@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Promotion — Hawker Vendor</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/vendor-shell.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorHeader.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorNav.css">
+  <link rel="stylesheet" href="../../css/vendor/storeMenu.css">
+  <link rel="stylesheet" href="../../css/vendor/storePromotions.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <div class="topBarBrand">
+        <img class="topBarLogo" src="../../images/hawkrOS.svg" alt="HAWKR">
+        <h1 class="topBarTitle">Add Promotion</h1>
+      </div>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="vendor.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+    <div class="page-title">
+      <a href="storeDetail.html" id="backLink" class="back-link">&larr; Back to Store</a>
+    </div>
+
+    <div class="content">
+      <div class="banner error" id="errorBanner"></div>
+      <div class="banner success" id="successBanner"></div>
+
+      <div class="menu-toolbar">
+        <h1 id="storeNameTitle">Promotions</h1>
+        <button class="btn btn-primary" id="addPromotionBtn">+ Add Promotion</button>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-scroll">
+          <table class="menu-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Discount</th>
+                <th>Applies To</th>
+                <th>Status</th>
+                <th>Validity</th>
+                <th class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="promotionTableBody">
+              <tr><td colspan="6" class="menu-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="menu-toolbar">
+        <h1 id="voucherSectionTitle">Vouchers</h1>
+        <button class="btn btn-primary" id="addVoucherBtn">+ Add Voucher</button>
+      </div>
+
+      <div class="card table-card">
+        <div class="table-scroll">
+          <table class="menu-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Discount</th>
+                <th>Min Order</th>
+                <th>Usage</th>
+                <th>Status</th>
+                <th>Validity</th>
+                <th class="actions-col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="voucherTableBody">
+              <tr><td colspan="7" class="menu-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">&copy; 2026 Hawker Management System</footer>
+  </div>
+
+  <!-- Add / Edit promotion modal -->
+  <div class="modal-overlay" id="promotionModal">
+    <div class="modal modal-lg">
+      <h2 id="promotionModalTitle">Add Promotion</h2>
+      <div class="modal-sub">Applies only to <strong id="promotionModalStallName">this stall</strong>. Customers will see the discounted price on its menu.</div>
+      <div class="promotion-layout">
+        <form id="promotionForm">
+          <input type="hidden" id="editingPromotionId">
+          <div class="form-field">
+            <label for="promotionName">Promotion Name</label>
+            <input type="text" id="promotionName" placeholder="e.g. Happy Hour Special" required>
+          </div>
+          <div class="form-field">
+            <label for="promotionDescription">Description</label>
+            <textarea id="promotionDescription" rows="2" placeholder="e.g. Available on all drinks."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="promotionDiscountType">Discount Type</label>
+              <select id="promotionDiscountType">
+                <option value="percentage">Percentage Discount (%)</option>
+                <option value="fixed">Fixed Amount ($)</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="promotionDiscountValue">Value</label>
+              <input type="number" id="promotionDiscountValue" step="0.01" min="0.01" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Applicable Items</label>
+            <div class="scope-type-tabs">
+              <label class="scope-tab"><input type="radio" name="promotionScopeType" value="all" checked> All Items</label>
+              <label class="scope-tab"><input type="radio" name="promotionScopeType" value="category"> By Category</label>
+              <label class="scope-tab"><input type="radio" name="promotionScopeType" value="items"> Specific Items</label>
+            </div>
+            <select id="promotionScopeCategorySelect" class="scope-sub-field" hidden></select>
+            <div id="promotionScopeItemsList" class="scope-sub-field scope-item-checklist" hidden></div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="promotionStartDate">Start Date</label>
+              <input type="date" id="promotionStartDate" required>
+            </div>
+            <div class="form-field">
+              <label for="promotionEndDate">End Date</label>
+              <input type="date" id="promotionEndDate" required>
+            </div>
+          </div>
+          <div class="form-field checkbox-field">
+            <label><input type="checkbox" id="promotionActive" checked> Active</label>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" id="cancelPromotionBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="savePromotionBtn">Save Promotion</button>
+          </div>
+        </form>
+        <div class="promotion-preview">
+          <div class="preview-label">👁 Customer View Preview</div>
+          <div class="preview-card">
+            <div class="preview-badge" id="previewBadge">% OFF</div>
+            <div class="preview-name" id="previewName">Promotion Name</div>
+            <div class="preview-desc" id="previewDesc">Description goes here.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete promotion confirmation modal -->
+  <div class="modal-overlay" id="deletePromotionModal">
+    <div class="modal">
+      <h2>Remove Promotion</h2>
+      <div class="modal-sub">This will stop the discount from applying to your menu right away.</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="cancelDeletePromotionBtn">Cancel</button>
+        <button type="button" class="btn btn-primary danger" id="confirmDeletePromotionBtn">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add / Edit voucher modal -->
+  <div class="modal-overlay" id="voucherModal">
+    <div class="modal">
+      <h2 id="voucherModalTitle">Add Voucher</h2>
+      <div class="modal-sub">Customers enter this code at checkout. It's always re-checked before the discount is applied.</div>
+      <form id="voucherForm">
+        <input type="hidden" id="editingVoucherId">
+        <div class="form-field">
+          <label for="voucherCode">Voucher Code</label>
+          <input type="text" id="voucherCode" placeholder="e.g. SAVE10" style="text-transform: uppercase;" required>
+        </div>
+        <div class="form-field">
+          <label for="voucherDescription">Description</label>
+          <textarea id="voucherDescription" rows="2" placeholder="e.g. $5 off orders above $30"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="voucherDiscountType">Discount Type</label>
+            <select id="voucherDiscountType">
+              <option value="percentage">Percentage Discount (%)</option>
+              <option value="fixed">Fixed Amount ($)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="voucherDiscountValue">Value</label>
+            <input type="number" id="voucherDiscountValue" step="0.01" min="0.01" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="voucherMinOrder">Minimum Order (optional)</label>
+            <input type="number" id="voucherMinOrder" step="0.01" min="0">
+          </div>
+          <div class="form-field">
+            <label for="voucherUsageLimit">Usage Limit (optional)</label>
+            <input type="number" id="voucherUsageLimit" step="1" min="1" placeholder="Unlimited">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="voucherStartDate">Start Date</label>
+            <input type="date" id="voucherStartDate" required>
+          </div>
+          <div class="form-field">
+            <label for="voucherEndDate">End Date</label>
+            <input type="date" id="voucherEndDate" required>
+          </div>
+        </div>
+        <div class="form-field checkbox-field">
+          <label><input type="checkbox" id="voucherActive" checked> Active</label>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelVoucherBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveVoucherBtn">Save Voucher</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete voucher confirmation modal -->
+  <div class="modal-overlay" id="deleteVoucherModal">
+    <div class="modal">
+      <h2>Remove Voucher</h2>
+      <div class="modal-sub">Customers will no longer be able to apply this code.</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="cancelDeleteVoucherBtn">Cancel</button>
+        <button type="button" class="btn btn-primary danger" id="confirmDeleteVoucherBtn">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="dashboard.html" data-tab="dashboard">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Dashboard</span>
+    </a>
+    <a class="bottomPillNav__item" href="orders.html" data-tab="orders">
+      <span class="icon" style="--icon: url(../../icons/orders.svg)"></span>
+      <span>Orders</span>
+    </a>
+    <a class="bottomPillNav__item" href="stall.html" data-tab="stall">
+      <span class="icon" style="--icon: url(../../icons/organisation.svg)"></span>
+      <span>My Stall</span>
+    </a>
+    <a class="bottomPillNav__item" href="orderHistory.html" data-tab="orderHistory">
+      <span class="icon" style="--icon: url(../../icons/history.svg)"></span>
+      <span>Order History</span>
+    </a>
+    <a class="bottomPillNav__item" href="support.html" data-tab="support">
+      <span class="icon" style="--icon: url(../../icons/feedback.svg)"></span>
+      <span>Support</span>
+    </a>
+  </nav>
+
+  <script src="../../js/vendor/vendorNav.js"></script>
+  <script>renderBottomPillNav('stall');</script>
+  <script src="../../js/vendor/storePromotions.js"></script>
+  <script src="../../js/vendor/vendorHeader.js"></script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

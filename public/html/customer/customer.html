@@ -1,0 +1,1378 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawker Centre System - Customer</title>
+    <link rel="stylesheet" href="../../css/tokens.css">
+    <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+    <link rel="stylesheet" href="../../css/shared/components.css">
+    <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+    <link rel="stylesheet" href="../../css/shared/appShell.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font-ui), Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        /* Full desktop-width content (1920x1080 target) by default, like the vendor and
+           operator apps — hawkr's own consumer app caps at a 600px phone column even on
+           desktop, but this app is meant to be used as a real desktop site first with a
+           persistent sidebar. Below the mobile breakpoint it narrows into a phone-style
+           single column instead (appShell.css already drops the sidebar margin there). */
+        .customerMain {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        @media (max-width: 768px) {
+            .customerMain {
+                max-width: 600px;
+                padding: 16px;
+            }
+        }
+        .header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 20px 24px;
+            border-radius: 24px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-floating);
+        }
+        .header h1 {
+            margin: 0;
+            font-family: var(--font-display);
+        }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+        .header-brand .brand-mark {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-brand .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .header-brand .brand-sub {
+            font-size: 12px;
+            color: #b9c4d3;
+        }
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .header-icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+        .header-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.26);
+            transform: translateY(-1px);
+        }
+        .search-block {
+            padding: 16px 0 8px;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: var(--radius-pill, 999px);
+            background: color-mix(in srgb, var(--accent, #913b9f) 10%, #fff);
+        }
+        .search-bar-icon {
+            font-size: 16px;
+            opacity: 0.6;
+        }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: none;
+            outline: none;
+            font-family: inherit;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+        .search-bar input::placeholder {
+            color: var(--text-secondary);
+        }
+        .cuisine-row {
+            display: flex;
+            gap: 20px;
+            padding: 12px 4px 20px;
+            overflow-x: auto;
+        }
+        .cuisine-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            width: 64px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: inherit;
+            color: var(--text-primary);
+            font-size: 12px;
+            padding: 0;
+        }
+        .cuisine-emoji {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            background: var(--surface-sunken, #f4f1f6);
+            transition: box-shadow 0.2s ease, transform 0.15s ease;
+        }
+        .cuisine-item:hover .cuisine-emoji {
+            transform: translateY(-2px);
+        }
+        .cuisine-item.is-selected .cuisine-emoji {
+            box-shadow: 0 0 0 3px var(--accent, #913b9f);
+        }
+        .cuisine-item.is-selected {
+            color: var(--accent, #913b9f);
+            font-weight: 600;
+        }
+        .cart-fab {
+            position: fixed;
+            left: 24px;
+            bottom: 24px;
+            z-index: 500;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            border: none;
+            background: #fff;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cart-fab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        .cart-fab:active {
+            transform: translateY(0) scale(0.95);
+        }
+        .cart-fab-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 5px;
+            border-radius: 999px;
+            background: var(--accent, #913b9f);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-button {
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--radius-pill, 999px);
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+            position: relative;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+        .cart-button:hover {
+            background: rgba(255, 255, 255, 0.26);
+            transform: translateY(-1px);
+        }
+        .cart-button:active {
+            transform: translateY(0) scale(0.97);
+        }
+        .cart-badge {
+            background-color: #e67e22;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+        .container {
+            background-color: white;
+            padding: 24px;
+            border-radius: 24px;
+            margin-top: 20px;
+            box-shadow: var(--shadow-raised);
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-family: var(--font-display);
+        }
+        button {
+            background-color: #913b9f;
+            color: #fffafa;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+        }
+        button:hover {
+            background-color: #6f2d7a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(145, 59, 159, 0.25);
+        }
+        button:active {
+            transform: translateY(0) scale(0.98);
+        }
+        button.danger {
+            background-color: #e74c3c;
+        }
+        button.danger:hover {
+            background-color: #c0392b;
+        }
+        button.success {
+            background-color: #2ecc71;
+        }
+        button.success:hover {
+            background-color: #27ae60;
+        }
+        button.info {
+            background-color: #17a2b8;
+        }
+        button.info:hover {
+            background-color: #138496;
+        }
+        button.warning {
+            background-color: #f39c12;
+        }
+        button.warning:hover {
+            background-color: #e67e22;
+        }
+        button.add-to-cart {
+            background-color: #27ae60;
+            padding: 5px 12px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        button.add-to-cart:hover {
+            background-color: #229954;
+        }
+        .output {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+            max-height: 600px;
+            overflow: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .refresh-note {
+            font-size: 12px;
+            color: #6c757d;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        /* Order card styles */
+        .order-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .order-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(52,21,57,0.05);
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .order-id {
+            font-weight: bold;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .order-status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-preparing { background: #cce5ff; color: #004085; }
+        .status-ready { background: #d4edda; color: #155724; }
+        .status-completed { background: #d1ecf1; color: #0c5460; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        
+        .order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 20px;
+            margin: 10px 0;
+        }
+        .order-detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+        }
+        .order-detail-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .order-items {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #f0f0f0;
+            justify-content: flex-end;
+        }
+        .order-actions button {
+            padding: 6px 15px;
+            font-size: 12px;
+            margin: 0;
+        }
+        .btn-update {
+            background-color: #17a2b8;
+        }
+        .btn-update:hover {
+            background-color: #138496;
+        }
+        .btn-view {
+            background-color: #28a745;
+        }
+        .btn-view:hover {
+            background-color: #218838;
+        }
+        .no-orders {
+            text-align: center;
+            color: #6c757d;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(52,21,57,0.5);
+            overflow: auto;
+        }
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 4px 20px rgba(52,21,57,0.3);
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .modal-close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .modal-close:hover {
+            color: #e74c3c;
+        }
+        .modal-body {
+            padding: 25px;
+        }
+        .modal-order-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 30px;
+        }
+        .modal-order-detail {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .modal-order-detail .label {
+            font-weight: bold;
+            color: #555;
+            display: inline-block;
+            width: 120px;
+        }
+        .modal-order-detail .value {
+            color: #2c3e50;
+        }
+        .modal-order-items {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .modal-order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .modal-order-item:last-child {
+            border-bottom: none;
+        }
+        .modal-actions {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .modal-actions button {
+            padding: 8px 20px;
+            font-size: 14px;
+            margin: 0;
+        }
+        .modal-status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .modal-order-total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        /* Cart styles */
+        .cart-container {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 450px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(52,21,57,0.2);
+            transition: right 0.3s ease;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+        }
+        .cart-container.open {
+            right: 0;
+        }
+        .cart-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cart-header h2 {
+            margin: 0;
+        }
+        .cart-close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .cart-close:hover {
+            color: #e74c3c;
+        }
+        .cart-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-name {
+            font-weight: bold;
+        }
+        .cart-item-price {
+            color: #666;
+            font-size: 14px;
+        }
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cart-item-actions button {
+            padding: 3px 10px;
+            font-size: 14px;
+            margin: 0;
+            min-width: 30px;
+        }
+        .cart-item-quantity {
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+        .cart-item-subtotal {
+            font-weight: bold;
+            color: #2c3e50;
+            min-width: 70px;
+            text-align: right;
+        }
+        .cart-footer {
+            padding: 20px;
+            border-top: 2px solid #f0f0f0;
+            background: #f8f9fa;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .payment-methods {
+            margin-bottom: 15px;
+        }
+        .payment-label {
+            font-size: 13px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .payment-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .payment-btn {
+            padding: 10px;
+            font-size: 13px;
+            background: #fff;
+            color: #2c3e50;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .payment-btn:hover {
+            border-color: #3498db;
+        }
+        .payment-btn.selected {
+            border-color: #27ae60;
+            background: #eafaf1;
+            color: #1e8449;
+            font-weight: bold;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .cart-actions button {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .empty-cart {
+            text-align: center;
+            color: #6c757d;
+            padding: 40px;
+        }
+        .cart-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(52,21,57,0.3);
+            z-index: 1999;
+        }
+        .cart-overlay.show {
+            display: block;
+        }
+
+        /* Menu items with add to cart */
+        .browse-breadcrumb {
+            font-size: 13px;
+            color: #666;
+            margin: 8px 0 14px;
+        }
+        .browse-breadcrumb a {
+            color: #2980b9;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .browse-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        .hawker-grid, .stall-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .hawker-card, .stall-card {
+            border: none;
+            border-radius: 20px;
+            padding: 16px;
+            background: white;
+            cursor: pointer;
+            box-shadow: var(--shadow-raised);
+            transition: box-shadow 0.2s ease, transform 0.15s ease;
+        }
+        .hawker-card:hover, .stall-card:hover {
+            box-shadow: var(--shadow-floating);
+            transform: translateY(-3px);
+        }
+        .stall-card img,
+        .stall-card-photo-placeholder {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            background: var(--surface-sunken);
+        }
+        .stall-card-photo-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stall-card-photo-placeholder::after {
+            content: "🍜";
+            font-size: 32px;
+            opacity: 0.35;
+        }
+        .stall-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+        .cuisine-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: var(--radius-pill, 999px);
+            background: var(--tag-bg, #f2f2ff);
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 600;
+        }
+        /* Administrative blue, not the purple accent — this is an NEA-assigned grade,
+           not something the stall or vendor controls. */
+        .nea-grade-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: var(--radius-pill, 999px);
+            background: var(--grade-bg, #eff6ff);
+            color: var(--grade-ink, #1d4ed8);
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 6px;
+            width: fit-content;
+        }
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .card-header-row .favorite-btn {
+            flex-shrink: 0;
+            font-size: 14px;
+            padding: 3px 8px;
+        }
+        .hawker-card-name, .stall-card-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 17px;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .hawker-card-sub, .stall-card-sub {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        .menu-item-card {
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            background: white;
+            box-shadow: var(--shadow-raised);
+            transition: box-shadow 0.2s ease, transform 0.15s ease;
+        }
+        .menu-item-card:hover {
+            box-shadow: var(--shadow-floating);
+            transform: translateY(-2px);
+        }
+        .menu-item-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+        .menu-item-price {
+            color: var(--accent, #913b9f);
+            font-weight: 700;
+            font-size: 15px;
+            margin: 6px 0;
+        }
+        .stall-hero {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-raised);
+        }
+        .stall-hero-photo {
+            width: 160px;
+            height: 160px;
+            border-radius: 16px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--surface-sunken);
+        }
+        .stall-hero-photo-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stall-hero-photo-placeholder::after {
+            content: "🍜";
+            font-size: 48px;
+            opacity: 0.35;
+        }
+        .stall-hero-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .stall-hero-name {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .stall-hero-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .stall-hero-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            max-width: 480px;
+        }
+        @media (max-width: 600px) {
+            .stall-hero {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+        .price-original {
+            color: #999;
+            text-decoration: line-through;
+            font-weight: normal;
+            margin-right: 6px;
+            font-size: 12px;
+        }
+        .price-discounted {
+            color: #d0433b;
+        }
+        .discount-badge {
+            display: inline-block;
+            background: #d0433b;
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .cart-item-price .price-original {
+            font-size: 11px;
+        }
+        .voucher-box {
+            padding: 14px 20px 16px;
+            border-top: 1px solid #f0f0f0;
+            background: linear-gradient(180deg, #fff9f4 0%, #ffffff 60%);
+        }
+        /* CDC-style voucher banner: a red ribbon banner with a banknote mark,
+           purely decorative branding above the existing code input/apply flow.
+           Nothing below this changes the input's id, the button's onclick, or
+           the message element JS already writes into. */
+        .voucher-banner {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px 8px 8px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #e6002d 0%, #b8001f 100%);
+            box-shadow: 0 4px 12px rgba(230, 0, 45, 0.25);
+        }
+        .voucher-banner-icon {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+        }
+        .voucher-banner-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            line-height: 1.25;
+        }
+        .voucher-banner-title {
+            color: #fff;
+            font-size: 12.5px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+        .voucher-banner-sub {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 10.5px;
+        }
+        .voucher-row {
+            display: flex;
+            gap: 8px;
+        }
+        .voucher-row input {
+            flex: 1;
+            padding: 9px 10px;
+            border: 1.5px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            text-transform: uppercase;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .voucher-row input:focus {
+            outline: none;
+            border-color: #e6002d;
+            box-shadow: 0 0 0 3px rgba(230, 0, 45, 0.12);
+        }
+        .voucher-row button {
+            padding: 8px 14px;
+            font-size: 13px;
+            border-radius: 6px;
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+        .voucher-row button:hover {
+            transform: translateY(-1px);
+        }
+        .voucher-message {
+            font-size: 12px;
+            margin-top: 6px;
+            transition: color 0.2s ease;
+        }
+        .voucher-message.valid {
+            color: #155724;
+            font-weight: 600;
+        }
+        .voucher-message.invalid {
+            color: #721c24;
+        }
+        .cart-discount-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #155724;
+            margin-bottom: 6px;
+        }
+        .menu-item-desc {
+            color: #666;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .menu-item-status {
+            font-size: 11px;
+            color: #28a745;
+        }
+        .menu-item-status.unavailable {
+            color: #dc3545;
+        }
+        .menu-item-actions {
+            margin-top: 8px;
+        }
+        /* Favorite styles */
+        .favorites-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .favorite-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(52,21,57,0.05);
+        }
+        .favorite-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .favorite-type {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #e8f4fd;
+            color: #0c5460;
+        }
+        .favorite-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px 20px;
+            margin: 5px 0;
+        }
+        .favorite-details div {
+            padding: 2px 0;
+        }
+        .favorite-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #f0f0f0;
+            justify-content: flex-end;
+        }
+        .btn-remove-favorite {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-remove-favorite:hover {
+            background-color: #c82333;
+        }
+        .favorite-btn {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0;
+            transition: all 0.2s;
+        }
+        .favorite-btn:hover {
+            transform: scale(1.1);
+        }
+        .favorite-btn.favorited {
+            border-color: #e74c3c;
+            background: #fff0f0;
+        }
+        .favorite-btn.unfavorited {
+            border-color: #ddd;
+            background: white;
+        }
+
+        /* Rate & Review */
+        .star-rating {
+            display: flex;
+            gap: 6px;
+            font-size: 32px;
+            line-height: 1;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        .star-rating .star {
+            color: #ddd;
+            transition: color 0.15s ease, transform 0.1s ease;
+        }
+        .star-rating .star:hover {
+            transform: scale(1.12);
+        }
+        .star-rating .star.selected {
+            color: #f5c344;
+        }
+        .review-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: vertical;
+        }
+        .review-textarea:focus {
+            outline: none;
+            border-color: #913b9f;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebarOverlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebarTop">
+            <div class="sidebarTopRow">
+                <div class="header-brand">
+                    <div class="brand-mark">
+                        <svg viewBox="0 0 64 64" width="40" height="40" aria-hidden="true"><defs><linearGradient id="hkCustomer" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e2685c"/><stop offset="1" stop-color="#b8362f"/></linearGradient></defs><rect x="16" y="14" width="9" height="36" rx="4.5" fill="url(#hkCustomer)"/><rect x="39" y="14" width="9" height="36" rx="4.5" fill="url(#hkCustomer)"/><path d="M25,26 C25,40 39,40 39,26" fill="none" stroke="url(#hkCustomer)" stroke-width="8" stroke-linecap="round"/><path d="M27,29 C27,34 37,34 37,29" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.5"/><circle cx="32" cy="17.5" r="3.4" fill="#f5c344"/></svg>
+                    </div>
+                    <div>
+                        <div class="brand-name">Hawker Management</div>
+                        <div class="brand-sub">Customer Portal</div>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="sidebarNav">
+                <a href="#browseSection" class="navItem active" onclick="document.getElementById('browseSection').scrollIntoView({behavior:'smooth'}); return false;">
+                    <span class="icon sidebarIcon" style="--icon: url(../../icons/customer/home.svg)"></span>
+                    <span>Home</span>
+                </a>
+                <a href="#favoritesSection" class="navItem" onclick="document.getElementById('favoritesSection').scrollIntoView({behavior:'smooth'}); return false;">
+                    <span class="icon sidebarIcon" style="--icon: url(../../icons/customer/heart.svg)"></span>
+                    <span>Favourites</span>
+                </a>
+                <a href="#ordersSection" class="navItem" onclick="document.getElementById('ordersSection').scrollIntoView({behavior:'smooth'}); return false;">
+                    <span class="icon sidebarIcon" style="--icon: url(../../icons/customer/order.svg)"></span>
+                    <span>Orders</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="mainContent">
+        <div class="customerMain">
+    <div class="header">
+        <div class="header-actions" style="margin-left: auto;">
+            <button class="header-icon-btn" onclick="document.getElementById('favoritesSection').scrollIntoView({behavior:'smooth'})" aria-label="Favourites" title="Favourites">♡</button>
+            <button class="cart-button" onclick="toggleCart()">
+                🛒 Cart
+                <span class="cart-badge" id="cartCount">0</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="search-block">
+        <div class="search-bar">
+            <span class="search-bar-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="customerSearchInput" placeholder="Search for whatever fancies you..." autocomplete="off">
+        </div>
+    </div>
+
+    <div class="cuisine-row">
+        <button class="cuisine-item" data-cuisine="western" type="button"><span class="cuisine-emoji">🍔</span><span>Western</span></button>
+        <button class="cuisine-item" data-cuisine="chinese" type="button"><span class="cuisine-emoji">🍜</span><span>Chinese</span></button>
+        <button class="cuisine-item" data-cuisine="korean" type="button"><span class="cuisine-emoji">🍲</span><span>Korean</span></button>
+        <button class="cuisine-item" data-cuisine="sushi" type="button"><span class="cuisine-emoji">🍣</span><span>Sushi</span></button>
+        <button class="cuisine-item" data-cuisine="malay" type="button"><span class="cuisine-emoji">🍢</span><span>Malay</span></button>
+        <button class="cuisine-item" data-cuisine="halal" type="button"><span class="cuisine-emoji">🕌</span><span>Halal</span></button>
+    </div>
+
+    <div class="container" id="browseSection">
+        <div id="statusMessages"></div>
+
+        <!-- Browse: Hawker Centres -> Stalls -> Menu -->
+        <div class="section">
+            <h3>Browse Hawker Centres</h3>
+            <div class="browse-breadcrumb" id="browseBreadcrumb"></div>
+            <div id="browseContent">Loading hawker centres...</div>
+        </div>
+
+        <!-- Orders -->
+        <div class="section" id="ordersSection">
+            <h3>Orders</h3>
+            <button onclick="fetchOrders()">Refresh Orders</button>
+            <button onclick="createSampleOrder()" class="success">Create Sample Order</button>
+            <div id="ordersOutput" class="output">Loading orders...</div>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-container" id="cartContainer">
+        <div class="cart-header">
+            <h2>Shopping Cart</h2>
+            <span class="cart-close" onclick="toggleCart()">&times;</span>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <div class="empty-cart">Your cart is empty</div>
+        </div>
+        <div class="voucher-box" id="voucherBox" style="display: none;">
+            <div class="voucher-banner">
+                <div class="voucher-banner-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="1.5" y="6" width="21" height="12" rx="2.5" fill="#fff" opacity="0.92"/>
+                        <circle cx="12" cy="12" r="3.2" fill="none" stroke="#e6002d" stroke-width="1.4"/>
+                        <circle cx="4.5" cy="9" r="1" fill="#e6002d"/>
+                        <circle cx="19.5" cy="15" r="1" fill="#e6002d"/>
+                    </svg>
+                </div>
+                <div class="voucher-banner-text">
+                    <span class="voucher-banner-title">CDC Voucher</span>
+                    <span class="voucher-banner-sub">Enter your voucher code below to redeem</span>
+                </div>
+            </div>
+            <div class="voucher-row">
+                <input type="text" id="voucherCodeInput" placeholder="Voucher code">
+                <button onclick="applyVoucherCode()" class="info">Apply</button>
+            </div>
+            <div class="voucher-message" id="voucherMessage"></div>
+        </div>
+        <div class="cart-footer" id="cartFooter" style="display: none;">
+            <div class="cart-discount-row" id="cartDiscountRow" style="display: none;">
+                <span>Voucher discount:</span>
+                <span id="cartDiscount">-$0.00</span>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <div class="payment-methods">
+                <div class="payment-label">Payment Method</div>
+                <div class="payment-options">
+                    <button type="button" class="payment-btn selected" data-method="cash" onclick="selectPaymentMethod('cash')">Cash</button>
+                    <button type="button" class="payment-btn" data-method="nets" onclick="selectPaymentMethod('nets')">NETS</button>
+                    <button type="button" class="payment-btn" data-method="paynow" onclick="selectPaymentMethod('paynow')">PayNow</button>
+                    <button type="button" class="payment-btn" data-method="card" onclick="selectPaymentMethod('card')">Card</button>
+                </div>
+            </div>
+            <div class="cart-actions">
+                <button onclick="clearCart()" class="danger">Clear Cart</button>
+                <button onclick="checkout()" class="success">Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rate & Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content" style="max-width: 480px;">
+            <div class="modal-header">
+                <h2 id="reviewModalTitle">Rate & Review</h2>
+                <span class="modal-close" onclick="closeReviewModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="reviewOrderId">
+                <div class="star-rating" id="reviewStarRating">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+                <textarea id="reviewComment" class="review-textarea" placeholder="How was the food? (optional)" maxlength="1000" rows="4"></textarea>
+                <div class="modal-actions">
+                    <button onclick="closeReviewModal()" style="background-color: #6c757d;">Cancel</button>
+                    <button class="success" onclick="submitReview()">Submit Review</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalOrderTitle">Order Details</h2>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Favorites -->
+    <div class="section" id="favoritesSection">
+        <h3>My Favorites</h3>
+        <div style="margin-bottom: 10px;">
+            <button onclick="favoriteFilter='all'; renderFavorites('all');" class="info" id="favFilterAll">All Favorites</button>
+            <button onclick="favoriteFilter='menu'; renderFavorites('menu');" class="info" id="favFilterMenu">Menu Items</button>
+            <button onclick="favoriteFilter='stall'; renderFavorites('stall');" class="info" id="favFilterStall">Stalls</button>
+            <button onclick="favoriteFilter='hawker'; renderFavorites('hawker');" class="info" id="favFilterHawker">Hawker Centres</button>
+            <button onclick="fetchUserFavorites().then(() => { renderFavorites(favoriteFilter); showStatus('Refreshed ' + favorites.length + ' favorites', 'success'); });" class="success">Refresh</button>
+        </div>
+        <div id="favoritesOutput" class="output">Loading favorites...</div>
+        <div class="refresh-note">Click filter buttons to view different types of favorites. Click ♡ on a hawker centre, stall, or menu item to favorite it.</div>
+    </div>
+
+        </div>
+    </div>
+
+    <script src="../../js/customer/customer.js"></script>
+    <script type="module" src="../../js/shared/liquidGlass.js"></script>
+    <script src="../../js/shared/sidebarResponsive.js"></script>
+    <script src="../../js/shared/sidebarCollapse.js"></script>
+    <script>
+        (function () {
+            var input = document.getElementById('customerSearchInput');
+            if (!input) return;
+            function applyFilter() {
+                var q = input.value.trim().toLowerCase();
+                document.querySelectorAll('[data-search-text]').forEach(function (card) {
+                    var match = !q || card.getAttribute('data-search-text').indexOf(q) !== -1;
+                    card.style.display = match ? '' : 'none';
+                });
+            }
+            input.addEventListener('input', applyFilter);
+
+            // Cuisine chips are quick-filter shortcuts into the same search box —
+            // not a second filtering system, just a faster way to type a common query.
+            document.querySelectorAll('.cuisine-item').forEach(function (chip) {
+                chip.addEventListener('click', function () {
+                    var already = chip.classList.contains('is-selected');
+                    document.querySelectorAll('.cuisine-item').forEach(function (c) { c.classList.remove('is-selected'); });
+                    if (already) {
+                        input.value = '';
+                    } else {
+                        chip.classList.add('is-selected');
+                        input.value = chip.dataset.cuisine || '';
+                    }
+                    applyFilter();
+                });
+            });
+        })();
+    </script>
+
+    <button class="cart-fab" id="cartFab" onclick="toggleCart()" aria-label="Open cart">
+        🛍️
+        <span class="cart-fab-badge" id="cartFabCount">0</span>
+    </button>
+</body>
+</html>

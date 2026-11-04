@@ -1,0 +1,10 @@
+.env
+loginCredentials.env
+node_modules/
+coverage/
+CreateDbUser.sql
+public/uploads/
+uploads/
+public/consumer/config.js
+_unused-assets/
+public/_unused-assets/

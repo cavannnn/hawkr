@@ -1,0 +1,171 @@
+/* ---- the status line: the one place either section says what it knows ---- */
+.pref-status {
+  margin: -8px 0 0;
+  padding: 0 24px;
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+.pref-status--busy { color: var(--text-secondary); }
+.pref-status--ok { color: var(--accent); }
+.pref-status--warn { color: var(--status-pending); }
+.pref-status--note { color: var(--text-secondary); }
+
+/* ---- the resting summary: what you have chosen, as tags ---- */
+.pref-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 24px;
+}
+.pref-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 0 12px 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.pref-tag__disc {
+  flex: none;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.pref-tag__plate {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.pref-tag--custom { padding-left: 12px; }
+
+.pref-empty {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* ---- the editor panel ---- */
+.pref-panel { padding: 0 24px; }
+.pref-panel[hidden] { display: none; }
+/* the onboarding "Other allergies" field, minus its 32px onboarding top margin */
+.pref-panel .allergy-other { margin-top: 20px; }
+
+/* ---- My Palette: the plate grid ---- */
+.pal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 12px;
+}
+.pal-pick {
+  width: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  opacity: 0.32; /* the onboarding resting state, to the value */
+  transition: opacity var(--duration-warm) var(--ease-standard),
+    transform var(--duration-quick) var(--ease-spring);
+  -webkit-tap-highlight-color: transparent;
+}
+.pal-pick.is-selected { opacity: 1; }
+.pal-pick:active { transform: scale(0.94); }
+.pal-pick__disc {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--border); /* holds the circle while the image loads */
+  box-sizing: border-box;
+  border: 2px solid transparent;
+  transition: border-color var(--duration-quick) var(--ease-standard);
+}
+.pal-pick.is-selected .pal-pick__disc { border-color: var(--accent); }
+.pal-pick__disc img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pal-pick__label {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* ---- the counter: "3 of 5" ---- */
+.pal-count {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-wash);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--accent);
+}
+.pal-count.is-full {
+  background: var(--status-pending-bg);
+  color: var(--status-pending);
+}
+
+/* ---- the guest state: no picker, one way out ---- */
+.pref-guest {
+  margin: 0 24px;
+  padding: 16px;
+  border-radius: var(--radius-chip);
+  background: var(--surface-sunken);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+.pref-guest[hidden] { display: none; }
+.pref-guest__copy {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+.pref-join {
+  flex: none;
+  border: 0;
+  border-radius: var(--radius-pill);
+  padding: 10px 18px;
+  background: var(--accent);
+  color: var(--text-inverse);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--duration-quick) var(--ease-spring);
+}
+.pref-join:active { transform: scale(0.97); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pal-pick, .pal-pick__disc, .pref-join { transition: none; }
+}

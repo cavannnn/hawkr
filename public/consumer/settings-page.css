@@ -1,0 +1,208 @@
+/* ---- view routing (base hide + fixed, like every other #view-X) ---- */
+#view-settings {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  max-width: 600px;
+  margin-inline: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface-page);
+  padding-block: 0 max(env(safe-area-inset-bottom), 40px);
+}
+body[data-view="settings"] #view-home { display: none; }
+body[data-view="settings"] #view-settings { display: flex; flex-direction: column; gap: 32px; }
+#view-settings > * { flex-shrink: 0; }
+
+/* ---- header: back/menu dual pill · heart · Log out (replaces the location pill) ---- */
+.st-bar {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: max(env(safe-area-inset-top), 20px) 24px 12px;
+  transition: transform 0.3s var(--ease-standard);
+  will-change: transform;
+}
+.st-bar--hidden { transform: translateY(-100%); }
+.st-bar__frost {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 100%);
+}
+.st-dual-left { position: relative; z-index: 1; }
+.st-bar__right { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; }
+.st-heart {
+  width: 48px; height: 48px; flex: none;
+  border: 0; border-radius: 50%;
+  display: grid; place-items: center;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.st-heart .dual-btn__icon { display: block; height: 19px; width: auto; }
+.st-logout {
+  --lg-fill: color-mix(in srgb, var(--destructive) 10%, transparent);
+  --lg-edge: color-mix(in srgb, var(--destructive) 22%, transparent);
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 14px; flex: none;
+  border: 0; border-radius: 48px;
+  color: var(--destructive);
+  font-family: var(--font-ui); font-weight: 500; font-size: 12px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.st-logout__icon { display: block; }
+.st-logout__label { line-height: 1; }
+
+/* ---- page title (route label — Google Sans, matches #view-profile's "Profile") ---- */
+.st-title { margin: 0; padding: 0 24px; font-family: var(--font-ui); font-weight: 600; font-size: 24px; color: var(--text-primary); }
+
+/* ---- identity card: "this is your account, you're recognised" (sidebar pill recipe) ---- */
+.st-card {
+  --lg-edge: rgba(255, 255, 255, 0.55);
+  margin-inline: 64px;
+  display: flex; align-items: center; gap: 16px;
+  padding: 8px 16px; border-radius: 32px;
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(145, 59, 159, 0.08));
+  box-shadow: 0 8px 24px rgba(52, 21, 57, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.st-avatar {
+  flex: none; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 32% 30%, #8fb2fc, #c7d9fe 55%, #fff); /* JS overrides with the member's OKLCH hue */
+  font-family: var(--font-display); font-size: 24px; color: var(--text-primary);
+}
+.st-who { display: flex; flex-direction: column; min-width: 0; }
+.st-name { font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: 0.48px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.st-meta { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-display); font-weight: 300; font-size: 16px; color: var(--text-secondary); }
+.st-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-secondary); flex: none; }
+
+/* ---- sections ---- */
+.st-sec { display: flex; flex-direction: column; gap: 16px; }
+.st-sec__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 24px; }
+.st-sec__actions { display: flex; align-items: center; gap: 12px; }
+.st-sec__ttl { margin: 0; padding: 0; font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -0.3px; color: var(--text-primary); }
+.st-danger > .st-sec__ttl, .st-danger > .st-note { padding-inline: 24px; }
+
+.st-note { margin: 0; padding: 0 24px; font-family: var(--font-ui); font-weight: 300; font-size: 13px; line-height: 1.45; color: var(--text-secondary); }
+.st-note--tight { padding: 0; font-size: 12px; }
+.st-link { color: var(--accent); text-decoration: none; font-weight: 500; }
+
+.st-chip {
+  --lg-fill: rgba(145, 59, 159, 0.08);
+  --lg-edge: rgba(145, 59, 159, 0.18);
+  --lg-glow: rgba(145, 59, 159, 0.15);      /* v1's purple bloom, via the primitive's glow */
+  --lg-glow-mid: rgba(145, 59, 159, 0.05);
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 32px; padding: 0 12px; flex: none;
+  border: 0; border-radius: 100px;
+  color: var(--accent);
+  font-family: var(--font-ui); font-weight: 500; font-size: 12px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.st-chip__icon { display: block; width: 12px; height: 12px; }
+.st-chip__plus { font-size: 15px; line-height: 1; font-weight: 500; }
+.st-chip__label { line-height: 1; }
+.st-chip--add {
+  --lg-fill: rgba(140, 198, 62, 0.14);
+  --lg-edge: rgba(140, 198, 62, 0.34);
+  --lg-glow: rgba(99, 153, 34, 0.16);
+  --lg-glow-mid: rgba(99, 153, 34, 0.05);
+  color: #3b6d11;
+}
+/* while editing, the chip flips to a filled "Done" state */
+.st-chip.is-active { --lg-fill: rgba(145, 59, 159, 0.18); font-weight: 600; }
+
+/* ---- Personal Details rows ---- */
+.st-rows { display: flex; flex-direction: column; gap: 20px; padding: 0 24px; }
+.st-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.st-row__label { flex: none; display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-ui); font-weight: 700; font-size: 14px; color: var(--text-primary); }
+.st-row__value { min-width: 0; font-family: var(--font-ui); font-weight: 400; font-size: 14px; letter-spacing: 0.4px; color: var(--text-primary); text-align: right; overflow-wrap: anywhere; }
+.st-row__value--mask { font-weight: 300; letter-spacing: 1px; }
+.st-row__value--phone { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.st-flag { display: block; width: 20px; height: auto; flex: none; border-radius: 2px; } /* real asset — emoji flags don't render on Windows */
+.st-optional { font-family: var(--font-ui); font-weight: 400; font-size: 11px; color: var(--accent); background: #f4f1f6; border: 1px solid #ac92ba; border-radius: var(--radius-chip); padding: 1px 6px; }
+.st-input {
+  font-family: var(--font-ui); font-size: 14px; color: var(--text-primary);
+  text-align: right; min-width: 0; width: 100%; max-width: 220px;
+  padding: 6px 10px; border: 1px solid var(--border-strong); border-radius: 10px; background: #fff;
+}
+.st-input:focus { outline: none; border-color: var(--accent); }
+
+/* ---- payment cards ---- */
+.st-cards { display: flex; gap: 12px; padding: 0 24px 4px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.st-cards::-webkit-scrollbar { display: none; }
+.st-cards.is-editing {
+  flex-direction: column;
+  overflow-x: visible;
+  overflow-y: visible;
+  gap: 12px;
+}
+
+.st-pcard {
+  position: relative; flex: none;
+  width: 160px; min-height: 92px;
+  padding: 12px 16px; border-radius: var(--radius-chip);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+  overflow: hidden;
+  transition: transform 0.42s var(--ease-spring), opacity 0.24s var(--ease-standard);
+}
+.st-cards.is-editing .st-pcard { width: 100%; } /* full width (the 24px page margins are the container's padding) */
+.st-pcard--mastercard { background: #ffebd1; }
+.st-pcard--visa { background: #ebf3ff; }
+.st-pcard--amex { background: #fffafa; border: 1px solid var(--border); }
+.st-pcard__logo { display: block; height: 18px; width: auto; position: relative; z-index: 1; }
+.st-pcard__num { font-family: var(--font-mono); font-weight: 600; font-size: 9px; letter-spacing: 1.4px; color: var(--text-primary); position: relative; z-index: 1; white-space: nowrap; } /* nowrap: the masked digits are one unit, never split across lines */
+.st-pcard__exp { font-family: var(--font-ui); font-weight: 300; font-size: 9px; color: var(--text-secondary); position: relative; z-index: 1; margin-top: 4px; }
+.st-pcard__mark { position: absolute; right: -14px; top: 2px; width: 78px; height: auto; opacity: 0.9; pointer-events: none; z-index: 0; }
+.st-pcard.is-removing { transform: scale(0.86); opacity: 0; }
+
+/* delete affordance — only while editing */
+.st-pcard__del {
+  position: absolute; top: 8px; right: 8px; z-index: 2;
+  width: 26px; height: 26px; border: 0; border-radius: 50%;
+  display: none; place-items: center;
+  background: var(--status-closed); color: #fff;
+  font-size: 17px; line-height: 1; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.4);
+  transition: transform var(--duration-quick) var(--ease-spring);
+}
+.st-cards.is-editing .st-pcard__del { display: grid; }
+.st-pcard__del:active { transform: scale(0.88); }
+
+.st-cards__empty { font-family: var(--font-ui); font-weight: 300; font-size: 13px; color: var(--text-secondary); padding: 8px 0; }
+
+/* ---- Danger Zone ---- */
+.st-danger { gap: 12px; }
+.st-danger__row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 24px; }
+.st-danger__copy { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.st-danger__ttl { font-family: var(--font-ui); font-weight: 700; font-size: 15px; color: var(--text-primary); }
+.st-delete {
+  --lg-fill: rgba(255, 59, 48, 0.1);
+  --lg-edge: rgba(255, 59, 48, 0.28);
+  --lg-glow: rgba(255, 59, 48, 0.18);
+  --lg-glow-mid: rgba(255, 59, 48, 0.06);
+  flex: none; border: 0; border-radius: 100px; padding: 9px 14px;
+  color: var(--status-closed);
+  font-family: var(--font-ui); font-weight: 500; font-size: 13px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+
+/* ---- delete confirm sheet (reuses .far-modal; these are the additions) ---- */
+.st-reasons { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.st-reason {
+  border: 1px solid var(--border-strong); background: #fff; border-radius: 100px;
+  padding: 8px 14px; cursor: pointer;
+  font-family: var(--font-ui); font-weight: 400; font-size: 12px; color: var(--text-primary);
+  transition: background var(--duration-quick) var(--ease-standard), border-color var(--duration-quick) var(--ease-standard), transform var(--duration-quick) var(--ease-spring);
+  -webkit-tap-highlight-color: transparent;
+}
+.st-reason:active { transform: scale(0.96); }
+.st-reason.is-selected { background: rgba(255, 59, 48, 0.08); border-color: var(--status-closed); color: var(--status-closed); font-weight: 500; }
+.st-btn--danger { background: var(--status-closed); color: #fff; border: 0; }
+.st-btn--danger:disabled { background: rgba(255, 59, 48, 0.32); cursor: not-allowed; } /* gated until a reason is picked */
+
+@media (prefers-reduced-motion: reduce) {
+  .st-pcard, .st-pcard__del, .st-reason { transition: none; }
+}

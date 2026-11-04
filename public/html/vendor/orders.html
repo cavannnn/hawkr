@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders — Hawker Vendor</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/vendor-shell.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorHeader.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorNav.css">
+  <link rel="stylesheet" href="../../css/vendor/orders.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <div class="topBarBrand">
+        <img class="topBarLogo" src="../../images/hawkrOS.svg" alt="HAWKR">
+        <h1 class="topBarTitle">Order</h1>
+      </div>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="vendor.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+    <div class="page-title">
+      <div class="page-sub">Live orders across all of your stalls</div>
+    </div>
+
+    <div class="content">
+      <div class="banner error" id="errorBanner"></div>
+      <div class="banner success" id="successBanner"></div>
+
+      <div class="order-columns">
+        <div class="order-column">
+          <div class="column-header new">
+            <div class="column-title" id="titlePending">New Order 0</div>
+          </div>
+          <div class="column-label">New Orders</div>
+          <div class="column-body" id="colPending"><div class="empty-state">Loading…</div></div>
+        </div>
+
+        <div class="order-column">
+          <div class="column-header preparing">
+            <div class="column-title" id="titlePreparing">Preparing 0</div>
+          </div>
+          <div class="column-label">In Preparation</div>
+          <div class="column-body" id="colPreparing"><div class="empty-state">Loading…</div></div>
+        </div>
+
+        <div class="order-column">
+          <div class="column-header ready">
+            <div class="column-title" id="titleReady">Ready for Collection 0</div>
+          </div>
+          <div class="column-label">Ready &amp; Completed</div>
+          <div class="column-body" id="colReady"><div class="empty-state">Loading…</div></div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">&copy; 2026 Hawker Management System</footer>
+  </div>
+
+  <!-- Cancel order confirmation modal -->
+  <div class="modal-overlay" id="cancelOrderModal">
+    <div class="modal">
+      <h2>Cancel Order</h2>
+      <div class="modal-sub">This will mark the order as cancelled. This can't be undone.</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="cancelCancelBtn">Back</button>
+        <button type="button" class="btn btn-primary danger" id="confirmCancelBtn">Cancel Order</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="dashboard.html" data-tab="dashboard">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Dashboard</span>
+    </a>
+    <a class="bottomPillNav__item" href="orders.html" data-tab="orders">
+      <span class="icon" style="--icon: url(../../icons/orders.svg)"></span>
+      <span>Orders</span>
+    </a>
+    <a class="bottomPillNav__item" href="stall.html" data-tab="stall">
+      <span class="icon" style="--icon: url(../../icons/organisation.svg)"></span>
+      <span>My Stall</span>
+    </a>
+    <a class="bottomPillNav__item" href="orderHistory.html" data-tab="orderHistory">
+      <span class="icon" style="--icon: url(../../icons/history.svg)"></span>
+      <span>Order History</span>
+    </a>
+    <a class="bottomPillNav__item" href="support.html" data-tab="support">
+      <span class="icon" style="--icon: url(../../icons/feedback.svg)"></span>
+      <span>Support</span>
+    </a>
+  </nav>
+
+  <script src="../../js/vendor/vendorNav.js"></script>
+  <script>renderBottomPillNav('orders');</script>
+  <script src="../../js/vendor/orders.js"></script>
+  <script src="../../js/vendor/vendorHeader.js"></script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

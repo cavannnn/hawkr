@@ -1,0 +1,585 @@
+:root {
+    --lg-glow: rgba(255, 255, 255, 0.9);
+    --lg-glow-mid: rgba(255, 255, 255, 0.34);
+}
+
+/* ---- View routing (one view visible at a time) ---- */
+#view-setloc {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    max-width: 600px;
+    margin-inline: auto;
+    background: var(--surface-page);
+    overflow: hidden;
+}
+body[data-view="search"] #view-home,
+body[data-view="map"] #view-home {
+    display: none;
+}
+body[data-view="search"] #view-setloc,
+body[data-view="map"] #view-setloc {
+    display: block;
+}
+
+/* ---- Persistent top bar (same element across search + map) ---- */
+.setloc-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Figma gap-[8px] */
+    padding-top: max(env(safe-area-inset-top), 12px);
+    padding-bottom: 8px;
+    view-transition-name: hawkr-topbar; /* stays put while the body cross-fades */
+}
+.setloc-scrim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    z-index: 1;
+    display: none;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent);
+    mask-image: linear-gradient(to bottom, #000 62%, transparent);
+    pointer-events: none;
+}
+body[data-view="map"] .setloc-scrim {
+    display: block;
+}
+.setloc-bar__label {
+    margin: 0;
+    padding-left: 78px; /* Figma pl-[78px] */
+    padding-right: 24px;
+    font-size: 14px; /* Figma text-[14px] */
+    font-weight: 300;
+    color: var(--text-muted); /* #9e94a1 */
+}
+.setloc-bar__row {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Figma gap-[16px] */
+    padding-left: 12px;
+    padding-right: 24px;
+}
+
+/* Icon buttons (back / crosshair / tick) */
+.setloc-iconbtn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    cursor: pointer;
+    transition: transform var(--duration-warm) var(--ease-spring);
+}
+.setloc-iconbtn:active {
+    transform: scale(0.9);
+}
+.setloc-iconbtn__icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.setloc-iconbtn[data-back] .setloc-iconbtn__icon { width: 11px; height: 19px; }
+
+#to-map,
+#confirm {
+    display: none;
+}
+
+body[data-view="search"] #to-map {
+    display: grid;
+}
+body[data-view="search"].has-pending #to-map {
+    display: none;
+}
+body[data-view="search"].has-pending #confirm {
+    display: grid;
+}
+body[data-view="map"] #confirm {
+    display: grid;
+}
+
+.setloc-field {
+    flex: 1 0 0;
+    min-width: 0;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Figma gap-[10px] */
+    padding: 10px;
+    border-radius: 48px; 
+    overflow: hidden;
+    view-transition-name: hawkr-locfield; 
+}
+.setloc-field__arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.setloc-field__input {
+    flex: 1 0 0;
+    min-width: 0;
+    border: none;
+    background: none;
+    outline: none;
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.setloc-field__input::placeholder {
+    color: var(--text-secondary);
+    font-weight: 400; 
+}
+
+.setloc-field--unset {
+    background: rgba(145, 59, 159, 0.06); /* accent @6% */
+}
+
+.location-pill--unset {
+    background: rgba(145, 59, 159, 0.06);
+}
+
+/* ---- Search list: Near You + Recents ---- */
+.setloc-search {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow-y: auto;
+    padding: 104px 24px calc(env(safe-area-inset-bottom) + 24px); /* clear the bar */
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+body[data-view="map"] .setloc-search {
+    display: none; 
+}
+
+/* ---- Autocomplete suggestions (the field's glass expanding downwards) ---- */
+.setloc-suggest {
+    position: absolute;
+    z-index: 3;
+    left: 12px;
+    right: 12px;
+    top: 96px; /* just below the bar */
+    max-height: 55vh;
+    overflow-y: auto;
+    margin: 0;
+    padding: 8px;
+    list-style: none;
+    border-radius: 24px;
+    display: none;
+}
+.setloc-suggest.is-open {
+    display: block;
+}
+.suggest-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: none;
+    border-radius: 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: var(--font-ui);
+    color: var(--text-primary);
+}
+.suggest-item:hover,
+.suggest-item:focus-visible {
+    background: rgba(145, 59, 159, 0.06); /* accent @6% */
+    outline: none;
+}
+.suggest-item__icon {
+    width: 16px;
+    height: 19px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.suggest-item__main {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.suggest-item__sub {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+.loc-section {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Figma gap-[8px] */
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--text-secondary); /* #6b5e6f */
+}
+.loc-section__icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+.loc-results {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px; /* Figma gap-[32px] */
+}
+.loc-result {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px; /* Figma gap-[16px] */
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+}
+.loc-result__icon {
+    width: 16px; /* pin ~15.5 × 19 */
+    height: 19px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.loc-result__icon--wide {
+    width: 19px; /* building 19 × 19 */
+}
+.loc-result__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+.loc-result__name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+.loc-result__addr {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+/* ---- Map layer (center-pin) ---- */
+.setloc-map {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+body[data-view="map"] .setloc-map {
+    display: block;
+}
+.setloc-map__canvas {
+    position: absolute;
+    inset: 0;
+    /* Fallback until tiles paint (not a Figma value) */
+    background: linear-gradient(135deg, #eef0f2 0%, #e7e9ec 45%, #dfe3e6 100%);
+}
+.map-pin {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    width: 30px;
+    height: 37px;
+    transform: translate(-50%, -100%); /* tip sits on the centre */
+    background: center / contain no-repeat url("../images/loc-pin.svg");
+    filter: drop-shadow(0 2px 3px rgba(52, 21, 57, 0.35));
+    pointer-events: none;
+}
+.map-pin::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 6px;
+    height: 3px;
+    transform: translate(-50%, -1px);
+    background: rgba(52, 21, 57, 0.25);
+    border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .setloc-iconbtn,
+    .setloc-map__canvas,
+    .setloc-scrim {
+        transition: none;
+    }
+}
+
+.cart-fab {
+    position: fixed;
+    z-index: 40;
+    right: max(24px, calc((100vw - 600px) / 2 + 24px)); /* Figma: 24px from the frame edge */
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    width: 48px; height: 48px;
+    padding: 0;
+    border: 0;
+    border-radius: 8px; /* Figma rx-8 */
+    background: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25); /* Figma drop shadow: blur 8, no offset, 25% */
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: transform 0.28s var(--ease-spring), opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+.cart-fab__icon { display: block; width: 48px; height: 48px; } /* icon viewBox is 48 → bag renders at its Figma 24px, centred */
+.cart-fab--active {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.28s var(--ease-spring), opacity 0.2s ease;
+}
+.cart-fab--active:active { transform: scale(0.92); } /* press feedback, consistent with the app's buttons */
+.cart-fab--bump { animation: cart-bump 0.32s var(--ease-spring); }
+@keyframes cart-bump { 0% { transform: scale(1); } 40% { transform: scale(1.18); } 100% { transform: scale(1); } }
+
+body[data-view="cart"] .cart-fab,
+body[data-view="item"] .cart-fab,
+body[data-view="login"] .cart-fab,
+body[data-view="password"] .cart-fab,
+body[data-view="name"] .cart-fab,
+body[data-view="newpassword"] .cart-fab,
+body[data-view="cuisines"] .cart-fab,
+body[data-view="allergies"] .cart-fab,
+body[data-view="map"] .cart-fab,
+body[data-view="search"] .cart-fab {
+    visibility: hidden;
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cart-fab { transition: opacity 0.2s ease, visibility 0s linear 0.2s; transform: none; }
+    .cart-fab--active { transform: none; }
+    .cart-fab--bump { animation: none; }
+}
+
+/* ---- Segmented control ---- */
+.seg {
+    --seg-pad: 2px;
+    position: relative; /* containing block for the two pills below */
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 4px;
+    padding: var(--seg-pad);
+    border-radius: var(--radius-pill);
+    background: #ececee;
+}
+.seg__opt {
+    position: relative;
+    z-index: 1; /* label rides above the pill */
+    height: 28px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    font-family: var(--font-ui);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.seg__opt[aria-checked="true"] {
+    background: #fff;
+    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+@supports (anchor-name: --a) {
+    .seg__opt[aria-checked="true"] { background: transparent; box-shadow: none; }
+
+    .seg::before,
+    .seg::after {
+        content: "";
+        position: absolute;
+        border-radius: inherit;
+        transition: inset 250ms var(--ease-standard);
+        inset: calc(anchor(start) + var(--seg-pad)) calc(anchor(end) + var(--seg-pad))
+               calc(anchor(end) + var(--seg-pad)) calc(anchor(start) + var(--seg-pad));
+    }
+    .seg::before {
+        background: rgba(0, 0, 0, 0.05);
+        position-anchor: --seg-hover;
+    }
+    /* the real selection pill */
+    .seg::after {
+        background: #fff;
+        box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.12);
+        position-anchor: --seg-checked;
+    }
+    
+    .seg__opt {
+        anchor-name: var(--seg-anchor-hover, --a), var(--seg-anchor-checked, --b);
+    }
+    .seg__opt[aria-checked="true"] { --seg-anchor-checked: --seg-checked; }
+}
+@media (hover: hover) {
+    @supports (anchor-name: --a) {
+        .seg__opt:hover { --seg-anchor-hover: --seg-hover; }
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .seg__opt { transition: none; }
+    .seg::before, .seg::after { transition: none; }
+}
+
+/* ---- "Far from your pill" reconcile modal ---- */
+.far-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+.far-modal[hidden] {
+    display: none;
+}
+.far-modal__scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45); /* neutral dim — recedes the page so the sheet pops (brand lives in the sheet) */
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity var(--duration-warm) var(--ease-standard);
+}
+.far-modal.is-open .far-modal__scrim {
+    opacity: 1;
+}
+.far-modal__sheet {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+    background: rgba(245, 242, 245, 0.66);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.5); /* lit rim, like the glass buttons */
+    border-bottom: 0; /* flush to the viewport bottom */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85), /* glossy top highlight */
+      0 -12px 44px rgba(52, 21, 57, 0.14); /* soft lift above the scrim */
+    border-radius: 48px 48px 0 0; /* rounded-[48px] (top corners; bottom is flush to viewport) */
+    touch-action: none; /* let the swipe-to-dismiss drag own the vertical gesture */
+    padding: 16px 32px calc(env(safe-area-inset-bottom) + 32px); /* pt-[16px] px-[32px] pb-[32px] */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px; /* gap-[24px] between handle · art · copy · actions */
+    text-align: center;
+    transform: translateY(100%);
+    transition: transform var(--duration-warm) var(--ease-spring);
+}
+.far-modal.is-open .far-modal__sheet {
+    transform: translateY(0);
+}
+.far-modal__handle {
+    width: 32px; /* w-[32px] */
+    height: 2px; /* h-[2px] */
+    border-radius: 16px; /* rounded-[16px] */
+    background: var(--text-muted); /* bg-[#9e94a1] */
+}
+.far-modal__art {
+    display: block;
+    width: 150px; /* w-[150px] — height kept auto to preserve the png's aspect (exact
+                     133px crop depends on the Distant-1 asset, not yet swapped in) */
+    height: auto;
+}
+.far-modal__art img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.far-modal__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px; /* gap-[16px] between title and subtitle */
+}
+.far-modal__title {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: 16px; /* text-[16px] */
+    font-weight: 600; /* Google Sans Flex SemiBold */
+    line-height: normal; /* leading-[normal] */
+    color: var(--text-primary); /* text-[#341539] */
+}
+.far-modal__text {
+    margin: 0;
+    width: 260px; /* w-[260px] */
+    max-width: 100%;
+    font-size: 12px; /* text-[12px] */
+    font-weight: 300; /* Google Sans Flex Light */
+    line-height: normal; /* leading-[normal] */
+    color: var(--text-secondary); /* text-[#6b5e6f] */
+}
+.far-modal__text b {
+    font-weight: inherit; /* Figma subtitle is uniform Light — no emphasis on the place names */
+    color: inherit;
+}
+.far-modal__actions {
+    display: flex;
+    gap: 24px; /* gap-[24px] */
+    align-items: center;
+}
+.far-btn {
+    padding: 10px; /* p-[10px] */
+    border-radius: 32px; /* rounded-[32px] */
+    font-family: var(--font-ui);
+    font-size: 12px; /* text-[12px] */
+    font-weight: 500; /* Google Sans Flex Medium */
+    line-height: normal;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform var(--duration-quick) var(--ease-spring);
+}
+.far-btn:active {
+    transform: scale(0.96);
+}
+.far-btn--ghost {
+    background: #fff; /* bg-white */
+    color: var(--text-primary); /* text-[#341539] */
+    border: 1px solid var(--text-primary); /* border border-[#341539] */
+}
+.far-btn--solid {
+    background: var(--text-primary); /* bg-[#341539] */
+    color: #f5f5f5; /* text-[#f5f5f5] */
+    border: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+    .far-modal__scrim,
+    .far-modal__sheet,
+    .far-btn {
+        transition: none;
+    }
+}

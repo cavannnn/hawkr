@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket History</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">Ticket History</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page page-wide">
+    <a href="supportInbox.html" class="back-link">&larr; Back to Support Inbox</a>
+    <p class="subtitle">Closed tickets for the hawker centres you manage.</p>
+
+    <div class="filter-row">
+      <div>
+        <label for="filterCategory">Category</label>
+        <select id="filterCategory">
+          <option value="">All categories</option>
+          <option>Facility Issue</option>
+          <option>Cleanliness</option>
+          <option>Account Issue</option>
+          <option>Billing/Rental</option>
+          <option>Order/Payment</option>
+          <option>Queue/Crowd</option>
+          <option>Safety Concern</option>
+          <option>Others</option>
+        </select>
+      </div>
+      <div>
+        <label for="filterOutcome">Outcome</label>
+        <select id="filterOutcome">
+          <option value="">All outcomes</option>
+          <option>Completed</option>
+          <option>Unresolvable</option>
+        </select>
+      </div>
+      <div>
+        <label for="filterDateFrom">From</label>
+        <input type="date" id="filterDateFrom">
+      </div>
+      <div>
+        <label for="filterDateTo">To</label>
+        <input type="date" id="filterDateTo">
+      </div>
+      <button id="clearHistoryFilterBtn" class="clear-btn" type="button">Clear</button>
+    </div>
+
+    <div class="table-plain">
+      <table id="historyTable">
+        <thead>
+          <tr><th>Subject</th><th>Category</th><th>Centre</th><th>Outcome</th><th>Completed</th><th>Actions</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="historyEmptyMsg" class="empty-msg" style="display:none;">No closed tickets found.</p>
+  </div>
+
+  <!-- View Detail Modal -->
+  <div id="viewHistoryModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeViewModalBtn">&times;</button>
+      <h3 id="viewModalTitle">Ticket</h3>
+      <div class="detail-list" id="viewModalBody"></div>
+    </div>
+  </div>
+
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/ticketHistory.js"></script>
+  <script>renderOperatorNavbar('supportInbox'); renderBottomPillNav('home');</script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

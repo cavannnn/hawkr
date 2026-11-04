@@ -1,0 +1,213 @@
+
+
+.profile-header {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 26px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 22px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.profile-header:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(52, 21, 57, 0.10), 0 2px 6px rgba(52, 21, 57, 0.06);
+}
+
+.profile-header .avatar-lg {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(150deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 22px;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.profile-header:hover .avatar-lg {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.avatar-lg img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-header .profile-name {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.profile-header .role-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-soft);
+  padding: 3px 9px;
+  border-radius: 20px;
+  transition: transform 0.15s ease;
+}
+
+.profile-header .role-badge:hover {
+  transform: scale(1.08);
+}
+
+.profile-details {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 6px 28px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 13px;
+  transition: background 0.15s ease, padding-left 0.15s ease;
+}
+
+.detail-row:hover {
+  background: var(--color-surface-2);
+  padding-left: 6px;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-row .detail-label {
+  color: var(--color-text-muted);
+}
+
+.detail-row .detail-value {
+  font-weight: 600;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.detail-value.is-unset {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  font-style: italic;
+}
+
+
+
+.stall-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stall-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(52, 21, 57, 0.10), 0 2px 6px rgba(52, 21, 57, 0.06);
+}
+
+.stall-card .stall-image {
+  width: 84px;
+  height: 84px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--color-surface-2);
+  flex-shrink: 0;
+}
+
+.stall-card .stall-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.stall-card .stall-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.stall-card .stall-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.stall-card .stall-meta span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.stall-card .stall-meta .stall-pending {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.stall-empty {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.stall-empty a {
+  color: var(--color-primary-dark);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.stall-empty a:hover {
+  text-decoration: underline;
+}
+
+.stall-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+
+
+.avatar-preview {
+  margin-top: 10px;
+}
+
+.avatar-preview img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}

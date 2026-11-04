@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Stall — Hawker Vendor</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/vendor-shell.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorHeader.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorNav.css">
+  <link rel="stylesheet" href="../../css/vendor/stall.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <div class="topBarBrand">
+        <img class="topBarLogo" src="../../images/hawkrOS.svg" alt="HAWKR">
+        <h1 class="topBarTitle">My Stall</h1>
+      </div>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="vendor.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+    <div class="page-title">
+      <div class="page-sub">Manage and monitor your business locations</div>
+    </div>
+
+    <div class="content">
+      <div class="banner error" id="errorBanner"></div>
+      <div class="banner success" id="successBanner"></div>
+
+      <!-- Approved stalls -->
+      <div class="card-title">Your Stalls</div>
+      <div class="stall-grid" id="stallGrid">
+        <div class="empty-state">Loading…</div>
+      </div>
+
+      <!-- Past requests -->
+      <div class="card-title">My Requests</div>
+      <div class="card">
+        <div id="requestList">
+          <div class="empty-state">Loading…</div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">&copy; 2026 Hawker Management System</footer>
+
+    <button class="fab-btn" id="openRequestBtn">+ Request New Stall</button>
+  </div>
+
+  <!-- Request a new stall -->
+  <div class="modal-overlay" id="requestModal">
+    <div class="modal modal-lg">
+      <h2>Request a New Stall</h2>
+      <div class="modal-sub">Fill in the details below. An operator will review your request and, once approved, the stall will appear above.</div>
+      <form id="requestForm">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="centreId">Hawker Centre</label>
+            <select id="centreId" required>
+              <option value="">Select a hawker centre…</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="unitNumber">Unit Number</label>
+            <input type="text" id="unitNumber" placeholder="e.g. 01-23" required>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="stallName">Stall Name</label>
+          <input type="text" id="stallName" placeholder="e.g. My First Chicken Rice" required>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="openingTime">Opening Time</label>
+            <input type="time" id="openingTime" required>
+          </div>
+          <div class="form-field">
+            <label for="closingTime">Closing Time</label>
+            <input type="time" id="closingTime" required>
+          </div>
+          <div class="form-field">
+            <label for="hygieneGrade">Existing NEA grade (optional)</label>
+            <select id="hygieneGrade">
+              <option value="">New stall &mdash; not yet graded</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+            </select>
+            <small class="field-hint">If this stall already traded before joining, declare its grade here. It is verified at your first inspection &mdash; until then the stall shows as NEW.</small>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="stallImage">Stall Image</label>
+          <input type="file" id="stallImage" accept="image/png, image/jpeg, image/webp, image/gif" required>
+          <div class="hint">JPG, PNG, WEBP or GIF. Max 5MB.</div>
+          <div class="image-preview" id="imagePreviewWrap" hidden>
+            <img id="imagePreview" alt="Preview">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="description">Description (optional)</label>
+          <textarea id="description" rows="2" placeholder="What food will you sell?"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelRequestBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">Send Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="dashboard.html" data-tab="dashboard">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Dashboard</span>
+    </a>
+    <a class="bottomPillNav__item" href="orders.html" data-tab="orders">
+      <span class="icon" style="--icon: url(../../icons/orders.svg)"></span>
+      <span>Orders</span>
+    </a>
+    <a class="bottomPillNav__item" href="stall.html" data-tab="stall">
+      <span class="icon" style="--icon: url(../../icons/organisation.svg)"></span>
+      <span>My Stall</span>
+    </a>
+    <a class="bottomPillNav__item" href="orderHistory.html" data-tab="orderHistory">
+      <span class="icon" style="--icon: url(../../icons/history.svg)"></span>
+      <span>Order History</span>
+    </a>
+    <a class="bottomPillNav__item" href="support.html" data-tab="support">
+      <span class="icon" style="--icon: url(../../icons/feedback.svg)"></span>
+      <span>Support</span>
+    </a>
+  </nav>
+
+  <script src="../../js/vendor/vendorNav.js"></script>
+  <script>renderBottomPillNav('stall');</script>
+  <script src="../../js/vendor/stall.js"></script>
+  <script src="../../js/vendor/vendorHeader.js"></script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

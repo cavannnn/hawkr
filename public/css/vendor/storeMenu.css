@@ -1,0 +1,203 @@
+
+
+.menu-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 18px;
+}
+
+.menu-toolbar h1 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.menu-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.menu-table th {
+  text-align: left;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.menu-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.menu-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.menu-table tbody tr:hover {
+  background: var(--color-surface-2);
+}
+
+.menu-table .item-id {
+  color: var(--color-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: nowrap;
+}
+
+.menu-table .item-name {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.menu-table .item-price {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.menu-table .item-description {
+  max-width: 360px;
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-table .item-unavailable {
+  color: var(--color-danger);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 6px;
+}
+
+.actions-col {
+  width: 90px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.icon-btn {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.icon-btn:hover {
+  transform: translateY(-1px);
+}
+
+.icon-btn.edit {
+  color: var(--color-primary-dark);
+}
+
+.icon-btn.edit:hover {
+  background: var(--color-primary-soft);
+}
+
+.icon-btn.delete {
+  color: var(--color-danger);
+}
+
+.icon-btn.delete:hover {
+  background: var(--color-danger-soft);
+}
+
+.menu-empty {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--color-text-muted);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px;
+}
+
+.pagination button {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.pagination button.active {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.checkbox-field label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.checkbox-field input[type="checkbox"] {
+  width: auto;
+}
+
+.btn.danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.btn.danger:hover {
+  background: #b53030;
+}
+
+@media (max-width: 700px) {
+  .menu-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

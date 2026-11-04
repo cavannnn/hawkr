@@ -1,0 +1,1300 @@
+/* authority.css — the NEA officer's desk (#view-authority). */
+
+#view-authority {
+
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: var(--surface-page);
+  /* deliberately NOT the 600px column the consumer views use */
+}
+body[data-view="authority"] #view-home { display: none; }
+#view-authority { display: flex; }
+
+/* ---- the dock ---- */
+
+#view-authority:has(.sf-modal:not([hidden])) .bottomNav {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+/* ---- the rail ---- */
+#view-authority:not([data-panel="stores"]) .sf-rail { display: none; }
+.sf-rail {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 268px;
+  margin: 32px 0 32px 32px;
+  padding: 32px 8px 8px;
+  border-radius: 48px;
+  /* rgba(145,59,159,.04) — measured off 785:1324, not a color-mix approximation */
+  background: rgba(145, 59, 159, 0.04);
+}
+.sf-rail__mark { display: block; width: 130px; height: auto; margin: 0 auto 64px; }
+.sf-rail__heading {
+  margin: 0 8px 8px;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+.sf-rail__list {
+  flex: 1 0 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+.sf-railRow {
+  padding: 16px 8px;
+  border: 0;
+  border-radius: 16px;
+  background: none;
+  text-align: left;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sf-railRow:hover { background: var(--surface-sunken); }
+.sf-railRow[aria-selected="true"] {
+  background: var(--accent-wash);
+  color: var(--accent);
+}
+.sf-rail__profile {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+
+  border: 1px solid var(--glass-light-rim);
+  background: var(--glass-light-fill);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+  cursor: pointer;
+}
+.sf-rail__account { flex: none; display: flex; align-items: center; gap: 8px; }
+.sf-rail__account .sf-rail__profile { flex: 1 1 auto; min-width: 0; }
+.sf-rail__account .sf-rail__name {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sf-topbar__account { flex: none; display: flex; align-items: center; gap: 8px; }
+.sf-logoutBtn {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  border: 1px solid var(--glass-light-rim);
+  border-radius: 50%;
+  background: var(--glass-light-fill);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.sf-logoutBtn:hover, .sf-logoutBtn:focus-visible { background: var(--surface-card); }
+.sf-rail__avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #8fb2fc, #c7d9fe 55%, #ffffff);
+}
+.sf-rail__avatar img { width: 26px; height: auto; }
+.sf-rail__name {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 16px;
+  text-align: left;
+  color: var(--text-primary);
+}
+
+/* ---- main ---- */
+.sf-main {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding: 32px 48px max(140px, 30vh);
+  overflow-y: auto;
+}
+
+/* ---- top bar: co-brand lockup + profile, HOME ONLY ---- */
+#view-authority:not([data-panel="home"]) .sf-topbar { display: none; }
+.sf-topbar {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+.sf-topbarPill {
+  position: relative;
+  width: 704px;
+  max-width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px 23px;
+
+  border-radius: var(--radius-pill);
+
+  border: 1px solid var(--glass-light-rim);
+  background: var(--glass-light-fill);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+.sf-topbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sf-topbar__wordmark { display: block; width: 170px; height: auto; }
+.sf-topbar__x { font-family: var(--font-display); font-size: 16px; color: var(--scaffold); }
+.sf-topbar__orgmark { display: block; width: 102.727px; height: 48px; }
+.sf-topbar__profile {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, #8fb2fc, #c7d9fe 55%, #ffffff);
+  cursor: pointer;
+}
+.sf-topbar__profile img { width: 26px; height: auto; }
+
+.sf-panel { display: none; flex-direction: column; gap: 20px; }
+#view-authority[data-panel="home"]   [data-panel-body="home"],
+#view-authority[data-panel="stores"] [data-panel-body="stores"] { display: flex; }
+
+.sf-title {
+  margin: 0;
+  font-family: var(--font-mono);   /* mono, not serif — see the note at the top */
+  font-weight: 400;
+  font-size: 28px;
+  color: var(--text-primary);
+}
+.sf-h2 {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+.sf-note {
+  margin: 0;
+  max-width: 60ch;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.sf-seg { width: 340px; }
+
+/* ---- stat tiles (INVENTED — v1's dashboard content is JS-built and undesigned) ---- */
+.sf-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; max-width: 720px; }
+.sf-stat {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-card);
+}
+.sf-stat__n { font-family: var(--font-mono); font-size: 28px; color: var(--text-primary); }
+.sf-stat__k { font-family: var(--font-ui); font-size: 12px; color: var(--text-secondary); }
+
+/* ---- rows ---- */
+
+/* ---- grade chip in a list (reuses the letter/colour language of the hygiene cards) ---- */
+.sf-grade {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--grade-ink);     /* blue letter, exactly as both hygiene cards do */
+  background: var(--grade-bg);
+}
+.sf-grade--a { background: #d91c54; color: #fff; }
+.sf-grade--b { background: #8cc63e; color: #fff; }
+.sf-grade--c { background: #ac8453; color: #fff; }
+.sf-grade--new { background: var(--grade-bg); color: var(--grade-ink); font-size: 12px; }
+
+/* grade history, revealed under a stall */
+.sf-historyItem { display: flex; gap: 12px; font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+
+.sf-modal { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; }
+.sf-modal[hidden] { display: none; }
+.sf-modal__scrim { position: absolute; inset: 0; background: rgba(52, 21, 57, 0.28); }
+.sf-modal__panel {
+  position: relative;
+  width: min(520px, calc(100vw - 64px));
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 28px;
+  border-radius: 20px;
+  background: var(--surface-card);
+  box-shadow: 0 24px 64px rgba(52, 21, 57, 0.24);
+}
+.sf-modal__title { margin: 0; font-family: var(--font-mono); font-weight: 400; font-size: 22px; color: var(--text-primary); }
+.sf-modal__sub { margin: -12px 0 0; font-family: var(--font-ui); font-size: 13px; color: var(--text-secondary); }
+.sf-modal__actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+.sf-field { display: flex; flex-direction: column; gap: 10px; border: 0; padding: 0; margin: 0; }
+.sf-field__label { font-family: var(--font-ui); font-weight: 500; font-size: 13px; color: var(--text-primary); padding: 0; }
+.sf-scores { display: flex; gap: 8px; }
+.sf-score {
+  display: grid;
+  place-items: center;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--text-primary);
+  cursor: pointer;
+  --lg-fill: var(--surface-card);
+  --lg-blur: 0px;
+  --lg-edge: var(--border-strong);
+  transition:
+    background var(--duration-quick) var(--ease-standard),
+    backdrop-filter var(--duration-quick) var(--ease-standard),
+    border-color var(--duration-quick) var(--ease-standard);
+}
+.sf-score:hover, .sf-score:focus-visible { --lg-fill: rgba(245, 245, 245, 0.64); }
+.sf-score.lg:hover, .sf-score.lg:focus-visible {
+  --lg-blur: 14px; /* liquidGlass.css's own default */
+  --lg-edge: var(--glass-light-rim);
+}
+.sf-score[aria-pressed="true"] {
+  --lg-fill: var(--grade-ink);
+  --lg-edge: var(--grade-ink);
+  color: #fff;
+}
+
+.sf-checkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+}
+.sf-checkRow[hidden] { display: none; }
+.sf-checkRow__label {
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+.sf-checkRow .segmentedControl {
+  flex: 0 0 148px;
+  width: 148px;
+}
+
+.sf-checkRow .segmentedControl:not(:has([aria-checked="true"]))::after {
+  display: none;
+}
+
+/* ---- Home dashboard ---- */
+
+.sf-dash {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 24px;
+  align-items: start;
+}
+.sf-dash__col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+.sf-dash__h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 2px;
+  font-family: var(--font-ui);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.sf-dash__col > .sf-dash__h:first-child { margin-top: 0; }
+
+.sf-dash__chip {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  background: color-mix(in srgb, currentColor 10%, transparent);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.sf-dash__chip--ungraded { color: var(--invalid); }
+.sf-dash__chip--pending  { color: var(--status-pending); background: var(--status-pending-bg); }
+
+.sf-dash__card {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  height: 216px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-card);
+}
+.sf-dash__card--ungraded { border-color: var(--invalid); }
+.sf-dash__card--pending  { border-color: var(--status-pending); }
+
+.sf-dashRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-ui);
+}
+.sf-dashRow:hover { background: var(--surface-page); }
+.sf-dashRow:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+.sf-dashRow__photo {
+  flex: 0 0 auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: var(--scaffold);
+}
+.sf-dashRow__main { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1 1 auto; }
+.sf-dashRow__name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sf-dashRow__meta {
+  font-family: var(--font-mono, var(--font-ui));
+  font-size: 12px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sf-dashRow__flag { font-size: 11px; color: var(--text-muted); }
+.sf-dashRow .sf-directions { flex: 0 0 auto; max-width: 168px; }
+
+/* ---- dashboard calendar (display only) ---- */
+
+.sf-dashCal {
+  margin-top: 12px;
+  padding: 14px 16px 18px;
+  border-radius: 18px;
+  background: var(--grade-bg);
+}
+.sf-dashCal__nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sf-dashCal__monthNav,
+.sf-dashCal__yearNav { display: flex; align-items: center; gap: 6px; }
+.sf-dashCal__month {
+  margin: 0;
+  min-width: 118px;
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.sf-dashCal__year { margin: 0; min-width: 54px; text-align: center; font-size: 15px; color: var(--grade-ink); }
+
+.sf-dashCal__dow,
+.sf-dashCal__grid { display: grid; grid-template-columns: repeat(7, 1fr); }
+.sf-dashCal__dow {
+  margin-top: 10px;
+  font-family: var(--font-mono, var(--font-ui));
+  font-size: 12px;
+  color: var(--grade-ink);
+  text-align: center;
+}
+.sf-dashCal__grid { gap: 2px 0; margin-top: 4px; }
+
+.sf-dashCal__cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono, var(--font-ui));
+  font-size: 14px;
+  color: var(--text-primary);
+}
+.sf-dashCal__cell--blank { color: var(--text-faint); }
+.sf-dashCal__cell.is-today .sf-dashCal__n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--grade-ink);
+  color: var(--surface-card);
+}
+.sf-dashCal__count {
+  position: absolute;
+  top: 4px;
+  right: 50%;
+  transform: translateX(18px);
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: var(--radius-pill);
+  background: var(--status-pending);
+  color: var(--surface-card);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .sf-dash { grid-template-columns: 1fr; }
+}
+
+.sf-settingsBody { color: var(--text-secondary); line-height: 1.5; }
+.sf-stallHead[role="button"] { cursor: pointer; }
+.sf-stallHead[role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.sf-resultPreview {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 2px;
+}
+.sf-resultPreview .sf-gradeCard { width: 100%; max-width: 260px; }
+
+.sf-modal__hint {
+  margin: 0;
+  min-height: 16px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.sf-check { display: flex; align-items: flex-start; gap: 10px; font-family: var(--font-ui); font-size: 13px; color: var(--text-primary); cursor: pointer; }
+.sf-check input { width: 16px; height: 16px; margin: 1px 0 0; accent-color: var(--grade-ink); }
+.sf-check em { font-style: normal; color: var(--text-secondary); }
+.sf-check--major input { accent-color: var(--status-closed); }
+
+.sf-textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  background: var(--surface-card);
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-primary);
+  resize: vertical;
+}
+
+.sf-btn {
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+}
+.sf-btn--ghost { background: var(--surface-card); border-color: var(--border-strong); color: var(--text-primary); }
+.sf-btn--solid { background: var(--accent); color: var(--text-inverse); }
+.sf-btn--danger { background: var(--status-closed); color: var(--text-inverse); }
+.sf-btn:disabled { opacity: 0.45; pointer-events: none; }
+
+.sf-empty { font-family: var(--font-ui); font-size: 13px; color: var(--text-secondary); }
+
+.sf-transcript { display: flex; gap: 32px; align-items: flex-start; width: 100%; }
+.sf-transcript__col {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 32px;
+}
+
+.sf-stallHead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 24px;
+  --frost-fade: 84%;
+}
+.sf-stallHead__frost {
+  position: absolute;
+  top: -32px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 var(--frost-fade), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 var(--frost-fade), transparent 100%);
+}
+.sf-stallHead__id,
+.sf-stallHead__actions { position: relative; z-index: 1; }
+.sf-stallHead__id { display: flex; align-items: center; gap: 32px; min-width: 0; }
+.sf-stallHead__photo {
+  flex: none;
+  width: 96px; height: 96px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: var(--surface-sunken); /* shows through when a stall has no photo yet */
+}
+.sf-stallHead__text { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+.sf-stallHead__text.sf-marquee {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 85%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 85%, transparent 100%);
+}
+.sf-stallHead__name {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 32px;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+.sf-stallHead__centre {
+  margin: 4px 0 0;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.sf-stallHead__text.sf-marquee .sf-stallHead__name,
+.sf-stallHead__text.sf-marquee .sf-stallHead__centre {
+  animation: sf-marquee 8s ease-in-out infinite;
+}
+@keyframes sf-marquee {
+  0%, 12%  { transform: translateX(0); }
+  50%, 62% { transform: translateX(var(--sf-marquee-dist, 0)); }
+  100%     { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sf-stallHead__text.sf-marquee .sf-stallHead__name,
+  .sf-stallHead__text.sf-marquee .sf-stallHead__centre {
+    animation: none;
+  }
+}
+.sf-stallHead__actions { flex: none; display: flex; gap: 24px; }
+
+.sf-entry { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; width: 100%; }
+@keyframes sf-entry-drop {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.sf-entry--drop { animation: sf-entry-drop var(--duration-warm) var(--ease-spring); }
+@media (prefers-reduced-motion: reduce) {
+  .sf-entry--drop { animation: none; }
+}
+.sf-entry__stamp {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent); /* an established text use, matching .navItem's active colour-only channel */
+}
+
+.sf-gradeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  width: 232px;
+  padding: 16px;
+  border-radius: 4px;
+  background: var(--grade-bg);
+  box-shadow: var(--shadow-floating);
+}
+.sf-gradeCard--schedule {
+  background: var(--surface-card);
+  border: 1px solid var(--scaffold); /* --scaffold's documented hairline use, not text */
+  box-shadow: var(--shadow-floating);
+}
+.sf-gradeCard--schedule.is-done {
+  border-color: var(--valid);
+  background: color-mix(in srgb, var(--valid) 6%, var(--surface-card));
+}
+.sf-gradeCard--schedule.is-done .sf-gradeCard__date,
+.sf-gradeCard--schedule.is-done .sf-gradeCard__day { color: var(--valid); }
+.sf-gradeCard--revision {
+  background: var(--surface-card);
+  border: 1px dashed var(--scaffold);
+  box-shadow: none;
+}
+.sf-gradeCard--revision .sf-gradeCard__date { font-size: 32px; }
+.sf-gradeCard--revision .sf-gradeCard__date,
+.sf-gradeCard--revision .sf-gradeCard__day { color: var(--text-secondary); }
+.sf-gradeCard__letter {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 48px;
+  color: var(--grade-ink);
+}
+.sf-gradeCard__date { margin: 0; font-family: var(--font-mono); font-size: 48px; line-height: 1.15; color: var(--grade-ink); }
+.sf-gradeCard__day { margin: -8px 0 0; font-family: var(--font-ui); font-size: 12px; color: var(--text-secondary); }
+.sf-gradeCard__rule { width: 100%; height: 0; margin: 0; border: 0; border-top: 1px solid var(--border); }
+.sf-gradeCard__since { margin: 0; font-family: var(--font-mono); font-size: 14px; color: var(--grade-ink); }
+.sf-gradeCard__caption { margin: 0; font-family: var(--font-ui); font-size: 12px; color: var(--text-secondary); }
+
+.sf-gradeCard__chiprow { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; }
+.sf-gradeCard__chiprow > * { white-space: nowrap; }
+.sf-gradeCard__chiprow .sf-gradeCard__tag { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.sf-gradeCard__chiprow .sf-cardEdit { flex: none; }
+.sf-gradeCard__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 6px 10px;
+  border-radius: var(--radius-pill);
+  --lg-fill: transparent;
+  --lg-edge: transparent;
+  box-shadow: var(--shadow-raised), var(--shadow-glass-rim);
+}
+.sf-gradeCard__tag {
+  --tick-ink: 9px;      /* how tall the tick should actually READ */
+  --tick-canvas: 2.7578; /* 44 ÷ 15.9545 — canvas height per unit of ink */
+}
+.sf-gradeCard__tag .icon-img {
+  height: calc(var(--tick-ink) * var(--tick-canvas));
+  width: auto;
+  margin-block: calc((var(--tick-ink) - var(--tick-ink) * var(--tick-canvas)) / 2);
+}
+
+.sf-cardEdit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--glass-light-rim);
+  background: var(--glass-light-fill);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.sf-directions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 48px;
+  box-shadow: none;
+  --lg-glow: rgba(255, 255, 255, 0.9);
+  --lg-glow-mid: rgba(255, 255, 255, 0.34);
+}
+a.sf-directions, .sf-directions[data-directions] { cursor: pointer; text-decoration: none; }
+.sf-directions__icon { flex: none; width: 16px; height: 16px; }
+.sf-directions__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sf-directions__label { font-family: var(--font-ui); font-size: 9px; font-weight: 300; color: var(--text-secondary); }
+.sf-directions__value {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-actionPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: 14px;
+  --lg-fill: var(--surface-sunken); /* Schedule: opaque, quiet, at rest */
+  --lg-blur: 0px;
+  --lg-edge: transparent;
+  box-shadow: none;
+  transition:
+    background var(--duration-quick) var(--ease-standard),
+    backdrop-filter var(--duration-quick) var(--ease-standard),
+    border-color var(--duration-quick) var(--ease-standard),
+    box-shadow var(--duration-quick) var(--ease-standard);
+}
+.sf-actionPill--primary {
+  color: var(--text-inverse);
+  --lg-fill: var(--accent); /* Assess: opaque, solid, at rest */
+}
+.sf-actionPill:hover, .sf-actionPill:focus-visible, .sf-actionPill:active {
+  --lg-fill: rgba(245, 245, 245, 0.64); /* the documented "app content" glass ground */
+}
+.sf-actionPill--primary:hover,
+.sf-actionPill--primary:focus-visible,
+.sf-actionPill--primary:active {
+  --lg-fill: color-mix(in srgb, var(--accent) 85%, transparent);
+}
+.sf-actionPill.lg:hover, .sf-actionPill.lg:focus-visible, .sf-actionPill.lg:active {
+  --lg-blur: 14px; /* liquidGlass.css's own default */
+  --lg-edge: var(--glass-light-rim);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+.sf-actionPill:disabled { opacity: 0.45; pointer-events: none; }
+.sf-actionPill__label { white-space: nowrap; }
+
+.sf-menuBtn { color: var(--text-primary); --lg-fill: var(--surface-sunken); --lg-blur: 0px; --lg-edge: transparent; }
+.sf-menuBtn:hover, .sf-menuBtn:focus-visible, .sf-menuBtn:active { --lg-fill: rgba(245, 245, 245, 0.64); }
+.sf-menuBtn.lg:hover, .sf-menuBtn.lg:focus-visible, .sf-menuBtn.lg:active {
+  --lg-blur: 14px; --lg-edge: var(--glass-light-rim);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+
+.sf-footBar {
+  position: fixed;
+  left: calc(32px + 268px + 48px);
+  right: 48px;
+  bottom: calc(24px + 60px + 12px + env(safe-area-inset-bottom, 0px));
+  z-index: 39;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: var(--radius-chip);
+
+  border: 1px solid var(--glass-light-rim);
+  background: var(--glass-light-fill);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.sf-footFrost {
+  position: fixed;
+  left: calc(32px + 268px + 48px);
+  right: 48px;
+  bottom: 0;
+  height: 180px;
+  z-index: 38;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to top, #000 0%, #000 55%, transparent 100%);
+}
+
+#view-authority:not([data-panel="stores"]) .sf-footBar,
+#view-authority:not([data-panel="stores"]) .sf-footFrost { display: none; }
+
+.sf-timeline {
+  flex: none;
+  align-self: flex-start;
+  position: sticky;
+  top: 168px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: 128px;
+  width: 32px;
+
+  --mark-h: 4px;
+  --timeline-room: calc(100vh - 348px);
+  gap: clamp(
+    2px,
+    calc((var(--timeline-room) - var(--mark-count, 1) * var(--mark-h)) / max(var(--mark-count, 1) - 1, 1)),
+    12px
+  );
+}
+.sf-timelineMark {
+  width: 16px; height: 4px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--scaffold);
+  cursor: pointer;
+}
+.sf-timelineMark--current { width: 32px; background: var(--accent); }
+.sf-timelineMark { transition: width var(--duration-quick) var(--ease-standard), background var(--duration-quick) var(--ease-standard); }
+
+.sf-searchOverlay { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; }
+.sf-searchOverlay[hidden] { display: none; }
+.sf-searchOverlay__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(52, 21, 57, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.sf-searchOverlay__panel {
+  position: relative;
+  z-index: 1;
+  width: 704px;
+  max-width: calc(100vw - 64px);
+  margin-top: 176px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.sf-searchOverlay__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 64px;
+  padding: 0 26px;
+  border-radius: 32px;
+  cursor: text;
+}
+.sf-searchOverlay__icon { width: 20px; height: 20px; opacity: 0.6; }
+.sf-searchOverlay__input {
+  flex: 1 0 0; min-width: 0;
+  border: 0; outline: 0; background: none;
+  font-family: var(--font-ui); font-size: 20px; font-weight: 400;
+  color: var(--text-primary);
+}
+.sf-searchOverlay__input::placeholder { color: var(--text-secondary); }
+.sf-searchOverlay__results {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 12px;
+  border-radius: 24px;
+  background: rgba(245, 245, 245, 0.64); /* the documented "app content" glass ground */
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.sf-searchOverlay__results:empty { display: none; }
+.sf-searchOverlay__results .listRow { background: rgba(255, 255, 255, 0.55); border-color: transparent; }
+
+.sf-calendarOverlay { position: fixed; inset: 0; z-index: 65; display: grid; place-items: center; }
+.sf-calendarOverlay[hidden] { display: none; }
+.sf-calendarOverlay__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(52, 21, 57, 0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.sf-calendarOverlay__stage {
+  position: relative;
+  z-index: 1;
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px); /* a safety net for a genuinely short viewport, not the normal case */
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: var(--shadow-floating);
+  background: var(--surface-calendar);
+}
+.sf-calendarOverlay__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-primary);
+  --lg-fill: var(--surface-sunken);
+  --lg-blur: 0px;
+  --lg-edge: transparent;
+  box-shadow: var(--shadow-floating);
+  transition:
+    background var(--duration-quick) var(--ease-standard),
+    backdrop-filter var(--duration-quick) var(--ease-standard),
+    border-color var(--duration-quick) var(--ease-standard),
+    box-shadow var(--duration-quick) var(--ease-standard);
+}
+.sf-calendarOverlay__close:hover,
+.sf-calendarOverlay__close:focus-visible,
+.sf-calendarOverlay__close:active {
+  --lg-fill: rgba(245, 245, 245, 0.64); /* the documented "app content" glass ground */
+}
+.sf-calendarOverlay__close.lg:hover,
+.sf-calendarOverlay__close.lg:focus-visible,
+.sf-calendarOverlay__close.lg:active {
+  --lg-blur: 14px; /* liquidGlass.css's own default */
+  --lg-edge: var(--glass-light-rim);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+.sf-calendarOverlay__close .icon { width: var(--icon-lg); height: var(--icon-lg); }
+
+.sf-calendarOverlay__track {
+  display: flex;
+  align-items: stretch;
+  width: 200%;
+  transition: transform var(--duration-warm) var(--ease-spring);
+}
+[data-calendar-stage="confirm"] .sf-calendarOverlay__track { transform: translateX(-50%); }
+@media (prefers-reduced-motion: reduce) {
+  .sf-calendarOverlay__track { transition: none; }
+}
+
+.sf-calendarOverlay__panel {
+  flex: 0 0 50%;
+  width: 50%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 80px 24px 24px;
+}
+.sf-calendarOverlay__panel--pick { background: var(--surface-calendar); overflow-y: auto; }
+.sf-calendarOverlay__panel--confirm { background: var(--surface-calendar); justify-content: space-between; }
+.sf-calendar__preview { display: flex; justify-content: center; }
+.sf-calendar__preview .sf-gradeCard { width: 100%; padding: 24px; gap: 16px; }
+.sf-calendar__preview .sf-gradeCard__date { font-size: 64px; }
+.sf-calendar__preview .sf-gradeCard__day { font-size: 24px; }
+.sf-calendar__preview .sf-gradeCard__tag { font-size: 16px; padding: 8px 12px; }
+.sf-calendar__preview .sf-gradeCard__tag .icon-img { width: 16px; height: 16px; }
+.sf-calendar__preview .sf-directions { gap: 12px; padding: 12px; }
+.sf-calendar__preview .sf-directions__icon { width: 20px; height: 20px; }
+.sf-calendar__preview .sf-directions__label { font-size: 12px; }
+.sf-calendar__preview .sf-directions__value { font-size: 16px; }
+
+.sf-calendar__nav { display: flex; align-items: center; justify-content: space-between; padding-bottom: 8px; }
+.sf-calendar__monthNav { display: flex; align-items: center; gap: 16px; }
+.sf-calendar__yearNav { display: flex; align-items: center; gap: 8px; }
+.sf-calendar__month {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 1.44px;
+  color: var(--text-primary); /* Figma says pure #000; --text-primary is this system's own near-black, already the same job */
+  font-feature-settings: "ss01" 1; /* Figma's own stylistic-alternate flag on this exact type instance */
+}
+.sf-calendar__year {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 14px; /* shrunk with .sf-calendar__month above, same proportion */
+  color: color-mix(in srgb, var(--accent) 50%, transparent); /* Figma: rgba(145,59,159,0.5) */
+}
+
+.sf-calendar__arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text-primary);
+  --lg-fill: var(--glass-bg); /* Figma's rgba(245,245,245,0.2) IS --glass-bg, unmodified */
+}
+.sf-calendar__arrow .icon {
+  width: 11px;
+  height: 19px;
+}
+.sf-calendar__icon--fwd { transform: scaleX(-1); } /* forward = the same asset, flipped — no new SVG */
+.sf-calendar__arrow--year {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+}
+.sf-calendar__arrow--year .icon { width: 7px; height: 12px; } /* scaled to the smaller circle; Figma's own 19px-tall icon inside a 20px button with 10px padding is arithmetically impossible (10+10 already consumes the whole button), so its literal number isn't followable here */
+.sf-calendar__arrow:disabled { opacity: 0.35; pointer-events: none; cursor: not-allowed; }
+
+.sf-calendar__weekdays,
+.sf-calendar__row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* fluid, not a fixed 94px — see the mobile note below */
+  gap: 8px;
+}
+.sf-calendar__weekdays {
+  padding-bottom: 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--scaffold) 25%, transparent); /* Figma: rgba(158,148,161,0.25) = --scaffold at 25% */
+}
+.sf-calendar__weekdays span {
+  padding: 4px;
+  font-family: var(--font-mono);
+  font-weight: 300;
+  font-size: 11px; /* shrunk with the panel above — Figma's 19px assumed a 94px column */
+  letter-spacing: 0.57px;
+  text-align: right;
+  color: color-mix(in srgb, var(--accent) 60%, transparent); /* Figma: rgba(145,59,159,0.6) */
+}
+.sf-calendar__grid { display: flex; flex-direction: column; }
+.sf-calendar__row { padding: 0; border-bottom: 1px solid color-mix(in srgb, var(--scaffold) 25%, transparent); }
+.sf-calendar__row:last-child { border-bottom: 0; }
+
+.sf-calendar__day {
+  aspect-ratio: 1; /* square at any column width the fluid grid computes — ~46px at the desktop 420px panel */
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 4px;
+  border: 0;
+  border-radius: var(--radius-chip); /* closest existing token — Figma's own cells carry no radius of their own to show a different one (no hover/selected state is drawn in the source) */
+  background: none;
+  font-family: var(--font-mono);
+  font-weight: 300;
+  font-size: 13px; /* shrunk with the panel above */
+  letter-spacing: 0.57px;
+  color: var(--text-secondary); /* Figma: #6b5e6f, exactly this token */
+  cursor: pointer;
+  transition: background var(--duration-quick) var(--ease-standard), color var(--duration-quick) var(--ease-standard);
+}
+.sf-calendar__day:hover:not(:disabled) { background: var(--accent-wash); } /* same value as .sf-railRow's selected state, per the shared token */
+.sf-calendar__day:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.sf-calendar__day[data-today]:not([aria-selected="true"]) { color: var(--accent); font-weight: 400; }
+.sf-calendar__day[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+.sf-calendar__day[aria-selected="true"]:hover { background: var(--accent); }
+.sf-calendar__day--outside { color: var(--text-faint); cursor: default; }
+.sf-calendar__day--outside:hover { background: none; }
+.sf-calendar__day:disabled {
+  color: var(--text-secondary);
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.sf-calendar__pickActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 16px;
+  margin-top: 8px;
+  border-top: 1px solid color-mix(in srgb, var(--scaffold) 25%, transparent);
+}
+.sf-calendar__pickActions [data-calendar-delete] { margin-right: auto; }
+.sf-calendar__pickActions [data-calendar-delete][hidden] { display: none; }
+
+.sf-calendar__confirmActions { display: flex; gap: 24px; }
+.sf-calendar__confirmActions [data-calendar-back] {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 20px;
+  padding: 12px 16px;
+  --lg-fill: var(--surface-card);
+  --lg-blur: 0px;
+  --lg-edge: var(--border-strong);
+  background: var(--lg-fill);
+  border-color: var(--lg-edge);
+  transition:
+    background var(--duration-quick) var(--ease-standard),
+    backdrop-filter var(--duration-quick) var(--ease-standard),
+    border-color var(--duration-quick) var(--ease-standard),
+    box-shadow var(--duration-quick) var(--ease-standard);
+}
+.sf-calendar__confirmActions [data-calendar-back] .icon { width: var(--icon-md); height: var(--icon-md); }
+.sf-calendar__confirmActions [data-calendar-confirm] {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 20px;
+  padding: 12px 16px;
+  --lg-fill: var(--accent);
+  --lg-blur: 0px;
+  --lg-edge: transparent;
+  background: var(--lg-fill);
+  border-color: var(--lg-edge);
+  transition:
+    background var(--duration-quick) var(--ease-standard),
+    backdrop-filter var(--duration-quick) var(--ease-standard),
+    border-color var(--duration-quick) var(--ease-standard),
+    box-shadow var(--duration-quick) var(--ease-standard);
+}
+.sf-calendar__confirmActions [data-calendar-back]:hover,
+.sf-calendar__confirmActions [data-calendar-back]:focus-visible,
+.sf-calendar__confirmActions [data-calendar-back]:active {
+  --lg-fill: rgba(245, 245, 245, 0.64); /* the documented "app content" glass ground */
+}
+.sf-calendar__confirmActions [data-calendar-confirm]:hover,
+.sf-calendar__confirmActions [data-calendar-confirm]:focus-visible,
+.sf-calendar__confirmActions [data-calendar-confirm]:active {
+  --lg-fill: color-mix(in srgb, var(--accent) 85%, transparent);
+}
+.sf-calendar__confirmActions [data-calendar-back].lg:hover,
+.sf-calendar__confirmActions [data-calendar-back].lg:focus-visible,
+.sf-calendar__confirmActions [data-calendar-back].lg:active,
+.sf-calendar__confirmActions [data-calendar-confirm].lg:hover,
+.sf-calendar__confirmActions [data-calendar-confirm].lg:focus-visible,
+.sf-calendar__confirmActions [data-calendar-confirm].lg:active {
+  --lg-blur: 14px; /* liquidGlass.css's own default */
+  --lg-edge: var(--glass-light-rim);
+  box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+
+@media (max-width: 768px) {
+  .sf-main { padding: 24px 24px 140px; }
+
+  .sf-topbarPill { height: 48px; padding: 6px 16px; }
+  .sf-topbar__wordmark { width: 120px; }
+  .sf-topbar__x { font-size: 14px; }
+  .sf-topbar__orgmark { width: 72.5px; height: 33.9px; }
+
+  /* ---- the dock ---- */
+
+  /* ---- the disclaimer bar ---- */
+  .sf-footBar, .sf-footFrost { left: 24px; right: 24px; }
+  .sf-timeline { top: 120px; margin-top: 96px; }
+
+  /* ---- Home ---- */
+  .sf-title { font-size: 24px; }
+
+  /* ---- the transcript ---- */
+  .sf-transcript { flex-direction: column; align-items: stretch; }
+  .sf-timeline { flex-direction: row; padding-top: 0; }
+
+  .sf-stallHead__id { gap: 16px; }
+  .sf-stallHead__photo { width: 64px; height: 64px; }
+  .sf-stallHead__name { font-size: 24px; }
+  .sf-stallHead__centre { font-size: 14px; }
+  .sf-stallHead__actions { gap: 12px; }
+  .sf-actionPill { width: 48px; height: 48px; padding: 0; }
+  .sf-actionPill__label { display: none; }
+
+  .sf-gradeCard__letter, .sf-gradeCard__date { font-size: 32px; }
+
+  /* ---- the calendar ---- */
+  .sf-calendarOverlay__panel { max-height: calc(100vh - 16px); padding: 16px; gap: 4px; }
+  .sf-calendar__pickActions [data-calendar-next],
+  .sf-calendar__pickActions [data-calendar-delete] { flex: 1; }
+  .sf-calendar__confirmActions { flex-direction: column-reverse; }
+  .sf-calendar__confirmActions [data-calendar-back],
+  .sf-calendar__confirmActions [data-calendar-confirm] { flex: 1; }
+}
+
+:root {
+  --sf-drawer-shift: 280px;  /* matches sidebarResponsive.css's own --drawer-shift */
+  --sf-drawer-radius: 32px;  /* matches its --drawer-radius */
+}
+
+.sf-shell { display: contents; }
+.sf-menuBtn { display: none; flex: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; }
+.sf-drawerOverlay { display: none; }
+.sf-drawerEdge { display: none; }
+
+@media (max-width: 768px) {
+  .sf-menuBtn { display: grid; place-items: center; }
+
+  .sf-shell {
+    display: block;
+    position: relative;
+    z-index: 2;
+    flex: 1 0 0;
+    min-width: 0;
+    background: var(--surface-page);
+    transform: translateX(0);
+    transition:
+      transform var(--duration-warm) var(--ease-standard),
+      border-radius var(--duration-warm) var(--ease-standard);
+    will-change: transform;
+  }
+  #view-authority.sf-drawerOpen .sf-shell {
+    transform: translateX(var(--sf-drawer-shift));
+    border-radius: var(--sf-drawer-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-drawer);
+  }
+
+  .sf-rail {
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sf-drawer-shift);
+    margin: 0;
+    border-radius: 0;
+    background: var(--surface-page);
+    visibility: hidden;
+    transition: visibility 0s linear var(--duration-warm);
+  }
+  #view-authority.sf-drawerOpen .sf-rail {
+    visibility: visible;
+    transition-delay: 0s;
+  }
+
+  .sf-drawerOverlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    background: rgba(255, 255, 255, var(--drawer-wash));
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--duration-warm) var(--ease-standard),
+      transform var(--duration-warm) var(--ease-standard),
+      visibility var(--duration-warm) var(--ease-standard);
+  }
+  #view-authority.sf-drawerOpen .sf-drawerOverlay {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(var(--sf-drawer-shift));
+    border-radius: var(--sf-drawer-radius);
+  }
+
+  .sf-drawerEdge {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 22px;
+    z-index: 4;
+    touch-action: pan-y;
+    pointer-events: none;
+  }
+  #view-authority:not(.sf-drawerOpen) .sf-drawerEdge {
+    pointer-events: auto;
+  }
+}
+
+#view-authority.sf-drawerDragging .sf-shell,
+#view-authority.sf-drawerDragging .sf-drawerOverlay {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* .listRow's own reduced-motion rule ships with it in assets/css/listRow.css */
+  .sf-score { transition: none; } /* .bottomNav__item is covered by bottomNav.css */
+  .bottomNav__thumb { transition: none; }
+  .sf-shell, .sf-drawerOverlay { transition: none; }
+}

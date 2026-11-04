@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Inbox</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+  <link rel="stylesheet" href="../../css/shared/listRow.css">
+  <link rel="stylesheet" href="../../css/operator/supportInbox.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">Support Inbox</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page page-wide">
+    <a href="operatorHome.html" class="back-link">&larr; Back to Home</a>
+    <p class="subtitle">Review and respond to vendor and customer support requests.</p>
+
+    <div class="filters-row">
+      <select id="filterCategory">
+        <option value="">All categories</option>
+        <option value="Payment">Payment</option>
+        <option value="Rental">Rental</option>
+        <option value="Technical">Technical</option>
+        <option value="Others">Others</option>
+      </select>
+      <select id="filterStatus">
+        <option value="">Any status</option>
+        <option value="Open">Open</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Finding Solution">Finding Solution</option>
+        <option value="Testing">Testing</option>
+        <option value="Awaiting Response">Awaiting Response</option>
+      </select>
+      <div id="filterCentreWrap" style="display: none; align-items: center;">
+        <select id="filterCentre"></select>
+      </div>
+    </div>
+
+    <div class="card">
+      <div id="inboxList" class="listStack"></div>
+      <p class="empty-msg" id="inboxEmptyMsg" style="display: none;">No open tickets right now.</p>
+    </div>
+  </div>
+
+  <!-- Ticket detail modal -->
+  <div id="ticketDetailModal" class="modal-overlay">
+    <div class="modal-box form-modal-box">
+      <button type="button" class="form-modal-close" id="closeDetailModalBtn">&times;</button>
+      <h3 id="detailTicketTitle">Ticket</h3>
+      <div id="detailTicketBody"></div>
+      <div id="detailActions"></div>
+      <p class="msg" id="detailMsg"></p>
+    </div>
+  </div>
+
+  <!-- Mark complete modal -->
+  <div id="completeModal" class="modal-overlay">
+    <div class="modal-box form-modal-box">
+      <button type="button" class="form-modal-close" id="closeCompleteModalBtn">&times;</button>
+      <h3>Close Ticket</h3>
+      <form id="completeForm">
+        <label for="Outcome">Outcome</label>
+        <select id="Outcome">
+          <option value="Completed">Resolved</option>
+          <option value="Unresolvable">Unresolvable</option>
+        </select>
+        <label for="Message">Resolution message</label>
+        <textarea id="Message" rows="3" placeholder="What was done / why it can't be resolved"></textarea>
+        <p class="msg" id="completeMsg"></p>
+        <div class="modal-actions">
+          <button type="button" class="modal-cancel-btn" id="cancelCompleteBtn">Cancel</button>
+          <button type="submit" class="modal-confirm-btn">Close Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/ticketInbox.js"></script>
+  <script>
+    renderOperatorNavbar('supportInbox');
+    renderBottomPillNav('home');
+    if (!localStorage.getItem('authToken')) {
+      window.location.href = '/auth/login.html';
+    }
+  </script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

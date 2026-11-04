@@ -1,0 +1,811 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    overflow-x: hidden;
+}
+
+body {
+    font-family:
+        var(--font-ui),
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        sans-serif;
+    background-color: #fff;
+    min-height: 100vh;
+}
+
+/* ============================================
+   LIQUID GLASS TOP BAR (AUTH PAGES)
+   ============================================ */
+
+.authGlassTopBar {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 600px;
+    height: 72px;
+    border-radius: 20px;
+    z-index: 1000;
+    cursor: grab;
+    user-select: none;
+
+    border: 1px solid var(--glass-light-rim);
+    background: var(--glass-light-fill);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+
+.authGlassTopBar:active {
+    cursor: grabbing;
+}
+
+.authGlassTopBar.dragging {
+    cursor: grabbing;
+    transition: box-shadow 0.15s ease;
+    box-shadow:
+        0 16px 48px rgba(52, 21, 57, 0.18),
+        0 4px 12px rgba(0, 0, 0, 0.1),
+        inset 0 1px 1px rgba(255, 255, 255, 0.9),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.authGlassTopBar.bouncing {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.authGlassTopBarInner {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 100%;
+    position: relative;
+    z-index: 2;
+}
+
+/* Glass highlight - specular reflection */
+.authGlassHighlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: 1;
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(255, 255, 255, 0) 40%
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+}
+
+/* Back Button - pill shape with icon and text */
+.authTopBarBack {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 56px;
+    padding: 0 20px 0 16px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--glass-light-rim);
+    background: var(--glass-light-fill);
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+    color: var(--text-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 3;
+    text-decoration: none;
+}
+
+.authTopBarBack .icon {
+    color: var(--text-primary);
+}
+
+.authTopBarBackText {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--accent);
+}
+
+.authTopBarTitle {
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 3;
+}
+
+.authTopBarLogo {
+    height: 28px;
+    width: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.authTopBarSpacer {
+    width: 90px;
+}
+
+/* No back button variant */
+.authGlassTopBar.no-back .authTopBarTitle {
+    text-align: center;
+}
+
+.authGlassTopBar.no-back .authTopBarSpacer {
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .authGlassTopBar {
+        top: 8px;
+        width: calc(100% - 16px);
+        height: 56px;
+        border-radius: 16px;
+    }
+
+    .authTopBarBack {
+        height: 40px;
+        padding: 0 14px 0 10px;
+        border-radius: 20px;
+    }
+
+    .authTopBarBackText {
+        font-size: 13px;
+    }
+
+    .authTopBarSpacer {
+        width: 70px;
+    }
+
+    .authTopBarLogo {
+        height: 22px;
+    }
+
+    .authTopBarTitle {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   AUTH CONTAINER - CENTERED LAYOUT
+   ============================================ */
+
+.authContainer {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-sunken);
+    padding-top: 104px;
+    padding-bottom: 24px;
+}
+
+.authRight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    width: 100%;
+}
+
+.authFormContainer {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* ============================================
+   AUTH HEADER
+   ============================================ */
+
+.authHeader {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.authTitle {
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.authSubtitle {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+
+.authForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formLabel {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.formInput {
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: var(--font-ui);
+    font-size: 16px;
+    color: var(--text-primary);
+    background: #fff;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(145, 59, 159, 0.1);
+}
+
+.formInput::placeholder {
+    color: #a0a0a0;
+}
+
+.formInput.error {
+    border-color: var(--invalid);
+}
+
+.formInput.error:focus {
+    box-shadow: 0 0 0 3px rgba(235, 0, 27, 0.1);
+}
+
+/* Password Input Wrapper */
+.passwordInputWrapper {
+    position: relative;
+}
+
+.passwordInputWrapper .formInput {
+    padding-right: 48px;
+}
+
+.passwordToggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.passwordToggle:hover {
+    color: var(--text-primary);
+}
+
+.eyeIcon {
+    width: 20px;
+    height: 20px;
+}
+
+.eyeIcon.eyeClosed {
+    display: none;
+}
+
+.passwordToggle.visible .eyeIcon.eyeOpen {
+    display: none;
+}
+
+.passwordToggle.visible .eyeIcon.eyeClosed {
+    display: block;
+}
+
+/* Form Error Messages */
+.formError {
+    color: var(--invalid);
+    font-size: 13px;
+    min-height: 18px;
+    display: none;
+}
+
+.formError.visible {
+    display: block;
+}
+
+.formErrorGeneral {
+    text-align: center;
+    padding: 12px;
+    background: rgba(235, 0, 27, 0.08);
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+/* ============================================
+   INVALID CREDENTIALS NOTIFICATION (LIQUID GLASS)
+   ============================================ */
+
+.invalidCredentialsNotif {
+    position: fixed;
+    top: 110px;
+    right: 16px;
+    transform: translateX(calc(100% + 16px));
+    width: auto;
+    max-width: calc(100vw - 32px);
+    padding: 24px;
+
+    border: 1px solid var(--glass-light-rim);
+    background: var(--glass-light-fill);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border-radius: 24px;
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    transition:
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.3s ease;
+}
+
+.invalidCredentialsNotif.visible {
+    transform: translateX(0);
+}
+
+.invalidCredentialsImage {
+    width: 350px;
+    height: auto;
+}
+
+.invalidCredentialsHeader {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.invalidCredentialsText {
+    font-family: var(--font-ui);
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .invalidCredentialsNotif {
+        width: calc(100vw - 32px);
+        right: -100vw;
+    }
+
+    .invalidCredentialsNotif.visible {
+        transform: translateX(0);
+    }
+
+    .invalidCredentialsImage {
+        width: 200px;
+    }
+
+    .invalidCredentialsText {
+        white-space: normal;
+    }
+}
+
+/* Form Options Row */
+.formOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 14px;
+    user-select: none;
+}
+
+.checkboxLabel input[type="checkbox"] {
+    display: none;
+}
+
+.checkboxCustom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    position: relative;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkboxCustom {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkboxCustom::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 4px;
+    height: 8px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.forgotLink {
+    color: var(--accent);
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.forgotLink:hover {
+    color: #7a2f87;
+    text-decoration: underline;
+}
+
+/* ============================================
+   AUTH BUTTON
+   ============================================ */
+
+.loading .btnText {
+    visibility: hidden;
+}
+
+.loading .btnLoader {
+    display: block;
+}
+
+.btnLoader {
+    display: none;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+
+.authDivider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+}
+
+.authDivider::before,
+.authDivider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
+.authDivider span {
+    padding: 0 16px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* ============================================
+   SOCIAL BUTTON
+   ============================================ */
+
+.socialButton {
+    width: 100%;
+    height: 52px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.socialButton:hover {
+    border-color: var(--text-primary);
+    background: #faf8fb;
+}
+
+/* ============================================
+   AUTH FOOTER
+   ============================================ */
+
+.authFooter {
+    text-align: center;
+    margin-top: 24px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+.authLink {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.authLink:hover {
+    color: #7a2f87;
+    text-decoration: underline;
+}
+
+/* ============================================
+   PASSWORD STRENGTH INDICATOR
+   ============================================ */
+
+.passwordStrength {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.strengthBar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.strengthBar.weak {
+    background: var(--invalid);
+}
+
+.strengthBar.fair {
+    background: #f5a623;
+}
+
+.strengthBar.good {
+    background: #7cb342;
+}
+
+.strengthBar.strong {
+    background: var(--status-open);
+}
+
+.strengthText {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+.strengthText.weak {
+    color: var(--invalid);
+}
+
+.strengthText.fair {
+    color: #f5a623;
+}
+
+.strengthText.good {
+    color: #7cb342;
+}
+
+.strengthText.strong {
+    color: var(--status-open);
+}
+
+/* ============================================
+   SUCCESS MESSAGE
+   ============================================ */
+
+.successMessage {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    padding: 32px;
+}
+
+.successMessage.visible {
+    display: flex;
+}
+
+.successIcon {
+    width: 64px;
+    height: 64px;
+    background: #e8f5e9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.successIcon .icon {
+    color: var(--status-open);
+}
+
+.successTitle {
+    color: var(--text-primary);
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.successText {
+    color: var(--text-secondary);
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* ============================================
+   USER TYPE SELECTION (REGISTER)
+   ============================================ */
+
+.userTypeSelection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.userTypeOption {
+    padding: 16px 8px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.userTypeOption:hover {
+    border-color: var(--accent);
+}
+
+.userTypeOption.selected {
+    border-color: var(--accent);
+    background: rgba(145, 59, 159, 0.05);
+}
+
+.userTypeOption input {
+    display: none;
+}
+
+.userTypeIcon {
+    width: 40px;
+    height: 40px;
+    margin: 0 auto 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-sunken);
+    border-radius: 50%;
+}
+
+.userTypeOption.selected .userTypeIcon {
+    background: rgba(145, 59, 159, 0.15);
+}
+
+.userTypeName {
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ============================================
+   BACK TO LOGIN LINK
+   ============================================ */
+
+.backToLogin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: color 0.2s ease;
+}
+
+.backToLogin:hover {
+    color: var(--text-primary);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 968px) {
+    .authRight {
+        padding: 32px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .authRight {
+        padding: 24px 16px;
+    }
+
+    .authTitle {
+        font-size: 28px;
+    }
+
+    .formOptions {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .userTypeSelection {
+        flex-direction: column;
+    }
+}

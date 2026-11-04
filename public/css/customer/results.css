@@ -1,0 +1,256 @@
+/* ---- View routing (one view visible at a time) ---- */
+#view-results {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  max-width: 600px;
+  margin-inline: auto;
+  background: var(--surface-page);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+body[data-view="results"] #view-home { display: none; }
+body[data-view="results"] #view-results { display: block; }
+
+/* ---- Header (dual button · heart · location pill) ---- */
+.results-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* matches home's app-header gap */
+  padding: max(env(safe-area-inset-top), 20px) 16px 8px;
+}
+.results-bar__gap { flex: 0 0 49px; } /* measured: aligns heart + pill to their home position exactly (menu+logo width − dual button width), so the morph is a no-op and they hold still */
+.results-bar__right {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dual-btn {
+  --lg-fill: rgba(245, 245, 245, 0.64);
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 40px; /* Figma gap-[40px] */
+  height: 44px; /* h-[44px] */
+  padding: 10px 19px; /* px-[19px] py-[10px] */
+  border-radius: 48px; /* rounded-[48px] */
+}
+.dual-btn__side {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.dual-btn__icon { display: block; height: 19px; width: auto; } /* real Figma SVGs, accent-purple */
+.hdr-btn__icon--panel { width: 19px; height: 19px; } /* home menu panel matches the dual-button panel (both 19px) */
+
+.results-heart { flex: none; }
+
+.results-search {
+  margin: 8px 16px 0;
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.results-search .search-block { padding: 0; }
+.results-search .search-bar { background: transparent; border-radius: 0; overflow: visible; }
+/* the × (search-clear) doubles as the close-advanced control while open */
+.results-search.is-open .search-clear { opacity: 1; transform: none; pointer-events: auto; }
+
+.adv-loc { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.44s var(--ease-standard); }
+.results-search.is-open .adv-loc { grid-template-rows: 1fr; }
+.adv-loc__gi { min-height: 0; overflow: hidden; }
+.adv-loc__in {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 2px 16px 16px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transform-origin: top;
+  transition: opacity 0.3s var(--ease-standard) 0.08s, transform 0.42s var(--ease-standard) 0.08s;
+}
+.results-search.is-open .adv-loc__in { opacity: 1; transform: none; }
+.adv-loc__label { flex: none; font-family: var(--font-ui); font-size: 14px; font-weight: 600; color: var(--text-primary); }
+/* fully-rounded frosted liquid-glass input, no icon (Figma has none) */
+.adv-loc__input {
+  flex: 1;
+  min-width: 0;
+  border-radius: 100px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.42);
+  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  backdrop-filter: blur(10px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+.adv-loc__input input {
+  width: 100%;
+  border: 0;
+  background: none;
+  outline: none;
+  font-family: var(--font-ui);
+  font-size: 15px;
+  color: var(--text-primary);
+}
+.adv-loc__input input::placeholder { color: var(--text-secondary); }
+
+.adv-suggest {
+  list-style: none;
+  margin: 8px 16px 0;
+  padding: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.42);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+  backdrop-filter: blur(16px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 28px rgba(0, 0, 0, 0.14);
+  transition: max-height 0.38s var(--ease-standard), opacity 0.28s var(--ease-standard);
+}
+.adv-suggest.is-open { max-height: 260px; opacity: 1; padding: 6px; overflow-y: auto; }
+.adv-suggest__item { padding: 10px 14px; border-radius: 14px; cursor: pointer; transition: background 0.15s; }
+.adv-suggest__item:hover,
+.adv-suggest__item.is-active { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.adv-suggest__main { display: block; font-family: var(--font-ui); font-size: 15px; font-weight: 500; color: var(--text-primary); }
+.adv-suggest__sub { display: block; font-family: var(--font-ui); font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+/* ---- Cuisine row reuses .cuisine-row from home.css (no overrides needed) ---- */
+
+/* ---- Filter / action chips ---- */
+.results-filters {
+  display: flex;
+  gap: 16px;
+  padding: 0 16px 24px;
+  overflow-x: auto;
+}
+.rfilter {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--text-muted);
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 5px 8px; /* Figma px-[8px] py-[4px] */
+  border-radius: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.rfilter__ic { height: 10px; width: auto; flex: none; } /* real Figma icon SVGs (grey / yellow star / ticket) */
+
+/* ---- Results body ---- */
+.results-body { padding-top: 8px; padding-bottom: 32px; }
+.results-title {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 24px; /* text-[24px] */
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0 24px;
+}
+.results-feed { display: flex; flex-direction: column; }
+
+/* ---- Dish carousel — Grab pattern: shown under a stall only on a dish query ---- */
+.dish-row {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 0 24px 16px;
+  scrollbar-width: none;
+}
+.dish-row::-webkit-scrollbar { display: none; }
+.dish-card { flex: none; width: 96px; display: flex; flex-direction: column; gap: 4px; }
+.dish-card__photo {
+  width: 96px;
+  height: 96px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: var(--border);
+}
+.dish-card__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin: 0;
+}
+.dish-card__price {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* Header morph — home ↔ results (View Transitions). */
+.app-header .hdr-btn[aria-label="Favourites"],
+.results-heart { view-transition-name: hdr-heart; }
+
+.app-header .hdr-btn[aria-label="Menu"],
+.dual-btn { view-transition-name: hdr-leftpill; }
+
+.app-header .hdr-btn[aria-label="Menu"] .hdr-btn__icon,
+.dual-btn__side[data-menu] .dual-btn__icon { view-transition-name: hdr-panelicon; }
+
+.dual-btn__side[data-results-back] .dual-btn__icon { view-transition-name: hdr-backarrow; }
+
+.logo { view-transition-name: hdr-logo; }
+
+::view-transition-group(hdr-heart),
+::view-transition-group(hawkr-locfield) {
+  animation-duration: 460ms;
+  animation-timing-function: var(--ease-spring); /* heart + pill: bounce into place */
+}
+::view-transition-group(hdr-leftpill) {
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-standard); /* smooth grow, no overshoot */
+}
+::view-transition-old(hdr-leftpill),
+::view-transition-new(hdr-leftpill),
+::view-transition-old(hdr-heart),
+::view-transition-new(hdr-heart) {
+  mix-blend-mode: normal !important; /* !important: the UA sets plus-lighter via an ANIMATION, which beats a normal author rule */
+}
+::view-transition-group(hdr-panelicon) {
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-standard);
+}
+::view-transition-old(hdr-panelicon),
+::view-transition-new(hdr-panelicon) {
+  height: 100%;
+  width: auto;
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-standard);
+}
+::view-transition-new(hdr-backarrow) { animation: hdr-backarrow-in 300ms var(--ease-standard) 60ms both; }
+::view-transition-old(hdr-backarrow) { animation: hdr-backarrow-out 200ms var(--ease-standard) both; }
+@keyframes hdr-backarrow-in { from { opacity: 0; transform: translateX(-8px); } }
+@keyframes hdr-backarrow-out { to { opacity: 0; transform: translateX(-8px); } }
+
+::view-transition-old(hdr-logo) { animation: hdr-logo-out 200ms var(--ease-standard) both; }
+::view-transition-new(hdr-logo) { animation: hdr-logo-in 260ms var(--ease-spring) both; }
+@keyframes hdr-logo-out { to { opacity: 0; transform: scale(0.82); } }
+@keyframes hdr-logo-in { from { opacity: 0; transform: scale(0.82); } }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(hdr-heart),
+  ::view-transition-group(hdr-leftpill),
+  ::view-transition-group(hdr-panelicon),
+  ::view-transition-group(hdr-backarrow),
+  ::view-transition-group(hawkr-locfield),
+  ::view-transition-old(hdr-logo),
+  ::view-transition-new(hdr-logo) { animation-duration: 0.01ms; }
+}

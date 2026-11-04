@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — Hawker Operator</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+  <link rel="stylesheet" href="../../css/operator/operatorProfile.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">My Profile</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page">
+    <a href="operatorHome.html" class="back-link">&larr; Back to Home</a>
+    <p class="subtitle">Manage your account details, password, and hawker centre assignments.</p>
+
+    <!-- Photo -->
+    <div class="card">
+      <h2>Profile Photo</h2>
+      <div class="photo-row">
+        <div class="photo-preview" id="photoPreview">?</div>
+        <div>
+          <p class="profile-summary-line" id="profileSummaryLine"></p>
+          <label class="file-drop" for="photoInput" style="display:inline-block; padding:8px 14px;">Change Photo</label>
+          <input type="file" id="photoInput" accept="image/jpeg,image/png">
+          <p class="locked-note" style="margin-top:6px;">JPG or PNG, up to 5MB.</p>
+        </div>
+      </div>
+      <p id="photoMsg" class="msg"></p>
+    </div>
+
+    <!-- Account details -->
+    <div class="card">
+      <h2>Account Details</h2>
+      <form id="detailsForm">
+        <label>Username</label>
+        <input type="text" id="UserName" required minlength="3" maxlength="50">
+
+        <label>Email</label>
+        <input type="email" id="Email" placeholder="you@example.com">
+
+        <label>Phone Number <span class="locked-note">(optional, for urgent centre issues)</span></label>
+        <input type="tel" id="PhoneNumber" placeholder="e.g. 9123 4567">
+
+        <p id="detailsMsg" class="msg"></p>
+
+        <div class="form-actions">
+          <button type="submit" class="save-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Change password -->
+    <div class="card">
+      <h2>Change Password</h2>
+      <form id="passwordForm">
+        <label>Current Password</label>
+        <input type="password" id="currentPassword" required autocomplete="current-password">
+
+        <label>New Password</label>
+        <input type="password" id="newPassword" required minlength="8" autocomplete="new-password">
+
+        <label>Confirm New Password</label>
+        <input type="password" id="confirmPassword" required minlength="8" autocomplete="new-password">
+
+        <p id="passwordMsg" class="msg"></p>
+
+        <div class="form-actions">
+          <button type="submit" class="save-btn">Change Password</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Identity (read-only) -->
+    <div class="card">
+      <h2>Identity</h2>
+      <div class="detail-list">
+        <div class="detail-row"><span>Operator ID</span><strong id="v_UserId"></strong></div>
+        <div class="detail-row"><span>Role</span><strong><span class="status-badge status-inflight">Operator</span></strong></div>
+        <div class="detail-row"><span>Account Created</span><strong id="v_CreatedAt"></strong></div>
+      </div>
+    </div>
+
+    <!-- Hawker centres managed -->
+    <div class="card">
+      <h2>Hawker Centres Managed</h2>
+      <p class="subtitle" style="margin-bottom:12px;">Select which hawker centres you're assigned to. This controls which centres appear in Centre Management.</p>
+      <div class="checkbox-list" id="centreChecklist"></div>
+      <p id="centresMsg" class="msg"></p>
+      <div class="form-actions">
+        <button type="button" id="saveCentresBtn" class="save-btn">Save Assignments</button>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="card danger-zone">
+      <h2>Account</h2>
+      <div class="form-actions" style="justify-content: flex-start;">
+        <button type="button" id="dangerLogoutBtn" class="cancel-btn">Log Out</button>
+        <button type="button" id="deleteAccountBtn" class="delete-btn">Delete Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Delete Account</h3>
+      <p>This permanently deletes your operator account and removes your hawker centre assignments. This cannot be undone. Are you sure?</p>
+      <div class="modal-actions">
+        <button id="modalCancelBtn" class="modal-cancel-btn" type="button">Cancel</button>
+        <button id="modalConfirmBtn" class="modal-confirm-btn" type="button">Yes, Delete My Account</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Hawker Management System</p>
+  </footer>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/operatorProfile.js"></script>
+  <script>
+    renderOperatorNavbar('profile');
+    renderBottomPillNav('home');
+    if (!localStorage.getItem('authToken')) {
+      window.location.href = '/auth/login.html';
+    }
+  </script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

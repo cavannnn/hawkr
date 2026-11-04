@@ -1,0 +1,129 @@
+:root {
+    --dock-clearance: 96px;
+}
+
+.bottomNav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: max-content;
+    margin-inline: auto;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    z-index: 40; /* over content, UNDER a modal scrim so the scrim covers it */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 45px;
+    padding: 8px 26px;
+    border-radius: var(--radius-pill);
+    background: var(--accent);
+    box-shadow: 0 12px 32px rgba(52, 21, 57, 0.28);
+
+    /* ---- stadium geometry, read by assets/js/bottomNav.js ---- */
+    --bn-over: 30px; /* horizontal overhang each side */
+    --bn-pad-y: 6px; /* vertical padding around the item */
+    --bn-inset: 3px; /* closest the stadium may come to the bar's cap — this is what makes
+                        an END item's stadium shorter than a middle one */
+    --bn-grow: 8px; /* extra all round while materialised */
+
+    /* ---- takes liquidGlass.js's PHYSICS and none of its material ---- */
+    --lg-fill: var(--accent);
+    --lg-blur: 0px;
+    --lg-edge: transparent;
+    --lg-glow: rgba(255, 255, 255, 0.22); /* white, not accent: the pill IS the accent */
+    --lg-glow-mid: rgba(255, 255, 255, 0.06);
+}
+
+.bottomNav.lg {
+    overflow: visible;
+}
+.bottomNav .lg__glow {
+    border-radius: inherit;
+}
+
+.bottomNav__item {
+    position: relative; /* rides above the stadium */
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: transparent;
+    text-align: center;
+
+    text-decoration: none;
+    -webkit-user-drag: none;
+
+    font-family: var(--font-ui);
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 14px;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.78);
+    cursor: pointer;
+    transition: color var(--duration-quick) var(--ease-standard);
+}
+
+.bottomNav__icon {
+    flex: none;
+    width: 24px;
+    height: 24px;
+}
+
+.bottomNav__item:hover {
+    color: var(--text-inverse);
+}
+
+.bottomNav__item[aria-current="true"] {
+    background: rgba(255, 255, 255, 0.34);
+    color: var(--text-inverse);
+}
+.bottomNav.bottomNav--ready .bottomNav__item[aria-current="true"] {
+    background: transparent;
+}
+
+/* ---- the sliding stadium ---- */
+.bottomNav__thumb {
+    position: absolute;
+    z-index: 0;
+    opacity: 0; /* until JS has measured and placed it */
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.34);
+    pointer-events: none; /* the item under it is the drag handle */
+    transition:
+        left var(--duration-warm) var(--ease-standard),
+        top var(--duration-warm) var(--ease-standard),
+        width var(--duration-warm) var(--ease-standard),
+        height var(--duration-warm) var(--ease-standard),
+        background var(--duration-quick) var(--ease-standard),
+        border-color var(--duration-quick) var(--ease-standard),
+        box-shadow var(--duration-quick) var(--ease-standard);
+}
+.bottomNav.bottomNav--ready .bottomNav__thumb {
+    opacity: 1;
+}
+
+[data-bottom-nav].lg .bottomNav__thumb {
+    position: absolute;
+    z-index: 0;
+}
+
+.bottomNav.is-morphing .bottomNav__thumb {
+    background: var(--glass-bg);
+    border-color: var(--glass-light-rim);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bottomNav__item,
+    .bottomNav__thumb {
+        transition: none;
+    }
+}

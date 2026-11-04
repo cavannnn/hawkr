@@ -1,0 +1,188 @@
+:root {
+  --drawer-shift: 77%;      /* Figma 609:1164 left:309 / 402 — reveals the left 77% of the sidebar */
+  --drawer-radius: 48px;    /* corner size of the shoved app card only (Figma 609:1164 rounded-48).
+                               Plain circular radius — the squircle experiment was dropped. */
+}
+
+/* ---- The shell holding every view; one transform moves the whole app ---- */
+.app-shell {
+  position: fixed;
+  inset: 0;
+  max-width: 600px;
+  margin-inline: auto;
+  z-index: 2;                /* above the sidebar (z-index:1) */
+  background: var(--surface-page); /* occludes the drawer when closed */
+  overflow-y: auto;          /* the shell IS the scroll container for the home feed (the other views
+                                are fixed overlays with their own scroll); drawer-open clips to hidden */
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(0);
+  transition: transform var(--duration-warm) var(--ease-standard),
+    border-radius var(--duration-warm) var(--ease-standard);
+  will-change: transform;
+}
+body.drawer-open .app-shell {
+  transform: translateX(var(--drawer-shift));
+  border-radius: var(--drawer-radius);
+  overflow: hidden;
+  box-shadow: -1.5px 0 16px rgba(52, 21, 57, 0.32);
+}
+.app-shell__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 50;              /* above the view content */
+  background: rgba(255, 255, 255, var(--drawer-wash));
+  opacity: 0;
+  pointer-events: none;
+  touch-action: none;       /* our JS owns the horizontal swipe-to-close; stop the browser
+                               claiming it for scroll (else it pointercancels mid-drag → springs back) */
+  transition: opacity var(--duration-warm) var(--ease-standard);
+}
+body.drawer-open .app-shell__scrim {
+  opacity: 1;
+  pointer-events: auto;
+}
+body.drawer-dragging .app-shell,
+body.drawer-dragging .app-shell__scrim {
+  transition: none;
+}
+
+.drawer-edge {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 22px;
+  z-index: 3;               /* above .app-shell (z-index 2) so it catches the edge swipe */
+  touch-action: pan-y;
+  pointer-events: none;
+}
+body:not(.drawer-open) .drawer-edge {
+  pointer-events: auto;
+}
+
+/* ---- The drawer ---- */
+.sidebar {
+  position: fixed;
+  inset: 0;
+  max-width: 600px;
+  margin-inline: auto;
+  z-index: 1;              /* behind the shell */
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0 max(env(safe-area-inset-bottom), 24px);
+  background: #f5f5f5;
+  visibility: hidden;
+  transition: visibility 0s linear var(--duration-warm);
+}
+body.drawer-open .sidebar {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.sidebar__brand { padding: 0 24px 16px; display: inline-block; }
+.sidebar__logo {
+  height: 21px; /* matches the home header wordmark (.logo__img) exactly */
+  width: auto;
+  display: block;
+  transform-origin: left center; /* pops from its own left edge, so it doesn't drift position */
+}
+@keyframes wordmark-pop {
+  0%   { transform: scale(1); }
+  55%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+body.drawer-open .sidebar__logo {
+  animation: wordmark-pop 420ms var(--ease-spring);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+/* Row = link OR button; one reset for both. */
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 24px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 16px;
+  letter-spacing: 0.64px;  /* Figma tracking */
+  color: var(--text-primary); /* brand black; active flips to accent */
+  text-decoration: none;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.sidebar__item.is-active { color: var(--accent); }
+
+.sidebar__icon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background: currentColor;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.sidebar__icon[data-icon="home"]       { -webkit-mask-image: url(../images/nav-home.svg);       mask-image: url(../images/nav-home.svg); }
+.sidebar__icon[data-icon="favourites"] { -webkit-mask-image: url(../images/nav-favourites.svg); mask-image: url(../images/nav-favourites.svg); }
+.sidebar__icon[data-icon="reviews"]    { -webkit-mask-image: url(../images/nav-reviews.svg);    mask-image: url(../images/nav-reviews.svg); }
+.sidebar__icon[data-icon="history"]    { -webkit-mask-image: url(../images/nav-history.svg);    mask-image: url(../images/nav-history.svg); }
+
+/* ---- Profile pill (bottom) — the Settings / account entry (tap the name) ---- */
+.sidebar__profile {
+  margin: auto 24px 0;     /* auto-top floats it to the bottom of the column */
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 260px;        /* fits a normal name on one line (Figma); long names ellipsis */
+  padding: 8px 16px;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(145, 59, 159, 0.08));
+  box-shadow:
+    0 8px 24px rgba(52, 21, 57, 0.16),        /* drop → floats it off the sidebar (brand-black tint) */
+    inset 0 1px 0 rgba(255, 255, 255, 0.70);  /* top-edge highlight → the liquid-glass tell */
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.sidebar__avatar {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  /* Figma radial gradient: brand-blue core → pale → white */
+  background: radial-gradient(circle at 32% 30%, #8fb2fc, #c7d9fe 55%, #ffffff);
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--text-primary);
+}
+.sidebar__who { display: flex; flex-direction: column; min-width: 0; }
+.sidebar__name {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.48px;
+  color: var(--text-primary);
+  white-space: nowrap;          /* name stays on ONE line… */
+  overflow: hidden;
+  text-overflow: ellipsis;      /* …and truncates rather than wrapping */
+}
+.sidebar__role {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: 16px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}

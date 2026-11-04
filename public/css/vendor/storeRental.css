@@ -1,0 +1,143 @@
+
+
+.rental-card {
+  padding: 26px;
+}
+
+.rental-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.rental-price {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.rental-price span {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.rental-status-pill {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.rental-status-pill.active {
+  background: var(--color-success-soft);
+  color: #006300;
+}
+
+.rental-status-pill.expiring {
+  background: #fff3d6;
+  color: #8a6100;
+}
+
+.rental-status-pill.expired {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.rental-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rental-detail-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.rental-detail-value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rental-terms-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.rental-terms-box {
+  background: var(--color-surface-2);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.rental-empty {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.rental-empty-icon {
+  font-size: 34px;
+  margin-bottom: 10px;
+}
+
+.rental-status-pill.upcoming {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.rental-card + .rental-card {
+  margin-top: 16px;
+}
+
+.rental-section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 18px 0 8px;
+}
+
+.rental-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.rental-pending-note {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: #fff3d6;
+  color: #8a6100;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}

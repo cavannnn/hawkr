@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hawkr | Create Account</title>
+    <link rel="stylesheet" href="../tokens.css" />
+        <link rel="stylesheet" href="../assets/css/liquidGlass.css" />
+        <link rel="stylesheet" href="../assets/css/components.css" />
+        <link rel="stylesheet" href="auth.css" />
+    </head>
+    <body class="preLogin">
+        <!-- Liquid Glass Top Bar -->
+        <header class="authGlassTopBar" id="authGlassTopBar">
+            <div class="authGlassTopBarInner">
+                <a href="login.html" class="authTopBarBack" data-liquid-glass="drag">
+                    <span class="icon" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                    <span class="authTopBarBackText">Back</span>
+                </a>
+                <span class="authTopBarTitle">Create account</span>
+                <div class="authTopBarSpacer"></div>
+            </div>
+            <div class="authGlassHighlight"></div>
+        </header>
+
+        <div class="authContainer">
+            <div class="authRight">
+                <div class="authFormContainer">
+                    <div class="authHeader">
+                        <h1 class="authTitle">Create Account</h1>
+                        <p class="authSubtitle">
+                            Join Hawkr and discover amazing hawker food
+                        </p>
+                    </div>
+
+                    <form id="registerForm" class="authForm">
+                        <div class="formGroup">
+                            <span class="formLabel">I am signing up as</span>
+                            <div class="userTypeSelection" id="userTypeSelection">
+                                <label class="userTypeOption selected" data-role="customer">
+                                    <input type="radio" name="role" value="customer" checked />
+                                    <span class="userTypeIcon">
+                                        <span class="icon" style="--icon: url(../assets/icons/cart.svg)"></span>
+                                    </span>
+                                    <span class="userTypeName">Customer</span>
+                                </label>
+                                <label class="userTypeOption" data-role="vendor">
+                                    <input type="radio" name="role" value="vendor" />
+                                    <span class="userTypeIcon">
+                                        <span class="icon" style="--icon: url(../assets/icons/vendor.svg)"></span>
+                                    </span>
+                                    <span class="userTypeName">Vendor</span>
+                                </label>
+                                <label class="userTypeOption" data-role="operator">
+                                    <input type="radio" name="role" value="operator" />
+                                    <span class="userTypeIcon">
+                                        <span class="icon" style="--icon: url(../assets/icons/organisation.svg)"></span>
+                                    </span>
+                                    <span class="userTypeName">Operator</span>
+                                </label>
+                                <label class="userTypeOption" data-role="nea">
+                                    <input type="radio" name="role" value="nea" />
+                                    <span class="userTypeIcon">
+                                        <span class="icon" style="--icon: url(../assets/icons/authorities.svg)"></span>
+                                    </span>
+                                    <span class="userTypeName">NEA Officer</span>
+                                </label>
+                            </div>
+                            <span class="formError" id="roleError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="username" class="formLabel"
+                                >Username</label
+                            >
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="formInput"
+                                placeholder="Choose a username to sign in with"
+                                required
+                                maxlength="50"
+                                autocomplete="username"
+                            />
+                            <span class="formError" id="usernameError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="displayName" class="formLabel"
+                                >Full Name</label
+                            >
+                            <input
+                                type="text"
+                                id="displayName"
+                                name="displayName"
+                                class="formInput"
+                                placeholder="Enter your full name"
+                                required
+                                autocomplete="name"
+                            />
+                            <span class="formError" id="nameError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="email" class="formLabel">Email</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="formInput"
+                                placeholder="Enter your email"
+                                required
+                                autocomplete="email"
+                            />
+                            <span class="formError" id="emailError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="phone" class="formLabel"
+                                >Phone Number</label
+                            >
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="formInput"
+                                placeholder="+65 XXXX XXXX"
+                                autocomplete="tel"
+                            />
+                            <span class="formError" id="phoneError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="password" class="formLabel"
+                                >Password</label
+                            >
+                            <div class="passwordInputWrapper">
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="formInput"
+                                    placeholder="Create a password"
+                                    required
+                                    autocomplete="new-password"
+                                />
+                                <button
+                                    type="button"
+                                    class="passwordToggle"
+                                    id="passwordToggle"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <span class="icon eyeIcon eyeOpen" style="--icon: url(../assets/icons/eye.svg)"></span>
+                                    <span class="icon eyeIcon eyeClosed" style="--icon: url(../assets/icons/eye-off.svg)"></span>
+                                </button>
+                            </div>
+                            <div class="passwordStrength" id="passwordStrength">
+                                <div class="strengthBar" id="bar1"></div>
+                                <div class="strengthBar" id="bar2"></div>
+                                <div class="strengthBar" id="bar3"></div>
+                                <div class="strengthBar" id="bar4"></div>
+                            </div>
+                            <span class="strengthText" id="strengthText"></span>
+                            <span class="formError" id="passwordError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="confirmPassword" class="formLabel"
+                                >Confirm Password</label
+                            >
+                            <div class="passwordInputWrapper">
+                                <input
+                                    type="password"
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    class="formInput"
+                                    placeholder="Confirm your password"
+                                    required
+                                    autocomplete="new-password"
+                                />
+                                <button
+                                    type="button"
+                                    class="passwordToggle"
+                                    id="confirmPasswordToggle"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <span class="icon eyeIcon eyeOpen" style="--icon: url(../assets/icons/eye.svg)"></span>
+                                    <span class="icon eyeIcon eyeClosed" style="--icon: url(../assets/icons/eye-off.svg)"></span>
+                                </button>
+                            </div>
+                            <span
+                                class="formError"
+                                id="confirmPasswordError"
+                            ></span>
+                        </div>
+
+                        <div class="formOptions">
+                            <label class="checkboxLabel">
+                                <input
+                                    type="checkbox"
+                                    id="agreeTerms"
+                                    name="agreeTerms"
+                                    required
+                                />
+                                <span class="checkboxCustom"></span>
+                                I agree to the
+                                <a href="#" class="authLink"
+                                    >Terms of Service</a
+                                >
+                                and
+                                <a href="#" class="authLink">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="btn btn--primary btn--lg btn--block"
+                            id="registerBtn"
+                        >
+                            <span class="btnText">Create Account</span>
+                            <span class="btnLoader"></span>
+                        </button>
+
+                        <div
+                            class="formError formErrorGeneral"
+                            id="generalError"
+                        ></div>
+                    </form>
+
+                    <div class="authDivider">
+                        <span>or</span>
+                    </div>
+
+                    <button type="button" class="socialButton" id="googleBtn">
+                        <img class="icon-img" src="../assets/icons/google-g.svg" alt="">
+                        Continue with Google
+                    </button>
+
+                    <p class="authFooter">
+                        Already have an account?
+                        <a href="login.html" class="authLink">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script type="module" src="./register.js"></script>
+        <script type="module" src="../assets/js/liquidGlass.js"></script>
+    </body>
+</html>

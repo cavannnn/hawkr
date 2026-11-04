@@ -1,0 +1,66 @@
+
+
+.reviews-summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.reviews-summary .avg-rating {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-primary-dark);
+}
+
+.reviews-summary .avg-stars {
+  color: #f5c344;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+.reviews-summary .review-count {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.review-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.review-item-stars {
+  color: #f5c344;
+  letter-spacing: 1px;
+}
+
+.review-item-author {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.review-item-date {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-left: auto;
+}
+
+.review-item-comment {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--color-text);
+}

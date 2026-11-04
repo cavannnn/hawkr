@@ -1,0 +1,80 @@
+/* liquidGlass.css — the interactive liquid-glass primitive. */
+
+.lg {
+    /* --- knobs: override per element; host tokens win, defaults bake in --- */
+    --lg-fill: var(--glass-bg, rgba(245, 245, 245, 0.64));
+    --lg-fill-op: var(--glass-bg-opaque, rgba(245, 242, 245, 0.95));
+    --lg-blur: var(--glass-blur, 14px);
+    --lg-edge: var(--glass-border, rgba(255, 255, 255, 0.55));
+    --lg-accent: var(--accent, #913b9f);
+
+    --lg-glow: rgba(145, 59, 159, 0.15);
+    --lg-glow-mid: rgba(145, 59, 159, 0.05);
+
+    --lg-smooth: cubic-bezier(0.33, 1, 0.68, 1); /* easeOutCubic — smooth, no bounce */
+    --lg-drag: cubic-bezier(0.22, 0.61, 0.36, 1); /* quick trail while dragging */
+    --lg-swell: 1.05; /* press scale */
+
+    position: relative;
+    overflow: hidden; /* clips the glow to the rounded shape — survives Safari's
+                         border-radius-clipping bug under blend/transform */
+    isolation: isolate;
+    background: var(--lg-fill);
+    -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(160%);
+    backdrop-filter: blur(var(--lg-blur)) saturate(160%);
+    border: 1px solid var(--lg-edge);
+    transition: transform 0.5s var(--lg-smooth);
+    will-change: transform;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .lg {
+        background: var(--lg-fill-op);
+    }
+}
+
+.lg__glow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(
+        96px 62px at var(--lg-x, 50%) var(--lg-y, 50%),
+        var(--lg-glow) 0%,
+        var(--lg-glow-mid) 46%,
+        transparent 76%
+    );
+}
+
+/* The element's own content rides above the glow. */
+.lg > *:not(.lg__glow) {
+    position: relative;
+    z-index: 1;
+}
+
+.lg.is-pressing {
+    transform: scale(var(--lg-swell));
+}
+.lg.is-pressing .lg__glow {
+    opacity: 1;
+}
+.lg.is-dragging {
+    transition: transform 0.16s var(--lg-drag);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .lg,
+    .lg.is-pressing,
+    .lg.is-dragging {
+        transition-duration: 0.001ms;
+    }
+    .lg.is-pressing {
+        transform: none; /* keep the glow, drop the motion */
+    }
+}

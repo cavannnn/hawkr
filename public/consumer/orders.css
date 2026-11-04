@@ -1,0 +1,117 @@
+/* orders.css — #view-orders, "Your orders". */
+
+#view-orders {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  max-width: 600px;
+  margin-inline: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface-page);
+  padding-bottom: max(env(safe-area-inset-bottom), 40px);
+}
+body[data-view="orders"] #view-home { display: none; }
+body[data-view="orders"] #view-orders { display: flex; flex-direction: column; gap: 32px; }
+#view-orders > * { flex-shrink: 0; }
+
+/* ---- the list ---- */
+.od-list {
+  padding: 0 24px;
+  max-width: none;   /* the 860px cap is for a desktop table; the view is already 600px */
+}
+
+/* ---- one row, opened ---- */
+.od-detail {
+  gap: 14px;
+  padding: 0 16px 16px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.od-fields { font-size: 12px; }
+
+.od-note {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+/* ---- what was bought ---- */
+.od-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.od-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.od-line__qty {
+  flex: none;
+  min-width: 22px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.od-line__name {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.od-line__stall,
+.od-line__note {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.od-line__note { font-style: italic; }
+.od-line__money {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+}
+.od-line__was {
+  color: var(--text-secondary);
+  text-decoration: line-through;
+}
+.od-empty {
+  margin: 0;
+  font-weight: 300;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ---- the money ---- */
+.od-total {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.od-total__label { font-size: 12px; color: var(--text-secondary); }
+.od-total__value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: right;
+}
+.od-total__label--strong { font-weight: 600; color: var(--text-primary); }
+.od-total__value--strong { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+
+/* ---- the one action ---- */
+.od-actions { display: flex; justify-content: flex-end; }
+.od-cancel:disabled { opacity: 0.5; pointer-events: none; }

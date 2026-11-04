@@ -1,0 +1,157 @@
+.segmentedControl {
+    
+    --seg-pad: 0.15rem;
+    --seg-gap: 0;
+    --seg-h: 38px;
+    --seg-w: 200px;
+    --seg-fz: 16px;
+    --seg-fw: 600;
+    --seg-track: var(--surface-sunken);
+    --seg-thumb: var(--surface-card);
+    
+
+    --seg-hover-ink: rgb(0 0 0 / 0.05);
+
+    display: flex;
+    position: relative;
+    gap: var(--seg-gap);
+    padding: var(--seg-pad);
+    border-radius: var(--radius-pill);
+    background: var(--seg-track);
+    align-self: center;
+
+    
+
+    anchor-name: --segmented-button-hover;
+    anchor-scope: --segmented-button-hover, --segmented-button-checked;
+}
+
+.segmentedControl::before,
+.segmentedControl::after {
+    content: "";
+    position: absolute;
+    border-radius: inherit;
+    transition: inset 250ms var(--ease-standard);
+    inset: calc(anchor(start) + var(--seg-pad)) calc(anchor(end) + var(--seg-pad))
+        calc(anchor(end) + var(--seg-pad)) calc(anchor(start) + var(--seg-pad));
+}
+
+
+.segmentedControl::before {
+    background-color: var(--seg-hover-ink);
+    position-anchor: --segmented-button-hover;
+    opacity: 0;
+    transition:
+        inset 250ms var(--ease-standard),
+        opacity 150ms ease;
+}
+
+.segmentedControl:hover::before {
+    opacity: 1;
+}
+
+
+.segmentedControl::after {
+    background-color: var(--seg-thumb);
+    position-anchor: --segmented-button-checked;
+    box-shadow: var(--shadow-raised);
+}
+
+.segmentedButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: none;
+    border-radius: inherit;
+    width: var(--seg-w);
+    height: var(--seg-h);
+    padding: 0;
+    font-family: var(--font-ui);
+    font-size: var(--seg-fz);
+    font-weight: var(--seg-fw);
+    line-height: 24px;
+    color: var(--text-primary);
+    cursor: pointer;
+    z-index: 1; 
+    -webkit-tap-highlight-color: transparent;
+
+    
+
+    anchor-name: var(--anchor-name-1, --a), var(--anchor-name-2, --b);
+}
+
+
+.segmentedButton:has(:checked),
+.segmentedButton[aria-checked="true"] {
+    --anchor-name-2: --segmented-button-checked;
+}
+
+.segmentedButton:has(:focus-visible),
+.segmentedButton:focus-visible {
+    outline: 2px solid var(--accent);
+}
+
+
+
+.segmentedButton input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+
+
+@media (hover: hover) {
+    .segmentedButton:hover {
+        --anchor-name-1: --segmented-button-hover;
+    }
+}
+
+
+
+@supports not (anchor-name: --a) {
+    .segmentedControl::before,
+    .segmentedControl::after {
+        display: none;
+    }
+
+    .segmentedButton:has(:checked),
+    .segmentedButton[aria-checked="true"] {
+        background-color: var(--seg-thumb);
+        box-shadow:
+            0 0 0 0.5px rgb(0 0 0 / 0.04),
+            0 1px 3px rgb(0 0 0 / 0.12);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .segmentedControl::before,
+    .segmentedControl::after {
+        transition: none;
+    }
+}
+
+.segmentedControl--sm {
+    --seg-pad: 2px;
+    --seg-gap: 4px;
+    --seg-h: 28px;
+    --seg-w: auto;
+    --seg-fz: 13px;
+    --seg-fw: 500;
+    --seg-track: #ececee;
+    --seg-thumb: #fff;
+}
+
+.segmentedControl--sm .segmentedButton {
+    flex: 1 1 0;
+    min-width: max-content;
+    padding-inline: 12px;
+    line-height: normal;
+}

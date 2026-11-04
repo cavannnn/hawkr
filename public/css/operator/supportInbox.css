@@ -1,0 +1,123 @@
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.filters-row select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-page, #fff);
+  font-family: inherit;
+  font-size: 0.9em;
+  color: var(--text-primary);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78em;
+  font-weight: 600;
+}
+
+.status-badge.status-open { background: var(--info-soft); color: var(--info); }
+.status-badge.status-inflight { background: var(--warning-soft); color: var(--warning); }
+.status-badge.status-completed { background: var(--success-soft); color: var(--success); }
+.status-badge.status-unresolvable { background: var(--danger-soft); color: var(--danger); }
+
+.sla-breach-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--danger-soft);
+  color: var(--danger);
+  font-size: 0.72em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.listRowWrap.sla-breach .listRow {
+  box-shadow: inset 3px 0 0 var(--danger);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92em;
+  gap: 16px;
+}
+
+.detail-row:last-child { border-bottom: none; }
+.detail-row span { color: var(--text-muted); flex-shrink: 0; }
+.detail-row strong { text-align: right; }
+
+.detail-row-block {
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.detail-row-block:last-child { border-bottom: none; }
+.detail-row-block span { color: var(--text-muted); font-size: 0.85em; }
+.detail-row-block p { margin: 6px 0 0; }
+
+.attachment-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.attachment-thumb {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 120px;
+  text-decoration: none;
+}
+
+.attachment-thumb img,
+.attachment-thumb video {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.attachment-thumb .file-label {
+  font-size: 0.72em;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.claim-btn,
+.complete-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.claim-btn { background: var(--accent); color: var(--text-inverse); }
+.complete-btn { background: var(--success); color: var(--text-inverse); }
+
+.status-select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 0.85em;
+}

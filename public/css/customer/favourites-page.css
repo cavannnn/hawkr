@@ -1,0 +1,119 @@
+
+
+#view-favourites {
+  display: none; /* base rule is mandatory — see the note in cart.css */
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  max-width: 600px;
+  margin-inline: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--surface-page);
+  padding-bottom: max(env(safe-area-inset-bottom), 40px);
+}
+body[data-view="favourites"] #view-home { display: none; }
+body[data-view="favourites"] #view-favourites { display: flex; flex-direction: column; gap: 32px; }
+#view-favourites > * { flex-shrink: 0; }
+
+/* ---- top bar (same recipe as .ct-bar / .st-bar) ---- */
+.fv-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(env(safe-area-inset-top), 20px) 24px 12px;
+  transition: transform 0.3s var(--ease-standard);
+  will-change: transform;
+}
+.fv-bar--hidden { transform: translateY(-100%); }
+.fv-bar__frost {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, #000 0%, #000 var(--frost-fade), transparent 100%);
+}
+.fv-bar > .dual-btn, .fv-bar__right { position: relative; z-index: 1; }
+.fv-bar__right { display: flex; align-items: center; gap: 16px; }
+
+/* The heart is filled here because you're already on the page it points to — it's a
+   state indicator, not a control, so it's a <span> and not focusable. */
+/* The heart's two states are two ASSETS, swapped in favourites-page.js — see the note
+   there. A filter can't fill a shape, and Figma's active heart (141:1248) is filled. */
+.fv-heart { display: grid; place-items: center; }
+
+/* the tap itself gets a small pop, so hearting feels like something happened */
+#view-store [data-fav-heart].is-fav .dual-btn__icon,
+#view-item .item-heart.is-fav .dual-btn__icon {
+  animation: fav-pop 0.32s var(--ease-spring);
+}
+@keyframes fav-pop { 0% { transform: scale(1); } 45% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  #view-store [data-fav-heart].is-fav .dual-btn__icon,
+  #view-item .item-heart.is-fav .dual-btn__icon { animation: none; }
+}
+
+/* ---- title + tabs ---- */
+.fv-head { display: flex; flex-direction: column; gap: 12px; padding: 0 24px; }
+.fv-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--text-primary);
+}
+.fv-seg { width: 150px; } /* Figma 143:1947 — narrower than the cart's 216 */
+
+/* ---- list ---- */
+.fv-list { display: flex; flex-direction: column; }
+.fv-list .store-card { width: 100%; }
+
+
+.fv-stall { padding: 0 24px; }
+.fv-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 12px 24px 24px;
+}
+
+.fv-cards .p-dish { width: auto; }
+.fv-card { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+
+/* ---- empty state (Figma 143:1954) ---- */
+.fv-empty { display: flex; flex-direction: column; align-items: center; gap: 32px; padding: 0 24px; }
+.fv-empty[hidden] { display: none; } /* an author `display` outranks the UA [hidden] rule */
+.fv-empty__art { width: 154.271px; height: 144px; }
+.fv-empty__copy { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.fv-empty__ttl {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--text-primary);
+}
+.fv-empty__sub {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--text-secondary);
+}
+
+.fv-end {
+  margin: 0;
+  padding: 0 24px;
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.fv-end[hidden] { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fv-bar { transition: none; }
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Stalls</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+  <link rel="stylesheet" href="../../css/operator/myChildren.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">My Stalls</h1>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search for anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="pageSectionHead">
+        <h2 class="pageSectionTitle">My Stalls</h2>
+        <p class="subtitle">Every stall you've approved, across every centre you run.</p>
+      </div>
+
+      <div class="childrenGrid" id="childrenGrid" aria-live="polite">
+        <!-- Skeleton cards while the real list loads, replaced by childCardHtml() in myChildren.js -->
+        <div class="childCard childCard--skeleton"></div>
+        <div class="childCard childCard--skeleton"></div>
+        <div class="childCard childCard--skeleton"></div>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 Hawker Management System</p>
+    </footer>
+  </div>
+
+  <!-- Stall detail modal -->
+  <div class="modal-overlay" id="childModal">
+    <div class="modal-box-wrap">
+      <div class="modal-box form-modal-box childDetailBox">
+        <button class="form-modal-close" id="childModalClose" type="button" aria-label="Close">&times;</button>
+        <div id="childModalBody"><!-- filled by openChildModal() in myChildren.js --></div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/myChildren.js"></script>
+  <script>
+    renderOperatorNavbar('home');
+    renderBottomPillNav('children');
+    if (!localStorage.getItem('authToken')) {
+      window.location.href = '/auth/login.html';
+    }
+  </script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

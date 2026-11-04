@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    overflow-x: hidden;
+    font-family: var(--font-ui), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--surface-page);
+    min-height: 100vh;
+    color: var(--text-primary);
+}
+
+.header-brand {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 4px !important;
+}
+
+.header-brand .sidebarLogo,
+.brand .sidebarLogo {
+    width: 112px;
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.brand {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 4px !important;
+}
+
+.mainContent {
+    margin-left: 224px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: margin-left var(--duration-warm) var(--ease-standard);
+}
+
+.topBar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: transparent;
+    padding: 24px 32px 0;
+}
+
+.sidebarTopRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-right: 16px;
+}
+
+.sidebar.isCollapsed .sidebarTopRow {
+    justify-content: center;
+}
+
+.global-search {
+    grid-column: 2;
+}
+
+.topBarTitle {
+    grid-column: 1;
+    justify-self: start;
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.page-title {
+    padding-top: 4px !important;
+}
+
+.page-title:empty {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .topBarTitle {
+        display: none;
+    }
+
+    .global-search {
+        width: 100%;
+    }
+
+    .global-search:focus-within {
+        width: 100%;
+    }
+}
+
+.sidebar {
+    transition: width var(--duration-warm) var(--ease-standard), padding var(--duration-warm) var(--ease-standard);
+    border-right: none;
+}
+
+.sidebar.isCollapsed {
+    width: 88px;
+    padding-right: 0;
+}
+
+.sidebar.isCollapsed .header-brand .name,
+.sidebar.isCollapsed .header-brand .sub,
+.sidebar.isCollapsed .navItem span:not(.icon) {
+    display: none;
+}
+
+.sidebar.isCollapsed .navItem {
+    justify-content: center;
+    padding: 10px;
+}
+
+.sidebar.isCollapsed .header-brand {
+    justify-content: center;
+}
+
+.mainContent.isCollapsed {
+    margin-left: 88px;
+}
+
+@media (max-width: 768px) {
+    .sidebar.isCollapsed {
+        width: 200px;
+        padding-right: 24px;
+    }
+
+    .sidebar.isCollapsed .header-brand .name,
+    .sidebar.isCollapsed .header-brand .sub,
+    .sidebar.isCollapsed .navItem span:not(.icon) {
+        display: inline;
+    }
+
+    .mainContent.isCollapsed {
+        margin-left: 0;
+    }
+}
+
+.mainContent > .page-title {
+    padding: 0 32px;
+}
+
+.mainContent > .content {
+    padding: 0 32px 40px;
+}
+
+.mainContent > footer {
+    padding: 0 32px 24px;
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        margin-left: 0;
+    }
+
+    .topBar {
+        padding: 16px;
+    }
+
+    .mainContent > .page-title,
+    .mainContent > .content,
+    .mainContent > footer {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}

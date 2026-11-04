@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Agreements</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">Rental Agreements</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page page-wide">
+    <a href="operatorHome.html" class="back-link">&larr; Back to Home</a>
+    <p id="authStatus" class="auth-status"></p>
+
+    <div class="primary-action-bar">
+      <div class="filter-bar" style="margin-bottom:0;">
+        <div>
+          <label for="filterId">Filter by Agreement ID</label>
+          <input type="number" id="filterId" placeholder="e.g. 3">
+        </div>
+        <button id="clearFilterBtn" class="clear-btn" type="button">Clear</button>
+      </div>
+      <button id="newAgreementBtn" class="new-btn" type="button">+ New Agreement</button>
+    </div>
+
+    <div class="table-plain">
+      <table id="agreementTable">
+        <thead>
+          <tr>
+            <th>ID</th><th>Stall</th><th>Owner</th><th>Start</th><th>End</th><th>Terms</th><th>Price</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="emptyMsg" class="empty-msg" style="display:none;">No agreements found.</p>
+    <p id="pageMsg" class="msg"></p>
+  </div>
+
+  <!-- Create / Edit Agreement Modal -->
+  <div id="agreementModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeFormModalBtn">&times;</button>
+      <h3 id="formTitle">Create New Agreement</h3>
+      <form id="agreementForm">
+        <input type="hidden" id="AgreementId">
+
+        <label>Stall ID</label>
+        <input type="number" id="StallId" required>
+
+        <label>Owner ID</label>
+        <input type="number" id="OwnerId" required>
+
+        <label>Start Date <span id="startDateNote" class="locked-note" style="display:none;">(cannot be changed)</span></label>
+        <input type="datetime-local" id="AgreementStartDate" required>
+
+        <label>End Date</label>
+        <input type="datetime-local" id="AgreementEndDate" required>
+
+        <label>Terms and Conditions</label>
+        <textarea id="AgreementTermsAndConditions" required></textarea>
+
+        <label>Rental Price</label>
+        <input type="number" step="0.01" id="RentalPrice" required>
+
+        <p id="msg" class="msg"></p>
+
+        <div class="form-actions">
+          <button type="button" id="cancelEditBtn" class="cancel-btn">Cancel</button>
+          <button type="submit" id="saveBtn" class="save-btn">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="confirmModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Confirm Deletion</h3>
+      <p id="confirmModalText">Are you sure you want to delete this rental agreement?</p>
+      <div class="modal-actions">
+        <button id="modalCancelBtn" class="modal-cancel-btn" type="button">Cancel</button>
+        <button id="modalConfirmBtn" class="modal-confirm-btn" type="button">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/rentalAgreement.js"></script>
+  <script>renderOperatorNavbar('rentalAgreement'); renderBottomPillNav('home');</script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Tickets</title>
+  <link rel="stylesheet" href="../css/operator/operator.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <span class="brand"><span class="brand-mark">HT</span>Hawker Tickets</span>
+    </div>
+    <div class="navbar-right">
+      <a href="#" id="homeLink">Home</a>
+      <div class="profile" id="profileMenu">
+        <button type="button" class="profile-trigger" id="profileTrigger">
+          <span class="profile-avatar" id="profileAvatar">?</span>
+          <span class="profile-label">Welcome, <strong id="profileUsername">there</strong></span>
+          <span class="profile-caret">&#9662;</span>
+        </button>
+        <div class="profile-dropdown" id="profileDropdown">
+          <button type="button" class="nav-logout" id="navLogoutBtn">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page page-wide">
+    <h1>My Tickets</h1>
+    <p class="subtitle">Raise a support ticket or check the status of one you've submitted.</p>
+
+    <div class="tabs">
+      <button type="button" class="tab-btn active" id="tabSubmittedBtn">Submitted Tickets</button>
+      <button type="button" class="tab-btn" id="tabHistoryBtn">Ticket History</button>
+    </div>
+
+    <div class="primary-action-bar" style="justify-content: flex-end;">
+      <button type="button" class="new-btn" id="newTicketBtn">+ New Ticket</button>
+    </div>
+
+    <div id="submittedPanel" class="tab-panel active">
+      <div class="table-plain">
+        <table id="submittedTable">
+          <thead><tr><th>Subject</th><th>Category</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="submittedEmptyMsg" class="empty-msg" style="display:none;">No open tickets.</p>
+    </div>
+
+    <div id="historyPanel" class="tab-panel">
+      <div class="table-plain">
+        <table id="historyTable">
+          <thead><tr><th>Subject</th><th>Category</th><th>Outcome</th><th>Completed</th><th>Actions</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="historyEmptyMsg" class="empty-msg" style="display:none;">No closed tickets yet.</p>
+    </div>
+  </div>
+
+  <!-- New Ticket Modal -->
+  <div id="newTicketModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeNewTicketBtn">&times;</button>
+      <h3>New Ticket</h3>
+      <form id="newTicketForm">
+        <label>Hawker Centre</label>
+        <select id="HawkerId" required></select>
+
+        <label>Category</label>
+        <select id="Category" required>
+          <option value="">Select a category</option>
+          <option>Facility Issue</option>
+          <option>Cleanliness</option>
+          <option>Account Issue</option>
+          <option>Billing/Rental</option>
+          <option>Order/Payment</option>
+          <option>Queue/Crowd</option>
+          <option>Safety Concern</option>
+          <option>Others</option>
+        </select>
+
+        <div id="otherCategoryField" style="display:none;">
+          <label>Describe the category</label>
+          <input type="text" id="OtherCategoryText" placeholder="e.g. Lost property">
+        </div>
+
+        <label>Subject</label>
+        <input type="text" id="Subject" maxlength="150" required>
+
+        <label>Description</label>
+        <textarea id="Description" required></textarea>
+
+        <label>Attachments <span class="locked-note">(images up to 5MB, videos up to 50MB)</span></label>
+        <label class="file-drop" for="attachmentsInput">Click to choose images or a video</label>
+        <input type="file" id="attachmentsInput" multiple accept="image/jpeg,image/png,video/mp4,video/quicktime">
+        <div class="file-list" id="fileList"></div>
+
+        <p id="ticketFormMsg" class="msg"></p>
+
+        <div class="form-actions">
+          <button type="button" id="cancelNewTicketBtn" class="cancel-btn">Cancel</button>
+          <button type="submit" id="submitTicketBtn" class="save-btn">Submit Ticket</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Ticket Modal (read-only) -->
+  <div id="viewTicketModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeViewTicketBtn">&times;</button>
+      <h3 id="viewTicketTitle">Ticket</h3>
+      <div class="detail-list" id="viewTicketDetails"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Hawker Management System</p>
+  </footer>
+
+  <script src="../js/tickets.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Hawkr | Login</title>
+    <link rel="stylesheet" href="../tokens.css" />
+        <link rel="stylesheet" href="../assets/css/liquidGlass.css" />
+        <link rel="stylesheet" href="../assets/css/components.css" />
+        <link rel="stylesheet" href="auth.css" />
+    </head>
+    <body class="preLogin">
+        <!-- Liquid Glass Top Bar with Logo -->
+        <header class="authGlassTopBar no-back" id="authGlassTopBar">
+            <div class="authGlassTopBarInner">
+                <img
+                    class="authTopBarLogo"
+                    src="../images/hawkr logo.svg"
+                    alt="hawkr logo"
+                    draggable="false"
+                />
+            </div>
+            <div class="authGlassHighlight"></div>
+        </header>
+
+        <div class="authContainer">
+            <div class="authRight">
+                <div class="authFormContainer">
+                    <div class="authHeader">
+                        <h1 class="authTitle">Welcome Back</h1>
+                        <p class="authSubtitle">Sign in to continue to Hawkr</p>
+                    </div>
+
+                    <form id="loginForm" class="authForm" autocomplete="off">
+                        <div class="formGroup">
+                            <label for="email" class="formLabel">Username</label>
+                            <input
+                                type="text"
+                                id="email"
+                                name="username"
+                                class="formInput"
+                                placeholder="Enter your username"
+                                required
+                                autocomplete="username"
+                            />
+                            <span class="formError" id="emailError"></span>
+                        </div>
+
+                        <div class="formGroup">
+                            <label for="password" class="formLabel"
+                                >Password</label
+                            >
+                            <div class="passwordInputWrapper">
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="formInput"
+                                    placeholder="Enter your password"
+                                    required
+                                    autocomplete="off"
+                                />
+                                <button
+                                    type="button"
+                                    class="passwordToggle"
+                                    id="passwordToggle"
+                                    aria-label="Toggle password visibility"
+                                >
+                                    <span class="icon eyeIcon eyeOpen" style="--icon: url(../assets/icons/eye.svg)"></span>
+                                    <span class="icon eyeIcon eyeClosed" style="--icon: url(../assets/icons/eye-off.svg)"></span>
+                                </button>
+                            </div>
+                            <span class="formError" id="passwordError"></span>
+                        </div>
+
+                        <div class="formOptions">
+                            <label class="checkboxLabel">
+                                <input
+                                    type="checkbox"
+                                    id="rememberMe"
+                                    name="rememberMe"
+                                />
+                                <span class="checkboxCustom"></span>
+                                Remember me
+                            </label>
+                            <a href="forgot-password.html" class="forgotLink"
+                                >Forgot password?</a
+                            >
+                        </div>
+
+                        <button type="submit" class="btn btn--primary btn--lg btn--block" id="loginBtn">
+                            <span class="btnText">Sign In</span>
+                            <span class="btnLoader"></span>
+                        </button>
+
+                        <div
+                            class="formError formErrorGeneral"
+                            id="generalError"
+                        ></div>
+                    </form>
+
+                    <div class="authDivider">
+                        <span>or</span>
+                    </div>
+
+                    <button type="button" class="socialButton" id="googleBtn">
+                        <img class="icon-img" src="../assets/icons/google-g.svg" alt="">
+                        Continue with Google
+                    </button>
+
+                    <button type="button" class="socialButton" id="guestBtn">
+                        Continue as Guest
+                    </button>
+
+                    <p class="authFooter">
+                        Don't have an account?
+                        <a href="register.html" class="authLink">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invalid Credentials Slide-in Notification -->
+        <div class="invalidCredentialsNotif" id="invalidCredentialsNotif">
+            <button
+                type="button"
+                class="invalidCredentialsNotifClose overlayClose overlayClose--sm" data-liquid-glass="drag"
+                id="invalidCredentialsClose"
+                aria-label="Close"
+            >
+                <span class="icon icon--sm" style="--icon: url(../assets/icons/close.svg)"></span>
+            </button>
+            <img
+                src="../images/squirrelShrugging.svg"
+                alt="Squirrel shrugging"
+                class="invalidCredentialsImage"
+            />
+            <h3 class="invalidCredentialsHeader">Do I know you?</h3>
+            <p class="invalidCredentialsText">
+                No we don't. In fact, we don't even have you in our databases.
+            </p>
+            <a href="register.html" class="btn btn--secondary btn--md">sign up?</a>
+        </div>
+
+        <script type="module" src="./login.js"></script>
+        <script>
+            (function () {
+                var e = new URLSearchParams(window.location.search).get(
+                    "email",
+                );
+                if (e) document.getElementById("email").value = e;
+            })();
+        </script>
+        <script type="module" src="../assets/js/liquidGlass.js"></script>
+    </body>
+</html>

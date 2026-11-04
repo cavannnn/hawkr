@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stall Requests</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+  <link rel="stylesheet" href="../../css/operator/stallRequests.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">Stall Requests</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page page-wide">
+    <a href="operatorHome.html" class="back-link">&larr; Back to Home</a>
+    <p class="subtitle">Review and approve or reject vendor stall requests.</p>
+
+    <div class="card">
+      <div id="pendingList">
+        <p class="empty-msg">Loading…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approve + set rental rate modal -->
+  <div id="approveModal" class="modal-overlay">
+    <div class="modal-box form-modal-box">
+      <button type="button" class="form-modal-close" id="closeApproveModalBtn">&times;</button>
+      <h3>Approve Request</h3>
+      <p class="subtitle">Approving creates the stall and a 6-month rental agreement starting today.</p>
+      <label for="approveRentalPrice">Monthly Rental Rate ($)</label>
+      <input type="number" id="approveRentalPrice" step="0.01" min="0.01" placeholder="e.g. 450.00">
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel-btn" id="cancelApproveBtn">Cancel</button>
+        <button type="button" class="modal-confirm-btn" id="confirmApproveBtn">Approve &amp; Generate Agreement</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject reason modal -->
+  <div id="rejectModal" class="modal-overlay">
+    <div class="modal-box form-modal-box">
+      <button type="button" class="form-modal-close" id="closeRejectModalBtn">&times;</button>
+      <h3>Reject Request</h3>
+      <label for="rejectNote">Reason (optional)</label>
+      <textarea id="rejectNote" rows="3" placeholder="Let the vendor know why this was rejected"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel-btn" id="cancelRejectBtn">Cancel</button>
+        <button type="button" class="modal-confirm-btn" id="confirmRejectBtn">Reject Request</button>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/stallRequests.js"></script>
+  <script>renderOperatorNavbar('stallRequests'); renderBottomPillNav('home');</script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

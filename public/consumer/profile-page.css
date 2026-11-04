@@ -1,0 +1,119 @@
+/* ---- view routing (base hide + fixed, like every other #view-X, store.css:8) ---- */
+#view-profile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  max-width: 600px;
+  margin-inline: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background: radial-gradient(140% 52% at 50% 106%, var(--join-purple) 0%, #b175ff 22%, #cba3ff 45%, #e5d1ff 70%, #ffffff 100%);
+  padding-block: 0 max(env(safe-area-inset-bottom), 28px);
+}
+body[data-view="profile"] #view-home { display: none; }
+body[data-view="profile"] #view-profile { display: flex; flex-direction: column; gap: 32px; }
+#view-profile > * { flex-shrink: 0; }
+
+/* ---- header: back/menu dual pill · heart · Join pill ---- */
+.pf-bar {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: max(env(safe-area-inset-top), 20px) 24px 12px;
+  transition: transform 0.3s var(--ease-standard);
+  will-change: transform;
+}
+.pf-bar--hidden { transform: translateY(-100%); }
+.pf-bar__frost {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 12%, transparent 100%);
+}
+.pf-dual-left { position: relative; z-index: 1; } /* .dual-btn (results.css) supplies the glass pill */
+.pf-bar__right { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; }
+.pf-heart { width: 48px; height: 48px; flex: none; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.pf-heart .dual-btn__icon { display: block; height: 19px; width: auto; }
+.pf-join {
+  --lg-fill: var(--join-fill-top);
+  --lg-edge: transparent;
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 40px; padding: 0 15px; flex: none;
+  border: 0; border-radius: 48px;
+  color: var(--join-purple);
+  font-family: var(--font-ui); font-weight: 500; font-size: 12px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.pf-join__icon { display: block; }
+.pf-join__label { line-height: 1; }
+
+/* ---- "Profile" title (Google Sans Flex SemiBold 24) ---- */
+.pf-title { margin: 0; padding: 0 24px; font-family: var(--font-ui); font-weight: 600; font-size: 24px; color: var(--text-primary); }
+
+/* ---- profile card — the liquid-glass guest pill (mirrors .sidebar__profile) + drag ---- */
+.pf-card {
+  --lg-edge: rgba(255, 255, 255, 0.55);
+  margin-inline: 64px;
+  display: flex; align-items: center; gap: 16px;
+  padding: 8px 16px; border-radius: 32px;
+  background: linear-gradient(rgba(255, 255, 255, 0.55), rgba(145, 59, 159, 0.08));
+  box-shadow: 0 8px 24px rgba(52, 21, 57, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.pf-avatar {
+  flex: none; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 32% 30%, #8fb2fc, #c7d9fe 55%, #fff); /* JS overrides with the assigned OKLCH hue */
+  font-family: var(--font-display); font-size: 24px; color: var(--text-primary);
+}
+.pf-who { display: flex; flex-direction: column; min-width: 0; }
+.pf-name { font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: 0.48px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pf-role { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-display); font-weight: 300; font-size: 16px; color: var(--text-secondary); }
+.pf-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--text-secondary); flex: none; }
+
+/* ---- hook: headline · greeting (assigned name + avatar) · stats ---- */
+.pf-hook { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.pf-hook__ttl { margin: 0; padding: 0 24px; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.84px; color: var(--text-primary); text-align: center; }
+.pf-greet { margin: 0; padding: 0 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-family: var(--font-display); font-weight: 300; font-size: 16px; color: var(--text-primary); text-align: center; }
+.pf-greet-av { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 32% 30%, #8fb2fc, #c7d9fe 55%, #fff); font-family: var(--font-display); font-size: 12px; color: var(--text-primary); box-shadow: 0 0.4px 1px rgba(0, 0, 0, 0.24); }
+.pf-stats { display: flex; align-items: flex-start; justify-content: center; gap: 48px; padding: 0 24px; }
+.pf-stat { display: flex; flex-direction: column; align-items: center; }
+.pf-stat__num { font-family: var(--font-mono); font-weight: 600; font-size: 48px; line-height: 1; color: var(--text-primary); }
+.pf-stat__lbl { margin-top: 2px; font-family: var(--font-ui); font-weight: 400; font-size: 16px; letter-spacing: -0.48px; color: var(--text-primary); }
+
+/* ---- "Members get" + the bento ---- */
+.pf-members { display: flex; flex-direction: column; gap: 16px; }
+.pf-members__ttl { margin: 0; padding: 0 24px; font-family: var(--font-display); font-weight: 700; font-size: 28px; letter-spacing: -0.84px; color: var(--text-primary); text-align: center; }
+.pf-bento { display: flex; gap: 8px; padding: 0 16px; align-items: stretch; }
+.pf-bento__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.pf-tile { background: #f5f5f5; border-radius: 8px; padding: 8px; }
+.pf-tile__ttl { margin: 0; font-family: var(--font-ui); font-weight: 600; font-size: 14px; color: var(--text-primary); text-align: center; }
+.pf-tile__sub { margin: 0; font-family: var(--font-ui); font-weight: 300; font-size: 9px; color: var(--text-secondary); text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pf-tile__cap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+/* left tall tile — favourites video */
+.pf-tile--tall { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.pf-tile--tall .pf-tile__media { width: 100%; aspect-ratio: 147 / 194; border-radius: 16px; overflow: hidden; background: var(--border); }
+.pf-tile__cap { width: 100%; }
+
+/* allergens tile — 3 overlapping discs */
+.pf-tile--allergens { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.pf-discs { display: flex; }
+.pf-disc { width: 28.5px; height: 28.5px; border-radius: 50%; border: 1.5px solid #fff; background-size: 58%; background-position: center; background-repeat: no-repeat; box-shadow: 0 0 3px rgba(0, 0, 0, 0.18); }
+.pf-disc + .pf-disc { margin-left: -9px; }
+
+.pf-tile--cards { border-radius: 6.4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+.pf-card-art { display: block; width: 100%; height: auto; }
+
+/* ---- Join Hawkr CTA — liquid glass (exact Figma fill/transparency) + drag ---- */
+.pf-cta-wrap { padding: 0 24px; }
+.pf-cta {
+  --lg-fill: var(--join-fill-cta); /* rgba(151,71,255,.24) — exact Figma; .lg paints it as the glass fill */
+  --lg-edge: transparent;
+  width: 100%; border: 0; border-radius: 32px; padding: 13px 24px;
+  color: #fffafa; font-family: var(--font-ui); font-weight: 600; font-size: 19px; text-align: center;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}

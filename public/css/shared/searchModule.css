@@ -1,0 +1,515 @@
+.searchModuleWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    z-index: 1000;
+}
+
+.searchModuleWrapper.active {
+    z-index: 1002;
+}
+
+.topBar:has(.searchModuleWrapper.active) {
+    position: relative;
+    z-index: 3;
+}
+
+.searchModule {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 56px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--glass-light-rim);
+    background: var(--glass-light-fill);
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+    position: relative;
+    z-index: 1001;
+    overflow: hidden;
+    transition: opacity 0.2s ease-out;
+}
+
+.searchModule .searchIcon {
+    transition:
+        opacity var(--duration-quick) var(--ease-standard),
+        width var(--duration-quick) var(--ease-standard),
+        margin var(--duration-quick) var(--ease-standard);
+}
+
+.searchModule.is-populated .searchIcon {
+    opacity: 0;
+    width: 0;
+    margin-right: -10px;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.searchClear {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 0;
+    height: 24px;
+    margin-left: -10px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    opacity: 0;
+    overflow: hidden;
+    transform: scale(0) rotate(-180deg);
+    pointer-events: none;
+    transition:
+        opacity var(--duration-quick) var(--ease-standard),
+        width var(--duration-quick) var(--ease-standard),
+        margin var(--duration-quick) var(--ease-standard),
+        transform var(--duration-quick) var(--ease-spring);
+}
+
+.searchModule.is-populated .searchClear {
+    width: 24px;
+    margin-left: 0;
+    opacity: 1;
+    overflow: visible;
+    transform: scale(1) rotate(0);
+    pointer-events: auto;
+}
+
+.searchClear .icon {
+    width: 12px;
+    height: 12px;
+}
+
+.searchClear:hover {
+    color: var(--text-primary);
+}
+
+.searchClear:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 50%;
+}
+
+/* ---- The bar GROWS THE MOMENT IT IS ACTIVE ---- */
+.topBar:has(.searchModuleWrapper.active) {
+    grid-template-columns:
+        minmax(0px, 1fr)
+        minmax(0px, 720px)
+        minmax(160px, 1fr);
+}
+
+.topBar:has(.searchModuleWrapper.active) .searchModuleWrapper {
+    max-width: 720px;
+}
+
+.searchModuleWrapper {
+    transition: max-width var(--duration-warm) var(--ease-standard);
+}
+
+/* ---- The shortcut hint leaves once you are in ---- */
+.searchModuleWrapper.active .searchShortcut,
+.searchModule.is-populated .searchShortcut {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.searchShortcut {
+    transition:
+        width var(--duration-warm) var(--ease-standard),
+        opacity var(--duration-quick) var(--ease-standard);
+}
+
+.topBar .topBarActions,
+.topBar .sidebarHamburger {
+    transition:
+        width var(--duration-warm) var(--ease-standard),
+        padding var(--duration-warm) var(--ease-standard),
+        margin var(--duration-warm) var(--ease-standard),
+        opacity var(--duration-quick) var(--ease-standard);
+}
+
+/* ---- Below 768 the row genuinely cannot hold both ---- */
+@media (max-width: 768px) {
+    .topBar:has(.searchModuleWrapper.active) .searchModuleWrapper {
+        max-width: none;
+        grid-column: 1 / -1;
+    }
+
+    .topBar:has(.searchModuleWrapper.active) .topBarActions,
+    .topBar:has(.searchModuleWrapper.active) .sidebarHamburger {
+        width: 0;
+        padding: 0;
+        margin-right: -16px;
+        opacity: 0;
+        overflow: hidden;
+        pointer-events: none;
+        border-width: 0;
+    }
+}
+
+.searchInput {
+    flex: 1 0 0;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0px;
+    margin: 0px;
+}
+
+.searchInput::placeholder {
+    color: var(--text-secondary);
+    font-weight: 400;
+    opacity: 1; /* Firefox dims placeholders by default; this puts it back to the token */
+}
+
+.searchIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--icon-lg);
+    height: var(--icon-lg);
+    flex-shrink: 0;
+    pointer-events: none;
+}
+
+/* ---- The results panel HANGS OFF THE FIELD ---- */
+.searchDropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    max-height: min(60vh, 560px);
+    overflow-y: auto;
+    background: var(--glass-light-fill);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-light-rim);
+    border-radius: 28px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+        opacity var(--duration-quick) var(--ease-standard),
+        transform var(--duration-warm) var(--ease-standard),
+        visibility var(--duration-warm) var(--ease-standard);
+}
+
+.searchModuleWrapper.active .searchDropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Search Dropdown Content */
+.searchDropdownContent {
+    padding: 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.searchDropdownContent::-webkit-scrollbar {
+    display: none;
+}
+
+/* Search Section Headers */
+.searchSectionHeader {
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: -0.64px;
+}
+
+/* Search Empty State */
+.searchEmptyState {
+    color: var(--text-primary);
+    font-family: "Source Serif", Georgia, serif;
+    font-size: 19px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+/* Search Section */
+.searchSection {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Search Result Item */
+.searchResultItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px;
+    margin: 0 -16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    transition:
+        background 0.3s ease,
+        transform 0.2s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Mouse-following light effect */
+.searchResultItem::before {
+    content: "";
+    position: absolute;
+    top: var(--mouse-y, 50%);
+    left: var(--mouse-x, 50%);
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(
+        circle at center,
+        rgba(145, 59, 159, 0.2) 0%,
+        rgba(145, 59, 159, 0.08) 40%,
+        transparent 70%
+    );
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.searchResultItem:hover::before,
+.searchResultItem.selected::before {
+    opacity: 1;
+}
+
+.searchResultItem:hover,
+.searchResultItem.selected {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(246, 238, 249, 0.5) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow:
+        0 4px 20px rgba(145, 59, 159, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(145, 59, 159, 0.03);
+}
+
+.searchResultItem.selected {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.55) 0%,
+        rgba(236, 230, 240, 0.6) 100%
+    );
+    box-shadow:
+        0 6px 24px rgba(145, 59, 159, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(145, 59, 159, 0.05);
+}
+
+/* Ensure content is above the light effect */
+.searchResultItem > * {
+    position: relative;
+    z-index: 1;
+}
+
+.searchResultImage {
+    width: 65px;
+    height: 65px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.searchResultImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.searchResultImage.searchResultIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+}
+
+.searchResultImage.searchResultIcon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.searchResultInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.searchResultName {
+    color: var(--text-primary);
+    font-family: "Source Serif", Georgia, serif;
+    font-size: 19px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.searchResultMeta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.searchResultMeta.history::before {
+    content: "•";
+    margin-right: 4px;
+}
+
+/* Menu Item specific styles */
+.searchResultMenuItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.searchResultMenuItem .searchResultInfo {
+    flex: 1;
+}
+
+.searchResultSubtitle {
+    color: var(--text-secondary);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.searchResultPrice {
+    color: var(--text-primary);
+    font-family: var(--font-ui);
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+
+    .searchModuleWrapper,
+    .topBar > .searchModule {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: none;
+        width: auto;
+    }
+
+    .searchModule {
+        height: 44px;
+        padding: 0 14px;
+    }
+
+    .searchModule .searchInput {
+        font-size: 16px;
+    }
+
+    /* No physical keyboard here, so the shortcut hint is only taking room. */
+    .searchModule .searchShortcut {
+        display: none;
+    }
+
+    .searchModule .searchIcon {
+        width: var(--icon-md);
+        height: var(--icon-md);
+    }
+
+    .searchDropdown {
+        max-height: calc(100vh - 140px);
+    }
+
+    .searchDropdownContent {
+        padding: 20px 24px;
+        gap: 20px;
+        max-height: calc(100vh - 120px);
+    }
+
+    .searchResultImage {
+        width: 50px;
+        height: 50px;
+    }
+
+    .searchResultName {
+        font-size: 16px;
+    }
+
+    .searchResultPrice {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .searchDropdownContent {
+        padding: 16px 20px;
+        gap: 16px;
+        max-height: calc(100vh - 100px);
+    }
+
+    .searchResultItem {
+        padding: 10px 12px;
+        margin: 0 -12px;
+        gap: 12px;
+    }
+
+    .searchResultImage {
+        width: 44px;
+        height: 44px;
+    }
+
+    .searchResultName {
+        font-size: 15px;
+    }
+
+    .searchResultMeta {
+        font-size: 12px;
+    }
+
+    .searchResultPrice {
+        font-size: 15px;
+    }
+}

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>hawkr</title>
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="../assets/css/liquidGlass.css">
+  <link rel="stylesheet" href="../assets/css/toggle.css">
+  <link rel="stylesheet" href="../assets/css/segmentedControl.css">
+  <link rel="stylesheet" href="../assets/css/listRow.css">
+  <link rel="stylesheet" href="../assets/css/toast.css">
+<link rel="stylesheet" href="results.css">
+<link rel="stylesheet" href="store.css">
+<link rel="stylesheet" href="item.css">
+<link rel="stylesheet" href="cuisines-onboarding.css">
+<link rel="stylesheet" href="allergies-onboarding.css">
+<link rel="stylesheet" href="sidebar.css">
+<link rel="stylesheet" href="profile-page.css">
+<link rel="stylesheet" href="settings-page.css">
+<link rel="stylesheet" href="preferences.css">
+<!-- last: .qstep--compact overrides item.css's .qstep at equal specificity, no !important -->
+<link rel="stylesheet" href="cart.css">
+<link rel="stylesheet" href="favourites-page.css">
+<link rel="stylesheet" href="reviews.css">
+<link rel="stylesheet" href="support.css">
+<link rel="stylesheet" href="orders.css">
+<!-- the one desktop surface: staff roles, not the consumer column -->
+</head>
+<body data-view="home">
+
+  <aside id="sidebar" class="sidebar" aria-label="Menu">
+    <a class="sidebar__brand" href="#home" data-nav="home" aria-label="hawkr — home">
+      <img class="sidebar__logo" src="../images/hawkr-logo.svg" alt="hawkr">
+    </a>
+    <nav class="sidebar__nav" aria-label="Primary">
+      <a class="sidebar__item is-active" href="#home" data-nav="home" aria-current="page">
+        <span class="sidebar__icon" data-icon="home" aria-hidden="true"></span>Home
+      </a>
+      <button class="sidebar__item" type="button" data-sidebar-stub="favourites">
+        <span class="sidebar__icon" data-icon="favourites" aria-hidden="true"></span>Favourites
+      </button>
+      <button class="sidebar__item" type="button" data-sidebar-stub="reviews">
+        <span class="sidebar__icon" data-icon="reviews" aria-hidden="true"></span>Reviews
+      </button>
+      <button class="sidebar__item" type="button" data-sidebar-stub="history">
+        <span class="sidebar__icon" data-icon="history" aria-hidden="true"></span>History
+      </button>
+      <button class="sidebar__item" type="button" data-sidebar-stub="support">
+        <span class="sidebar__icon" data-icon="support" aria-hidden="true"></span>Support
+      </button>
+    </nav>
+    <button class="sidebar__profile" type="button" data-sidebar-settings data-liquid-glass="drag">
+      <span class="sidebar__avatar" aria-hidden="true">W</span>
+      <span class="sidebar__who">
+        <span class="sidebar__name">Wandering Walrus</span>
+        <span class="sidebar__role">Guest</span>
+      </span>
+    </button>
+  </aside>
+
+  <div class="app-shell">
+    <div class="app-shell__scrim" data-drawer-close aria-hidden="true"></div>
+
+  <!-- ================= HOME ================= -->
+  <main id="view-home" class="view">
+    <header class="app-header">
+      <button class="hdr-btn liquid-glass" data-liquid-glass aria-label="Menu">
+        <img src="../images/icon-menu.svg" alt="" class="hdr-btn__icon hdr-btn__icon--panel">
+      </button>
+      <a class="logo" href="#home" data-nav="home"><img src="../images/hawkr-logo.svg" alt="hawkr" class="logo__img"></a>
+      <button class="hdr-btn liquid-glass" data-liquid-glass data-fav-heart aria-label="Favourites">
+        <img src="../images/icon-heart.svg" alt="" class="hdr-btn__icon">
+      </button>
+      <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+        <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+        <span class="location-pill__text">
+          <span class="location-pill__label">Location:</span>
+          <span class="location-pill__value skeleton">Locating…</span>
+        </span>
+      </a>
+    </header>
+
+    <form class="search-block" role="search">
+      <div class="search-bar">
+        <img class="search-bar__icon" src="../images/search.svg" alt="" aria-hidden="true">
+        <input class="search-bar__input" type="text" autocomplete="off"
+               aria-label="Search for food, addresses or cuisines">
+        <button class="search-clear" type="button" aria-label="Clear search">
+          <img src="../images/icon-clear.svg" alt="">
+        </button>
+      </div>
+    </form>
+
+    <div class="cuisine-row hide-scrollbar" aria-label="Cuisines"></div>
+
+    <section class="rail">
+      <h2 class="rail__title">You might like...</h2>
+      <div class="rail-row you-might-like-row"></div>
+    </section>
+  </main>
+
+  <!-- ============ SEARCH RESULTS — "Search for food by cuisine" (Figma 93:1776) ============ -->
+  <section id="view-results" class="view" aria-label="Search results">
+    <header class="results-bar">
+      <!-- Dual glass button: back + menu (liquid-glass primitive, draggable) -->
+      <div class="dual-btn" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-results-back aria-label="Back">
+          <img class="dual-btn__icon" src="../images/dual-back.svg" alt="">
+        </button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu">
+          <img class="dual-btn__icon" src="../images/dual-panel.svg" alt="">
+        </button>
+      </div>
+      <span class="results-bar__gap" aria-hidden="true"></span>
+      <div class="results-bar__right">
+        <button class="hdr-btn liquid-glass results-heart" data-liquid-glass data-fav-heart type="button" aria-label="Favourites">
+          <img src="../images/icon-heart.svg" alt="" class="hdr-btn__icon">
+        </button>
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="results-search" id="advSearch">
+      <form class="search-block" role="search">
+        <div class="search-bar">
+          <img class="search-bar__icon" src="../images/search.svg" alt="" aria-hidden="true">
+          <input class="search-bar__input" type="text" autocomplete="off" aria-label="Search for food, addresses or cuisines">
+          <button class="search-clear" type="button" aria-label="Clear search"><img src="../images/icon-clear.svg" alt=""></button>
+        </div>
+      </form>
+      <!-- Location field rises + fades in (grid-rows reveal, no clip-edge) -->
+      <div class="adv-loc"><div class="adv-loc__gi"><div class="adv-loc__in">
+        <span class="adv-loc__label">Location</span>
+        <label class="adv-loc__input"><input class="adv-loc-input" type="text" autocomplete="off" placeholder="Search a location…" aria-label="Location"></label>
+      </div></div></div>
+    </div>
+    <!-- glass Places suggestions for the Location field -->
+    <ul class="adv-suggest liquid-glass" aria-label="Location suggestions"></ul>
+
+    <div class="results-filters hide-scrollbar" aria-label="Filters">
+      <button class="rfilter" type="button" data-advanced>
+        <img class="rfilter__ic" src="../images/filter-advanced.svg" alt="">
+        Advanced Search
+      </button>
+      <button class="rfilter" type="button" data-filter="rating">
+        <img class="rfilter__ic" src="../images/filter-rating.svg" alt="">
+        4.5+
+      </button>
+      <button class="rfilter" type="button" data-filter="vouchers">
+        <img class="rfilter__ic" src="../images/filter-vouchers.svg" alt="">
+        Vouchers
+      </button>
+    </div>
+
+    <div class="cuisine-row results-cuisine-row hide-scrollbar" aria-label="Cuisines"></div>
+
+    <section class="results-body">
+      <h2 class="results-title">Showing results</h2>
+      <div class="results-feed"></div>
+    </section>
+  </section>
+
+  <!-- ============ STORE PROFILE — shared template (Figma 250:1386) ============ -->
+  <section id="view-store" class="view" aria-label="Store profile">
+    <header class="store-bar">
+      <div class="store-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn store-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-store-back aria-label="Back">
+          <img class="dual-btn__icon" src="../images/dual-back.svg" alt="">
+        </button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu">
+          <img class="dual-btn__icon" src="../images/dual-panel.svg" alt="">
+        </button>
+      </div>
+      <!-- right dual glass pill: search + favourite (matches the left, Figma 250:1397) -->
+      <div class="dual-btn store-dual-right" data-liquid-glass="drag" role="group" aria-label="Search and favourite">
+        <button class="dual-btn__side" type="button" data-store-search aria-label="Search this store">
+          <img class="dual-btn__icon" src="../images/dual-search.svg" alt="">
+        </button>
+        <button class="dual-btn__side" type="button" data-fav-heart aria-label="Favourites">
+          <img class="dual-btn__icon" src="../images/dual-heart.svg" alt="">
+        </button>
+      </div>
+      <form class="store-search" data-liquid-glass role="search">
+        <img class="store-search__icon" src="../images/search-field.svg" alt="" aria-hidden="true">
+        <input class="store-search__input" type="text" autocomplete="off" placeholder="Search within store" aria-label="Search within store">
+        <button class="store-search__clear" type="button" aria-label="Clear search"><img src="../images/icon-clear.svg" alt=""></button>
+      </form>
+    </header>
+
+    <!-- Hero photo (pulled up behind the sticky bar) -->
+    <div class="store-hero">
+      <img class="store-hero__img" src="" alt="">
+    </div>
+
+    <!-- Store header: hygiene chip · name · location · rating + live distance -->
+    <div class="store-head">
+      <span class="grade-chip store-hygiene">
+        <span class="grade-chip__letter"></span>
+        <img class="grade-chip__line" src="../images/grade-divider.svg" alt="">
+        <span class="grade-chip__text"></span>
+      </span>
+      <h1 class="store-title"></h1>
+      <p class="store-sub"></p>
+      <p class="store-rating"></p>
+    </div>
+
+    <!-- Body: carousels · menu groups · reviews · hygiene (filled by store.js) -->
+    <div class="store-body"></div>
+  </section>
+
+  <!-- ============ ITEM DETAIL — filled by item.js (openItem) ============ -->
+  <section id="view-item" class="view" aria-label="Dish">
+    <div class="item-scroll"></div>
+    <div class="item-foot"></div>
+  </section>
+
+  <!-- ================= ONBOARDING · CUISINE PICKER ================= -->
+  <section id="view-cuisines" class="view" aria-label="Choose your cuisines">
+    <header class="cuisines-bar">
+      <button class="hdr-btn liquid-glass" data-liquid-glass type="button" data-cuisines-back aria-label="Back">
+        <img class="hdr-btn__icon" src="../images/back.svg" alt="">
+      </button>
+      <span class="cuisines-mark liquid-glass" data-liquid-glass><img class="logo__img" src="../images/hawkr-logo.svg" alt="hawkr"></span>
+    </header>
+
+    <div class="cuisines-head">
+      <h1 class="cuisines-title">Your palette</h1>
+      <p class="cuisines-sub">Select at least three cuisines, up to five</p>
+    </div>
+
+    <div class="palate-scroll">
+      <div class="palate-track">
+        <button class="palate-plate" type="button" data-cuisine="Western"  aria-pressed="false"><span class="palate-plate__disc"><img src="../images/western.png" alt=""></span><span class="palate-plate__label">Western</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Indian"   aria-pressed="false"><span class="palate-plate__disc"><img src="../images/Indian.png" alt=""></span><span class="palate-plate__label">Indian</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Malay"    aria-pressed="false"><span class="palate-plate__disc"><img src="../images/malay.png" alt=""></span><span class="palate-plate__label">Malay</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Thai"     aria-pressed="false"><span class="palate-plate__disc"><img src="../images/Thai.png" alt=""></span><span class="palate-plate__label">Thai</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Chinese"  aria-pressed="false"><span class="palate-plate__disc"><img src="../images/chinese.png" alt=""></span><span class="palate-plate__label">Chinese</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Korean"   aria-pressed="false"><span class="palate-plate__disc"><img src="../images/korean.png" alt=""></span><span class="palate-plate__label">Korean</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Japanese" aria-pressed="false"><span class="palate-plate__disc"><img src="../images/Japanese.png" alt=""></span><span class="palate-plate__label">Japanese</span></button>
+        <button class="palate-plate" type="button" data-cuisine="Pizza"    aria-pressed="false"><span class="palate-plate__disc"><img src="../images/Pizza.png" alt=""></span><span class="palate-plate__label">Pizza</span></button>
+      </div>
+    </div>
+
+    <div class="cuisines-foot">
+      <button class="cuisines-next" type="button" disabled>Next</button>
+      <button class="cuisines-skip" type="button">Skip</button>
+    </div>
+  </section>
+
+  <!-- ================= ONBOARDING · ALLERGIES ================= -->
+  <section id="view-allergies" class="view" aria-label="Your allergies">
+    <div class="allergies-body">
+      <div class="allergies-top">
+        <div class="frost allergies-top__frost" aria-hidden="true"></div>
+        <header class="allergies-bar">
+          <button class="hdr-btn liquid-glass" data-liquid-glass type="button" data-allergies-back aria-label="Back">
+            <img class="hdr-btn__icon" src="../images/back.svg" alt="">
+          </button>
+          <span class="allergies-mark liquid-glass" data-liquid-glass><img class="logo__img" src="../images/hawkr-logo.svg" alt="hawkr"></span>
+          <span class="allergies-bar__spacer" aria-hidden="true"></span>
+        </header>
+        <div class="allergies-head">
+          <h1 class="allergies-title">Any allergies?</h1>
+          <p class="allergies-sub">We'll flag dishes that contain these — select all that apply.</p>
+        </div>
+      </div>
+
+      <!-- Curated list rendered by allergies-onboarding.js from the ALLERGENS registry -->
+      <div class="allergy-list"></div>
+
+      <!-- The out-of-vocab escape: anything the curated list doesn't cover, comma-separated -->
+      <label class="allergy-other">
+        <span class="allergy-other__label">Other allergies</span>
+        <input class="allergy-other__input" type="text" placeholder="Sesame, Celery" autocomplete="off"
+               aria-describedby="allergy-other-hint">
+        <span class="allergy-other__hint" id="allergy-other-hint">Separate with commas</span>
+      </label>
+    </div>
+
+    <div class="allergies-foot">
+      <div class="frost allergies-foot__frost" aria-hidden="true"></div>
+      <button class="allergies-next" type="button" disabled>Next</button>
+      <button class="allergies-none" type="button">I do not have any allergies</button>
+    </div>
+  </section>
+
+  <!-- ============ SET LOCATION (search + map share the bar) ============ -->
+  <section id="view-setloc" class="view" aria-label="Set location">
+    <div class="setloc-map">
+      <div id="map" class="setloc-map__canvas"></div>
+      <div class="map-pin" aria-hidden="true"></div>
+    </div>
+
+    <!-- Soft-blur scrim behind the bar (map mode only) -->
+    <div class="setloc-scrim" aria-hidden="true"></div>
+
+    <!-- Persistent top bar (morphs/stays across search ↔ map) -->
+    <header class="setloc-bar">
+      <p class="setloc-bar__label">Location:</p>
+      <div class="setloc-bar__row">
+        <button class="setloc-iconbtn liquid-glass" type="button" data-back aria-label="Back">
+          <img class="setloc-iconbtn__icon" src="../images/back.svg" alt="">
+        </button>
+        <form class="setloc-field setloc-field--on liquid-glass" role="search">
+          <img class="setloc-field__arrow" src="../images/loc-arrow.svg" alt="">
+          <input class="setloc-field__input" type="text" name="location" autocomplete="off"
+                 placeholder="Enter location manually" aria-label="Search location">
+        </form>
+        <button class="setloc-iconbtn liquid-glass" type="button" id="to-map" data-nav="map" aria-label="Use my location on the map">
+          <img class="setloc-iconbtn__icon" src="../images/crosshair.svg" alt="">
+        </button>
+        <button class="setloc-iconbtn liquid-glass" type="button" id="confirm" aria-label="Confirm location">
+          <img class="setloc-iconbtn__icon" src="../images/check.svg" alt="">
+        </button>
+      </div>
+    </header>
+
+    <ul class="setloc-suggest liquid-glass" aria-label="Address suggestions"></ul>
+
+    <div class="setloc-search">
+      <p class="loc-section"><img class="loc-section__icon" src="../images/near-you.svg" alt="">Near You</p>
+      <ul class="loc-results" data-list="near"></ul>
+      <p class="loc-section"><img class="loc-section__icon" src="../images/clock.svg" alt="">Recents</p>
+      <ul class="loc-results" data-list="recent"></ul>
+    </div>
+  </section>
+
+  <section id="view-profile" class="view" aria-label="Profile">
+    <header class="pf-bar">
+      <div class="pf-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn pf-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-profile-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="pf-bar__right">
+        <button class="pf-heart" type="button" data-liquid-glass="drag" data-fav-heart aria-label="Favourites"><img class="dual-btn__icon" src="../images/dual-heart.svg" alt=""></button>
+        <button class="pf-join" type="button" data-auth-login data-liquid-glass="drag" aria-label="Sign in or create an account">
+          <svg class="pf-join__icon" width="18" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3.5a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"/><path d="M2.5 20.5a6.5 6.5 0 0 1 13 0"/><path d="M19 8.5v6M22 11.5h-6"/></svg>
+          <span class="pf-join__label">Login</span>
+        </button>
+      </div>
+    </header>
+
+    <h1 class="pf-title">Profile</h1>
+
+    <div class="pf-card" data-liquid-glass="drag">
+      <span class="pf-avatar" aria-hidden="true">J</span>
+      <span class="pf-who">
+        <span class="pf-name">Juicy Joey</span>
+        <span class="pf-role"><span>Guest</span><span class="pf-dot" aria-hidden="true"></span><span class="pf-since">Since 2026</span></span>
+      </span>
+    </div>
+
+    <div class="pf-hook">
+      <h2 class="pf-hook__ttl">Why stay a guest?</h2>
+      <p class="pf-greet">Look what you've stashed,<span class="pf-greet-av" aria-hidden="true">J</span><span class="pf-greet-name">Juicy Joey</span></p>
+      <div class="pf-stats">
+        <div class="pf-stat"><span class="pf-stat__num pf-orders">20</span><span class="pf-stat__lbl">orders</span></div>
+        <div class="pf-stat"><span class="pf-stat__num">15</span><span class="pf-stat__lbl">stalls tried</span></div>
+      </div>
+    </div>
+
+    <div class="pf-members">
+      <h2 class="pf-members__ttl">Members get</h2>
+      <div class="pf-bento">
+        <div class="pf-tile pf-tile--tall">
+          <div class="pf-tile__media"><video class="pf-video" src="../video/favourites.mp4" muted loop autoplay playsinline preload="metadata"></video></div>
+          <div class="pf-tile__cap">
+            <p class="pf-tile__ttl">Your orders and favourites, saved</p>
+            <p class="pf-tile__sub">Reorder in two taps</p>
+          </div>
+        </div>
+        <div class="pf-bento__col">
+          <div class="pf-tile pf-tile--allergens">
+            <div class="pf-discs" aria-hidden="true"></div>
+            <div class="pf-tile__cap">
+              <p class="pf-tile__ttl">Allergens, remembered</p>
+              <p class="pf-tile__sub">Flagged on every dish</p>
+            </div>
+          </div>
+          <div class="pf-tile pf-tile--cards">
+            <img class="pf-card-art" src="../images/squiker-cards.png" alt="">
+            <div class="pf-tile__cap">
+              <p class="pf-tile__ttl">Save your cards</p>
+              <p class="pf-tile__sub">Checkout in seconds</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pf-cta-wrap">
+      <button class="pf-cta" type="button" data-profile-join data-liquid-glass="drag">Join Hawkr</button>
+    </div>
+  </section>
+
+  <!-- ============ SETTINGS (signed-up MEMBER account page, Figma 649:1758) ============ -->
+  <section id="view-settings" class="view" aria-label="Settings">
+    <header class="st-bar">
+      <div class="st-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn st-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-settings-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="st-bar__right">
+        <button class="st-heart" type="button" data-liquid-glass="drag" data-fav-heart aria-label="Favourites"><img class="dual-btn__icon" src="../images/dual-heart.svg" alt=""></button>
+        <button class="st-logout" type="button" data-settings-logout data-liquid-glass="drag">
+          <svg class="st-logout__icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></svg>
+          <span class="st-logout__label">Log out</span>
+        </button>
+      </div>
+    </header>
+
+    <h1 class="st-title">Settings</h1>
+
+    <div class="st-card" data-liquid-glass="drag">
+      <span class="st-avatar" aria-hidden="true">J</span>
+      <span class="st-who">
+        <span class="st-name">Jane Doe</span>
+        <span class="st-meta"><span class="st-orders">20 Orders</span><span class="st-dot" aria-hidden="true"></span><span class="st-since">Since 2026</span></span>
+      </span>
+    </div>
+
+    <!-- ---- Personal Details ---- -->
+    <section class="st-sec" data-section="details">
+      <div class="st-sec__head">
+        <h2 class="st-sec__ttl">Personal Details</h2>
+        <button class="st-chip" type="button" data-details-edit data-liquid-glass>
+          <img class="st-chip__icon" src="../images/edit-pencil.svg" alt="">
+          <span class="st-chip__label">Edit</span>
+        </button>
+      </div>
+      <div class="st-rows">
+        <div class="st-row"><span class="st-row__label">Name</span><span class="st-row__value" data-field="name">—</span></div>
+        <div class="st-row"><span class="st-row__label">Password</span><span class="st-row__value st-row__value--mask" data-field="password">••••••••••••</span></div>
+        <div class="st-row"><span class="st-row__label">Email</span><span class="st-row__value" data-field="email">—</span></div>
+        <div class="st-row">
+          <span class="st-row__label">Phone Number <span class="st-optional">Optional</span></span>
+          <span class="st-row__value st-row__value--phone"><img class="st-flag" src="../images/flag-sg.svg" alt="Singapore"><span data-field="phone">—</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- Payment ---- -->
+    <section class="st-sec" data-section="payment">
+      <div class="st-sec__head">
+        <h2 class="st-sec__ttl">Payment</h2>
+        <div class="st-sec__actions">
+          <button class="st-chip st-chip--add" type="button" data-card-add data-liquid-glass>
+            <span class="st-chip__plus" aria-hidden="true">+</span><span class="st-chip__label">Add Card</span>
+          </button>
+          <button class="st-chip" type="button" data-cards-edit data-liquid-glass>
+            <img class="st-chip__icon" src="../images/edit-pencil.svg" alt="">
+            <span class="st-chip__label">Edit</span>
+          </button>
+        </div>
+      </div>
+      <p class="st-note">Secure payment methods, PCI DSS compliant. We use Stripe for secure payment processing. <a href="#" class="st-link">Learn more &gt;</a></p>
+      <div class="st-cards" data-cards></div>
+    </section>
+
+    <!-- ---- Allergens ---- -->
+    <section class="st-sec" data-section="allergens">
+      <div class="st-sec__head">
+        <h2 class="st-sec__ttl">Allergens</h2>
+        <button class="st-chip" type="button" data-allergens-edit data-liquid-glass>
+          <img class="st-chip__icon" src="../images/edit-pencil.svg" alt="">
+          <span class="st-chip__label">Edit</span>
+        </button>
+      </div>
+      <p class="st-note">We flag dishes that contain these. It's a warning, never a promise that a dish is safe.</p>
+      <p class="pref-status" data-allergens-status hidden></p>
+      <div class="pref-summary" data-allergens-summary></div>
+      <div class="pref-panel" data-allergens-panel hidden>
+        <div class="allergy-list" data-allergens-list></div>
+        <label class="allergy-other">
+          <span class="allergy-other__label">Other allergies</span>
+          <input class="allergy-other__input" type="text" placeholder="Sesame, Celery" autocomplete="off"
+                 data-allergens-other aria-describedby="pref-other-hint">
+          <span class="allergy-other__hint" id="pref-other-hint">Separate with commas</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- ---- My Palette ---- -->
+    <section class="st-sec" data-section="palette">
+      <div class="st-sec__head">
+        <h2 class="st-sec__ttl">My Palette</h2>
+        <button class="st-chip" type="button" data-palette-edit data-liquid-glass>
+          <img class="st-chip__icon" src="../images/edit-pencil.svg" alt="">
+          <span class="st-chip__label">Edit</span>
+        </button>
+      </div>
+      <p class="st-note">Up to five cuisines you like. We keep them on your account — nothing recommends food from them yet.</p>
+      <p class="pref-status" data-palette-status hidden></p>
+      <div class="pref-summary" data-palette-summary></div>
+      <div class="pref-panel" data-palette-panel hidden>
+        <span class="pal-count" data-palette-count>0 of 5</span>
+        <div class="pal-grid" data-palette-grid></div>
+      </div>
+      <div class="pref-guest" data-palette-guest hidden>
+        <p class="pref-guest__copy">A palette is saved to your account, and you're browsing as a guest. Join hawkr and we'll keep it.</p>
+        <button class="pref-join" type="button" data-palette-join>Join hawkr</button>
+      </div>
+    </section>
+
+    <!-- ---- Danger Zone ---- -->
+    <section class="st-sec st-danger" data-section="danger">
+      <h2 class="st-sec__ttl">Danger Zone</h2>
+      <p class="st-note">This place is dangerous. Only click here if you know what you're doing!</p>
+      <div class="st-danger__row">
+        <div class="st-danger__copy">
+          <span class="st-danger__ttl">Delete Account</span>
+          <p class="st-note st-note--tight">We'll wipe your Hawkr profile, and (almost) everything we know about you. <a href="#" class="st-link">View Privacy Policy &gt;</a></p>
+        </div>
+        <button class="st-delete" type="button" data-account-delete data-liquid-glass>Delete Account</button>
+      </div>
+    </section>
+  </section>
+
+  <!-- ============ FAVOURITES (Figma 141:1244 · empty state 143:1594) ================ -->
+  <section id="view-favourites" class="view" aria-label="Favourites">
+    <header class="fv-bar">
+      <div class="fv-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn fv-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-fav-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="fv-bar__right">
+        <!-- filled, because this IS the favourites page (Figma draws it red here) -->
+        <!-- filled, because this IS the favourites page. It's also the way out: tapping
+             it returns you to wherever you came from (favourites-page.js). -->
+        <button class="hdr-btn liquid-glass fv-heart" type="button" data-liquid-glass data-fav-heart aria-label="Back to browsing">
+          <img src="../images/heart-filled.svg" alt="" class="hdr-btn__icon">
+        </button>
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="fv-head">
+      <h1 class="fv-title">Your Favourites</h1>
+      <div class="segmentedControl segmentedControl--sm fv-seg" role="radiogroup" aria-label="Favourite type" data-tab="stalls">
+        <button class="segmentedButton" type="button" role="radio" aria-checked="true" data-fav-tab="stalls">Stalls</button>
+        <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-fav-tab="dishes">Dish</button>
+      </div>
+    </div>
+
+    <p class="pref-status fv-status" data-fav-status hidden></p>
+
+    <div class="fv-list" data-fav-list></div>
+
+    <div class="fv-empty" hidden>
+      <img class="fv-empty__art" src="../images/fav-squirrel.svg" alt="" width="154" height="144">
+      <div class="fv-empty__copy">
+        <p class="fv-empty__ttl">No favourite items yet..</p>
+        <p class="fv-empty__sub">When you find food you love, tap the<br>heart icon to add it to this collection!</p>
+      </div>
+    </div>
+
+    <p class="fv-end" hidden>That's all… what else do you like?</p>
+  </section>
+
+  <!-- ============ CART (Figma 683:2086) ============================================ -->
+  <section id="view-cart" class="view" aria-label="Cart">
+    <header class="ct-bar">
+      <div class="ct-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn ct-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-cart-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="ct-bar__right">
+        <button class="hdr-btn liquid-glass" type="button" data-liquid-glass data-fav-heart aria-label="Favourites">
+          <img src="../images/icon-heart.svg" alt="" class="hdr-btn__icon">
+        </button>
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="ct-head">
+      <h1 class="ct-title">Cart</h1>
+      <div class="segmentedControl segmentedControl--sm ct-seg" role="radiogroup" aria-label="Collection method" data-mode="dinein">
+        <button class="segmentedButton" type="button" role="radio" aria-checked="true" data-mode-set="dinein">Dine-in</button>
+        <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-mode-set="dabao">Dabao</button>
+      </div>
+    </div>
+
+    <div class="ct-groups" data-cart-groups></div>
+
+    <section class="ct-sec ct-env">
+      <h2 class="ct-sec__ttl">Hawkr and the Environment</h2>
+      <div class="ct-env__row">
+        <span class="ct-env__label ct-env__label--inline">
+          <span class="ct-env__name">Hawkr Harvest</span>
+          <img class="ct-env__icon" src="../images/cart-humid.svg" alt="" width="18" height="16">
+          <span class="ct-dot" aria-hidden="true"></span>
+          <span class="ct-env__sub">Round up to the nearest dollar</span>
+        </span>
+        <label class="lg-toggle lg-toggle--sm" aria-label="Round up to the nearest dollar">
+          <input type="checkbox" role="switch" data-pref="roundUp">
+          <span class="lg-toggle__track"><span class="lg-toggle__thumb"></span></span>
+        </label>
+      </div>
+      <div class="ct-env__row">
+        <span class="ct-env__label">
+          <span class="ct-env__name">Cutlery</span>
+          <span class="ct-env__sub">Only request for cutlery if you need it!</span>
+        </span>
+        <label class="lg-toggle lg-toggle--sm" aria-label="Include cutlery">
+          <input type="checkbox" role="switch" data-pref="cutlery">
+          <span class="lg-toggle__track"><span class="lg-toggle__thumb"></span></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="ct-sec ct-collect">
+      <h2 class="ct-sec__ttl">Collection Details</h2>
+      <div class="ct-who" data-cart-who></div>
+      <div class="ct-collect__list" data-cart-centres></div>
+    </section>
+
+    <section class="ct-sec ct-pay">
+      <h2 class="ct-sec__ttl">Payment Details</h2>
+      <!-- cart.js fills this with: express wallets · divider · saved-card radiogroup -->
+      <div class="ct-pay__list" data-cart-methods></div>
+    </section>
+
+    <section class="ct-sec ct-voucher">
+      <h2 class="ct-sec__ttl">Voucher</h2>
+      <div class="ct-voucher__box" data-cart-voucher></div>
+    </section>
+
+    <div class="ct-totals" data-cart-totals></div>
+
+    <div class="ct-cta">
+      <button class="ct-confirm" type="button" data-cart-confirm data-liquid-glass>Confirm</button>
+    </div>
+
+    <div class="ct-empty">
+      <p class="ct-empty__text">Nothing in your cart yet.<br>Find a stall and add something tasty.</p>
+      <button class="ct-confirm ct-empty__cta" type="button" data-cart-browse data-liquid-glass>Browse stalls</button>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS (INVENTED — no Figma frame) ============================== -->
+  <section id="view-reviews" class="view" aria-label="Reviews">
+    <header class="rv-bar">
+      <div class="rv-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn rv-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-rv-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="rv-bar__right">
+        <button class="hdr-btn liquid-glass" type="button" data-liquid-glass data-fav-heart aria-label="Favourites">
+          <img src="../images/icon-heart.svg" alt="" class="hdr-btn__icon">
+        </button>
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="rv-head">
+      <h1 class="rv-title">How was it?</h1>
+      <p class="rv-sub"></p>
+    </div>
+
+    <div class="rv-centre-cta">
+      <button class="rv-order rv-centre-start" type="button" data-rv-centre-start>
+        <span class="rv-order__main">
+          <span class="rv-order__when">Rate a hawker centre</span>
+          <span class="rv-order__what">Cleanliness, seating, toilets and more</span>
+        </span>
+        <span class="rv-order__right">
+          <img class="rv-order__chev" src="../images/Chevron right.svg" alt="">
+        </span>
+      </button>
+    </div>
+
+    <div class="rv-orders"></div>
+
+    <div class="rv-centres"></div>
+
+    <div class="rv-centre-form"></div>
+
+    <div class="rv-list"></div>
+
+    <p class="rv-end" hidden>That's the lot. Thanks for telling them.</p>
+
+    <div class="rv-empty">
+      <img class="rv-empty__art" src="../images/squirrelShrugging.svg" alt="" width="150" height="156">
+      <div class="rv-empty__copy">
+        <p class="rv-empty__ttl">Nothing to review yet</p>
+        <p class="rv-empty__sub">Reviews open up once you've ordered.<br>Buy from a stall and we'll ask how it went.</p>
+      </div>
+      <button class="rv-post rv-empty__cta" type="button" data-rv-browse>Browse stalls</button>
+    </div>
+  </section>
+
+  <!-- ============ YOUR ORDERS (INVENTED — no Figma frame) ========================== -->
+  <section id="view-orders" class="view" aria-label="Your orders">
+    <header class="sp-bar">
+      <div class="sp-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-od-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="sp-bar__right">
+        <button class="hdr-btn liquid-glass" type="button" data-liquid-glass data-fav-heart aria-label="Favourites">
+          <img src="../images/icon-heart.svg" alt="" class="hdr-btn__icon">
+        </button>
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="sp-head">
+      <h1 class="sp-title">Your orders</h1>
+      <p class="sp-sub">Where each one got to, newest first. Tap an order to see what was in it.</p>
+    </div>
+
+    <div class="listStack od-list" data-od-list></div>
+  </section>
+
+  <!-- ============ YOUR TICKETS (INVENTED — no Figma frame) ========================= -->
+  <section id="view-tickets" class="view" aria-label="Your support tickets">
+    <header class="sp-bar">
+      <div class="sp-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn sp-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-sp-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="sp-bar__right">
+        <button class="hdr-btn liquid-glass" type="button" data-liquid-glass data-fav-heart aria-label="Favourites">
+          <img src="../images/icon-heart.svg" alt="" class="hdr-btn__icon">
+        </button>
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="sp-head">
+      <h1 class="sp-title">Your tickets</h1>
+      <p class="sp-sub">Something wrong at a centre? Tell us, and read the reply here.</p>
+      <div class="segmentedControl segmentedControl--sm sp-seg" role="radiogroup" aria-label="Ticket state" data-tab="open">
+        <button class="segmentedButton" type="button" role="radio" aria-checked="true" data-sp-tab="open">Open</button>
+        <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-sp-tab="closed">Answered</button>
+      </div>
+    </div>
+
+    <div class="sp-list" data-sp-list></div>
+
+    <div class="sp-form">
+      <button class="sp-submit" type="button" data-sp-new>Raise a ticket</button>
+    </div>
+  </section>
+
+  <!-- ============ RAISE A TICKET (INVENTED — no Figma frame) ======================= -->
+  <section id="view-newticket" class="view" aria-label="Raise a support ticket">
+    <header class="sp-bar">
+      <div class="sp-bar__frost frost" aria-hidden="true"></div>
+      <div class="dual-btn sp-dual-left" data-liquid-glass="drag" role="group" aria-label="Back and menu">
+        <button class="dual-btn__side" type="button" data-sp-back aria-label="Back"><img class="dual-btn__icon" src="../images/dual-back.svg" alt=""></button>
+        <button class="dual-btn__side" type="button" data-menu aria-label="Menu"><img class="dual-btn__icon" src="../images/dual-panel.svg" alt=""></button>
+      </div>
+      <div class="sp-bar__right">
+        <a class="location-pill liquid-glass" data-liquid-glass="drag" href="#search" data-nav="search" aria-label="Set location">
+          <img src="../images/loc-arrow.svg" alt="" class="location-pill__arrow">
+          <span class="location-pill__text">
+            <span class="location-pill__label">Location:</span>
+            <span class="location-pill__value skeleton">Locating…</span>
+          </span>
+        </a>
+      </div>
+    </header>
+
+    <div class="sp-head">
+      <h1 class="sp-title">Raise a ticket</h1>
+      <p class="sp-sub">Tell us what happened and where. Someone at the centre picks it up and writes back.</p>
+    </div>
+
+    <form class="sp-form" id="sp-form" novalidate>
+      <label class="sp-field sp-field--select">
+        <span class="sp-field__label">Hawker centre</span>
+        <select class="sp-field__select" id="sp-centre" required>
+          <option value="">Loading…</option>
+        </select>
+      </label>
+
+      <label class="sp-field sp-field--select">
+        <span class="sp-field__label">What is it about?</span>
+        <select class="sp-field__select" id="sp-category" required>
+          <option value="">Choose a category</option>
+        </select>
+      </label>
+
+      <label class="sp-field" data-sp-other hidden>
+        <span class="sp-field__label">Describe the category</span>
+        <input class="sp-field__input" type="text" id="sp-other" placeholder="e.g. Lost property">
+      </label>
+
+      <label class="sp-field">
+        <span class="sp-field__label">Subject</span>
+        <input class="sp-field__input" type="text" id="sp-subject" maxlength="150" placeholder="One line — what happened">
+        <span class="sp-count" data-sp-count>0/150</span>
+      </label>
+
+      <label class="sp-field sp-field--area">
+        <span class="sp-field__label">What happened?</span>
+        <textarea class="sp-field__area" id="sp-description" placeholder="When it happened, where in the centre, and anything that would help someone find it."></textarea>
+      </label>
+
+      <div class="sp-files">
+        <input class="sp-files__input" type="file" id="sp-files" multiple>
+        <label class="sp-drop" for="sp-files">Add photos or a video</label>
+        <p class="sp-files__hint">Up to 10 files. Images under 5MB, videos under 50MB. JPG, PNG, MP4 or MOV.</p>
+        <div class="sp-chosen" data-sp-chosen></div>
+      </div>
+
+      <p class="sp-error" data-sp-formerror hidden></p>
+
+      <button class="sp-submit" type="submit" data-sp-submit>Send ticket</button>
+    </form>
+  </section>
+
+  <button class="cart-fab" type="button" aria-label="View cart">
+    <img class="cart-fab__icon" src="../images/cart-bag.svg" alt="">
+  </button>
+
+  </div><!-- /.app-shell -->
+
+  <!-- ============ AUTHORITY (NEA officer) ========================================== -->
+
+  <!-- "Far from your pill" reconcile sheet (trigger wired to advanced search later) -->
+  <div class="far-modal" id="far-modal" hidden>
+    <div class="far-modal__scrim" data-far-dismiss></div>
+    <div class="far-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="far-title">
+      <span class="far-modal__handle" aria-hidden="true"></span>
+      <span class="far-modal__art"><img src="../images/far-squirrel.png" alt=""></span>
+      <div class="far-modal__copy">
+        <h2 class="far-modal__title" id="far-title">That's a bit far from your spot</h2>
+        <p class="far-modal__text">You're browsing around <b class="far-browsing">Jurong West</b>, but your pill's set to <b class="far-pill">Bishan</b>.</p>
+      </div>
+      <div class="far-modal__actions">
+        <button class="far-btn far-btn--ghost" type="button" id="far-update">Update pill</button>
+        <button class="far-btn far-btn--solid" type="button" id="far-keep">Keep it as is</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="far-modal st-confirm" id="st-confirm" hidden>
+    <div class="far-modal__scrim" data-confirm-dismiss></div>
+    <div class="far-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="st-confirm-title">
+      <span class="far-modal__handle" aria-hidden="true"></span>
+      <span class="far-modal__art"><img src="../images/far-squirrel.png" alt=""></span>
+      <div class="far-modal__copy">
+        <h2 class="far-modal__title" id="st-confirm-title">Delete your account?</h2>
+        <p class="far-modal__text">This wipes your profile, saved cards and order history. It can't be undone.</p>
+      </div>
+      <div class="st-reasons" role="radiogroup" aria-label="Why are you leaving?">
+        <button class="st-reason" type="button" role="radio" aria-checked="false" data-reason="not-using">I don't use it enough</button>
+        <button class="st-reason" type="button" role="radio" aria-checked="false" data-reason="privacy">Privacy concerns</button>
+        <button class="st-reason" type="button" role="radio" aria-checked="false" data-reason="another-app">I use another app</button>
+        <button class="st-reason" type="button" role="radio" aria-checked="false" data-reason="other">Something else</button>
+      </div>
+      <div class="far-modal__actions">
+        <button class="far-btn far-btn--ghost" type="button" data-confirm-cancel>Keep my account</button>
+        <button class="far-btn st-btn--danger" type="button" data-confirm-delete disabled>Delete forever</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="far-modal ct-placed" id="ct-placed" hidden>
+    <div class="far-modal__scrim" data-placed-dismiss></div>
+    <div class="far-modal__sheet" role="dialog" aria-modal="true" aria-labelledby="ct-placed-title">
+      <span class="far-modal__handle" aria-hidden="true"></span>
+      <span class="far-modal__art"><img src="../images/far-squirrel.png" alt=""></span>
+      <div class="far-modal__copy">
+        <h2 class="far-modal__title" id="ct-placed-title">Order placed</h2>
+        <p class="far-modal__text" data-placed-text></p>
+        <p class="ct-placed__who">Collecting as <b data-placed-name></b>.
+          <button class="ct-placed__rename" type="button" data-placed-rename>Not you?</button>
+        </p>
+        <div class="ct-placed__row" hidden>
+          <input class="ct-placed__input" type="text" placeholder="Your name" aria-label="Your name">
+          <button class="ct-placed__save" type="button" data-placed-save>Save</button>
+        </div>
+      </div>
+      <div class="far-modal__actions">
+        <button class="far-btn far-btn--solid" type="button" data-placed-done>Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script>
+    // Google Maps JS API — official dynamic bootstrap loader. Key from config.js.
+    (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+      key: window.HAWKR_MAPS_KEY,
+      v: "weekly",
+    });
+  </script>
+  <script src="allergens.js" defer></script>
+  <script src="preferences.js" defer></script>
+  <script type="module" src="liquidGlass.js"></script>
+  <script type="module" src="session.js"></script>
+  <script src="guestNames.js" defer></script>
+  <script src="profile.js" defer></script>
+  <script src="catalog.js" defer></script>
+  <script src="home.js" defer></script>
+  <script src="money.js" defer></script>
+  <script src="bag.js" defer></script>
+  <script src="cards.js" defer></script>
+  <script src="favourites.js" defer></script>
+  <script src="pay.js" defer></script>
+  <script type="module" src="toggle.js"></script>
+  <script src="app.js" defer></script>
+  <script src="advancedSearch.js" defer></script>
+  <script src="store.js" defer></script>
+  <script src="item.js" defer></script>
+  <script src="login.js" defer></script>
+  <script src="cuisines-onboarding.js" defer></script>
+  <script src="allergies-onboarding.js" defer></script>
+  <script src="sidebar.js" defer></script>
+  <script src="profile-page.js" defer></script>
+  <script src="settings-page.js" defer></script>
+  <script src="cart.js" defer></script>
+  <script src="favourites-page.js" defer></script>
+  <script type="module" src="reviews.js"></script>
+  <script type="module" src="centreStatus.js"></script>
+  <script type="module" src="support.js"></script>
+  <script type="module" src="orders.js"></script>
+  <script type="module" src="../assets/js/bottomNav.js"></script>
+</body>
+</html>

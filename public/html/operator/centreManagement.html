@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centre Management — Hawker Operator</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+  <link rel="stylesheet" href="../../css/operator/centreManagement.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">Centre Management</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page page-wide">
+    <a href="operatorHome.html" class="back-link">&larr; Back to Home</a>
+    <p class="subtitle">Manage closures, operations, satisfaction, and promotions for the centres you run.</p>
+
+    <div class="filter-row" id="centreSwitcherWrap">
+      <div>
+        <label for="centreSwitcher">Hawker Centre</label>
+        <select id="centreSwitcher"></select>
+      </div>
+    </div>
+    <p id="noCentreMsg" class="empty-msg" style="display:none;">You are not assigned to any hawker centres yet. Set this up on your Profile page.</p>
+
+    <div id="centreContent" style="display:none;">
+      <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="closures">Closures &amp; Hours</button>
+        <button type="button" class="tab-btn" data-tab="analytics">Operations Analytics</button>
+        <button type="button" class="tab-btn" data-tab="satisfaction">Satisfaction</button>
+        <button type="button" class="tab-btn" data-tab="promotions">Promotions</button>
+      </div>
+
+      <!-- ---------- Tab 1: Closures & Hours ---------- -->
+      <div id="tab-closures" class="tab-panel active">
+        <div class="primary-action-bar">
+          <p class="subtitle" id="closureStatusLine" style="margin:0;"></p>
+          <button type="button" id="newClosureBtn" class="new-btn">+ Schedule Closure</button>
+        </div>
+        <div class="table-plain">
+          <table id="closuresTable">
+            <thead><tr><th>Reason</th><th>Start</th><th>End</th><th>Status</th><th>Notes</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="closuresEmptyMsg" class="empty-msg" style="display:none;">No closures scheduled for this centre.</p>
+      </div>
+
+      <!-- ---------- Tab 2: Operations Analytics ---------- -->
+      <div id="tab-analytics" class="tab-panel">
+        <div class="tabs" style="border-bottom:none; margin-bottom:16px;">
+          <button type="button" class="tab-btn active" data-period="week">Last 7 Days</button>
+          <button type="button" class="tab-btn" data-period="month">Last 30 Days</button>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-tile"><span>Total Orders</span><strong id="a_totalOrders">-</strong></div>
+          <div class="stat-tile"><span>Peak Hour</span><strong id="a_peakHour">-</strong></div>
+          <div class="stat-tile"><span>Under-utilised Stalls</span><strong id="a_underUtilisedCount">-</strong></div>
+        </div>
+
+        <div class="card">
+          <h2>Order Volume by Hour</h2>
+          <div class="bar-chart" id="hourChart"></div>
+        </div>
+
+        <div class="card">
+          <h2>Order Volume by Day</h2>
+          <div class="bar-chart" id="dayChart"></div>
+        </div>
+
+        <div class="card">
+          <h2>Stall Utilisation</h2>
+          <div class="table-plain">
+            <table id="utilisationTable">
+              <thead><tr><th>Stall</th><th>Orders</th><th>Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" id="analyticsCompareCard" style="display:none;">
+          <h2>Compare My Centres</h2>
+          <div class="table-plain">
+            <table id="analyticsCompareTable">
+              <thead><tr><th>Centre</th><th>Orders</th><th>Peak Hour</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- Tab 3: Satisfaction ---------- -->
+      <div id="tab-satisfaction" class="tab-panel">
+        <div class="rings-row">
+          <div class="ring-card">
+            <h2>Stall Feedback</h2>
+            <div class="ring" id="stallRing"><span id="stallRingLabel">-</span></div>
+            <p class="ring-meta" id="stallRingMeta"></p>
+            <button type="button" class="edit-btn" id="viewStallNegativeBtn">View Negative Comments</button>
+          </div>
+          <div class="ring-card">
+            <h2>Hawker Centre Feedback</h2>
+            <div class="ring" id="hawkerRing"><span id="hawkerRingLabel">-</span></div>
+            <p class="ring-meta" id="hawkerRingMeta"></p>
+            <p class="ring-meta" id="hawkerTrendLine"></p>
+            <button type="button" class="edit-btn" id="viewHawkerNegativeBtn">View Negative Comments</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Stall Ratings</h2>
+          <div class="table-plain">
+            <table id="stallRatingsTable">
+              <thead><tr><th>Stall</th><th>Reviews</th><th>Avg Rating</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Facility Tag Breakdown</h2>
+          <div class="table-plain">
+            <table id="facilityTable">
+              <thead><tr><th>Facility</th><th>Feedback Count</th><th>Avg Rating</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" id="satisfactionCompareCard" style="display:none;">
+          <h2>Compare My Centres</h2>
+          <div class="table-plain">
+            <table id="satisfactionCompareTable">
+              <thead><tr><th>Centre</th><th>Stall Rating</th><th>Hawker Rating</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ---------- Tab 4: Promotions ---------- -->
+      <div id="tab-promotions" class="tab-panel">
+        <div class="primary-action-bar">
+          <h2 style="margin:0;">Centre Promotions</h2>
+          <button type="button" id="newPromotionBtn" class="new-btn">+ New Promotion</button>
+        </div>
+        <div class="table-plain">
+          <table id="promotionsTable">
+            <thead><tr><th>Name</th><th>Discount</th><th>Start</th><th>End</th><th>Status</th><th>Stalls</th><th>Actions</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="promotionsEmptyMsg" class="empty-msg" style="display:none;">No promotions for this centre yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Schedule Closure Modal -->
+  <div id="closureModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeClosureModalBtn">&times;</button>
+      <h3>Schedule Closure</h3>
+      <form id="closureForm">
+        <label>Reason</label>
+        <select id="c_Reason" required>
+          <option>Cleaning</option>
+          <option>Maintenance</option>
+          <option>Public Holiday</option>
+          <option>Special Event</option>
+          <option>Other</option>
+        </select>
+
+        <label class="checkbox-item" style="width:fit-content;">
+          <input type="checkbox" id="c_Immediate">
+          <span>Start immediately</span>
+        </label>
+
+        <label>Start</label>
+        <input type="datetime-local" id="c_Start" required>
+
+        <label>End</label>
+        <input type="datetime-local" id="c_End" required>
+
+        <label>Notes <span class="locked-note">(optional)</span></label>
+        <textarea id="c_Notes"></textarea>
+
+        <p id="closureMsg" class="msg"></p>
+
+        <div class="form-actions">
+          <button type="button" id="cancelClosureModalBtn" class="cancel-btn">Cancel</button>
+          <button type="submit" class="save-btn">Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Negative Feedback Modal -->
+  <div id="negativeModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeNegativeModalBtn">&times;</button>
+      <h3 id="negativeModalTitle">Negative Feedback</h3>
+      <div class="detail-list" id="negativeModalBody"></div>
+    </div>
+  </div>
+
+  <!-- New Promotion Modal -->
+  <div id="promotionModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closePromotionModalBtn">&times;</button>
+      <h3>New Promotion</h3>
+      <form id="promotionForm">
+        <label>Name</label>
+        <input type="text" id="p_Name" required maxlength="100">
+
+        <label>Description <span class="locked-note">(optional)</span></label>
+        <textarea id="p_Description"></textarea>
+
+        <label>Discount Type</label>
+        <select id="p_DiscountType" required>
+          <option value="Percentage">Percentage</option>
+          <option value="FixedAmount">Fixed Amount</option>
+        </select>
+
+        <label>Discount Value</label>
+        <input type="number" id="p_DiscountValue" step="0.01" min="0.01" required>
+
+        <label>Start</label>
+        <input type="datetime-local" id="p_Start" required>
+
+        <label>End</label>
+        <input type="datetime-local" id="p_End" required>
+
+        <label>Target Stalls</label>
+        <label class="checkbox-item" style="width:fit-content; margin-bottom:8px;">
+          <input type="checkbox" id="p_AllStalls" checked>
+          <span>All stalls in this centre</span>
+        </label>
+        <div class="checkbox-list" id="p_StallChecklist" style="display:none;"></div>
+
+        <p id="promotionMsg" class="msg"></p>
+
+        <div class="form-actions">
+          <button type="button" id="cancelPromotionModalBtn" class="cancel-btn">Cancel</button>
+          <button type="submit" class="save-btn">Create Promotion</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Clone Promotion Modal -->
+  <div id="cloneModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Clone Promotion</h3>
+      <p>Copy this promotion's details into another centre you manage. You'll need to pick target stalls there afterward.</p>
+      <label style="text-align:left; display:block;">Target Centre</label>
+      <select id="cloneTargetCentre" style="margin-bottom:16px;"></select>
+      <p id="cloneMsg" class="msg"></p>
+      <div class="modal-actions">
+        <button id="cancelCloneBtn" class="modal-cancel-btn" type="button">Cancel</button>
+        <button id="confirmCloneBtn" class="modal-confirm-btn" style="background:var(--success);" type="button">Clone</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Hawker Management System</p>
+  </footer>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/centreManagement.js"></script>
+  <script>
+    renderOperatorNavbar('centreManagement');
+    renderBottomPillNav('home');
+    if (!localStorage.getItem('authToken')) {
+      window.location.href = '/auth/login.html';
+    }
+  </script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

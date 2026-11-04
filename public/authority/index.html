@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>hawkr — Authority</title>
+
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="../assets/css/liquidGlass.css">
+<link rel="stylesheet" href="../assets/css/bottomNav.css">
+<link rel="stylesheet" href="../assets/css/segmentedControl.css">
+<link rel="stylesheet" href="../assets/css/toggle.css">
+<link rel="stylesheet" href="../assets/css/listRow.css">
+<link rel="stylesheet" href="authority.css">
+</head>
+<body>
+  <section id="view-authority" class="view" aria-label="Authority" data-panel="home">
+    <aside class="sf-rail" aria-label="History">
+      <img class="sf-rail__mark" src="../images/hawkrOS.svg" alt="HawkrOS">
+      <p class="sf-rail__heading">History</p>
+      <div class="sf-rail__list" data-authority-history></div>
+      <div class="sf-rail__account">
+        <button class="sf-rail__profile" type="button" data-liquid-glass="drag"
+                aria-label="Singapore Food Agency — account and settings">
+          <span class="sf-rail__avatar"><img src="../assets/icons/sfa-mark.svg" alt=""></span>
+          <span class="sf-rail__name">Singapore Food Agency</span>
+        </button>
+        <button class="sf-logoutBtn liquid-glass" type="button" data-liquid-glass="drag" data-logout aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../assets/icons/logout.svg)"></span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="sf-drawerOverlay" aria-hidden="true"></div>
+
+    <div class="sf-shell">
+    <div class="sf-main">
+      <header class="sf-topbar">
+        <div class="sf-topbarPill liquid-glass" data-liquid-glass="drag">
+          <div class="sf-topbar__brand">
+            <img class="sf-topbar__wordmark" src="../images/hawkrOS.svg" alt="HawkrOS">
+            <span class="sf-topbar__x" aria-hidden="true">x</span>
+            <img class="sf-topbar__orgmark" src="../assets/icons/sfa-logo.svg" alt="Singapore Food Agency">
+          </div>
+          <div class="sf-topbar__account">
+            <button class="sf-topbar__profile" type="button" data-liquid-glass="drag" aria-label="Account and settings">
+              <img src="../assets/icons/sfa-mark.svg" alt="">
+            </button>
+            <button class="sf-logoutBtn liquid-glass" type="button" data-liquid-glass="drag" data-logout aria-label="Log out">
+              <span class="icon icon--lg" style="--icon: url(../assets/icons/logout.svg)"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <section class="sf-panel" data-panel-body="home">
+        <div class="sf-dash">
+          <div class="sf-dash__col">
+            <h2 class="sf-dash__h">New Stalls
+              <span class="sf-dash__chip sf-dash__chip--ungraded">Ungraded</span></h2>
+            <div class="sf-dash__card sf-dash__card--ungraded" data-authority-unassigned></div>
+
+            <h2 class="sf-dash__h">Yet to Assess</h2>
+            <div class="sf-dash__card" data-authority-overdue></div>
+          </div>
+
+          <div class="sf-dash__col">
+            <h2 class="sf-dash__h">Inspections Today
+              <span class="sf-dash__chip sf-dash__chip--pending">Pending</span></h2>
+            <div class="sf-dash__card sf-dash__card--pending" data-authority-today></div>
+
+            <div class="sf-dashCal" data-dash-calendar>
+              <div class="sf-dashCal__nav">
+                <div class="sf-dashCal__monthNav">
+                  <button class="sf-calendar__arrow liquid-glass" type="button" data-liquid-glass="drag" data-dashcal-prev-month aria-label="Previous month">
+                    <span class="icon" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                  </button>
+                  <p class="sf-dashCal__month" data-dashcal-month></p>
+                  <button class="sf-calendar__arrow liquid-glass" type="button" data-liquid-glass="drag" data-dashcal-next-month aria-label="Next month">
+                    <span class="icon sf-calendar__icon--fwd" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                  </button>
+                </div>
+                <div class="sf-dashCal__yearNav">
+                  <button class="sf-calendar__arrow sf-calendar__arrow--year liquid-glass" type="button" data-liquid-glass="drag" data-dashcal-prev-year aria-label="Previous year">
+                    <span class="icon" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                  </button>
+                  <p class="sf-dashCal__year" data-dashcal-year></p>
+                  <button class="sf-calendar__arrow sf-calendar__arrow--year liquid-glass" type="button" data-liquid-glass="drag" data-dashcal-next-year aria-label="Next year">
+                    <span class="icon sf-calendar__icon--fwd" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="sf-dashCal__dow" aria-hidden="true">
+                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+              </div>
+              <div class="sf-dashCal__grid" data-dashcal-grid></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sf-panel" data-panel-body="stores">
+        <div class="sf-transcript" data-authority-transcript></div>
+      </section>
+    </div>
+
+    <nav class="bottomNav" aria-label="Sections" data-bottom-nav data-liquid-glass="drag">
+      <button class="bottomNav__item" type="button" data-panel-go="home" aria-current="true">
+        <span class="icon bottomNav__icon" style="--icon: url(../assets/icons/home.svg)" aria-hidden="true"></span>
+        <span>Home</span>
+      </button>
+      <button class="bottomNav__item" type="button" data-panel-go="stores">
+        <span class="icon bottomNav__icon" style="--icon: url(../assets/icons/vendor.svg)" aria-hidden="true"></span>
+        <span>Stores</span>
+      </button>
+      <button class="bottomNav__item" type="button" data-panel-go="search">
+        <span class="icon bottomNav__icon" style="--icon: url(../assets/icons/search.svg)" aria-hidden="true"></span>
+        <span>Search</span>
+      </button>
+    </nav>
+
+    <div class="frost sf-footFrost" aria-hidden="true"></div>
+    <p class="sf-footBar liquid-glass">This is not a conversation. Only you add to it — record schedules, assessments and grades.</p>
+    </div><!-- /.sf-shell -->
+
+    <div class="sf-searchOverlay" data-search-overlay hidden>
+      <div class="sf-searchOverlay__scrim" data-search-dismiss></div>
+      <div class="sf-searchOverlay__panel">
+        <label class="sf-searchOverlay__bar" data-liquid-glass>
+          <img class="sf-searchOverlay__icon" src="../assets/icons/search.svg" alt="" aria-hidden="true">
+          <input class="sf-searchOverlay__input" type="search" placeholder="Search stores…"
+                 data-authority-search aria-label="Search stores" autocomplete="off">
+        </label>
+        <div class="sf-searchOverlay__results listStack" data-authority-results></div>
+      </div>
+    </div>
+
+    <div class="sf-modal" data-stall-settings hidden>
+      <div class="sf-modal__scrim" data-stall-settings-close></div>
+      <div class="sf-modal__panel" role="dialog" aria-modal="true" aria-labelledby="sf-settings-title">
+        <h2 class="sf-modal__title" id="sf-settings-title">Auto-schedule Inspections</h2>
+        <p class="sf-modal__sub" data-stall-settings-sub></p>
+
+        <div class="sf-checkRow">
+          <span class="sf-checkRow__label" id="sf-settings-auto">Auto-schedule</span>
+          <label class="lg-toggle" data-stall-settings-toggle aria-labelledby="sf-settings-auto">
+            <input type="checkbox" role="switch">
+            <span class="lg-toggle__track"><span class="lg-toggle__thumb"></span></span>
+          </label>
+        </div>
+
+        <p class="sf-modal__hint sf-settingsBody">
+          With this on, completing an assessment books this stall's next visit straight away,
+          without asking. The interval comes from the grade the visit awards — twelve months
+          for an A, six for a B, two for a C or a stall still trading as NEW.
+        </p>
+        <p class="sf-modal__hint sf-settingsBody">
+          With it off, you are shown the same suggested date and decide whether to book it.
+          Either way the date is only a suggestion until a visit exists.
+        </p>
+        <p class="sf-modal__hint sf-settingsBody" data-stall-settings-state></p>
+
+        <div class="sf-modal__actions">
+          <button class="sf-btn sf-btn--ghost" type="button" data-stall-settings-close>Done</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sf-modal" data-result hidden>
+      <div class="sf-modal__scrim" data-result-close></div>
+      <div class="sf-modal__panel" role="dialog" aria-modal="true" aria-labelledby="sf-result-title">
+        <h2 class="sf-modal__title" id="sf-result-title">Assessment completed</h2>
+        <p class="sf-modal__sub" data-result-sub></p>
+
+        <div class="sf-resultPreview" data-result-preview></div>
+
+        <div class="sf-checkRow" data-result-ask hidden>
+          <span class="sf-checkRow__label" id="sf-result-auto">Auto-schedule from now on</span>
+          <label class="lg-toggle" data-result-auto-toggle aria-labelledby="sf-result-auto">
+            <input type="checkbox" role="switch">
+            <span class="lg-toggle__track"><span class="lg-toggle__thumb"></span></span>
+          </label>
+        </div>
+        <p class="sf-modal__hint" data-result-ask-hint hidden>
+          With this on, completing an assessment books the stall's next visit automatically,
+          at the interval its grade calls for. Change it any time from the stall's header.
+        </p>
+
+        <div class="sf-modal__actions">
+          <button class="sf-btn sf-btn--ghost" type="button" data-result-close>Done</button>
+          <button class="sf-btn sf-btn--solid" type="button" data-result-schedule>Schedule next visit</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sf-modal" data-assessment hidden>
+      <div class="sf-modal__scrim" data-assessment-close></div>
+      <form class="sf-modal__panel" role="dialog" aria-modal="true" aria-labelledby="sf-assess-title">
+        <h2 class="sf-modal__title" id="sf-assess-title">Assessment</h2>
+        <p class="sf-modal__sub" data-assessment-stall></p>
+
+        <fieldset class="sf-field">
+          <legend class="sf-field__label">Hygiene score</legend>
+          <div class="sf-scores" data-assessment-scores></div>
+        </fieldset>
+
+        <fieldset class="sf-field">
+          <legend class="sf-field__label">Checks</legend>
+
+          <div class="sf-checkRow">
+            <span class="sf-checkRow__label" id="sf-check-personalHygiene">Personal hygiene</span>
+            <div class="segmentedControl segmentedControl--sm" role="radiogroup"
+                 aria-labelledby="sf-check-personalHygiene" data-assess-seg="personalHygiene">
+              <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-assess-value="true">Pass</button>
+              <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-assess-value="false">Fail</button>
+            </div>
+          </div>
+
+          <div class="sf-checkRow">
+            <span class="sf-checkRow__label" id="sf-check-foodStorage">Food storage</span>
+            <div class="segmentedControl segmentedControl--sm" role="radiogroup"
+                 aria-labelledby="sf-check-foodStorage" data-assess-seg="foodStorage">
+              <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-assess-value="true">Pass</button>
+              <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-assess-value="false">Fail</button>
+            </div>
+          </div>
+
+          <div class="sf-checkRow">
+            <span class="sf-checkRow__label" id="sf-check-pestControl">Pest control</span>
+            <div class="segmentedControl segmentedControl--sm" role="radiogroup"
+                 aria-labelledby="sf-check-pestControl" data-assess-seg="pestControl">
+              <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-assess-value="true">Pass</button>
+              <button class="segmentedButton" type="button" role="radio" aria-checked="false" data-assess-value="false">Fail</button>
+            </div>
+          </div>
+        </fieldset>
+
+        <label class="sf-check sf-check--major">
+          <input type="checkbox" data-assess="isMajorIssue">
+          <span>Major issue found <em>— this alone sets the stall to grade C</em></span>
+        </label>
+
+        <label class="sf-field">
+          <span class="sf-field__label">Remarks</span>
+          <textarea class="sf-textarea" rows="3" maxlength="1000" data-assess="remarks" placeholder="What did you see?"></textarea>
+        </label>
+
+        <p class="sf-modal__hint" data-assessment-hint role="status" aria-live="polite"></p>
+
+        <div class="sf-modal__actions">
+          <button class="sf-btn sf-btn--ghost" type="button" data-assessment-close>Cancel</button>
+          <button class="sf-btn sf-btn--solid" type="button" data-assessment-save disabled>Complete inspection</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="sf-calendarOverlay" data-calendar-overlay hidden>
+      <div class="sf-calendarOverlay__scrim" data-calendar-dismiss></div>
+      <div class="sf-calendarOverlay__stage" data-calendar-stage="pick">
+        <button class="sf-calendarOverlay__close liquid-glass" type="button" data-liquid-glass="drag" data-calendar-dismiss aria-label="Close">
+          <span class="icon" style="--icon: url(../assets/icons/close.svg)"></span>
+        </button>
+        <div class="sf-calendarOverlay__track" data-calendar-track>
+          <div class="sf-calendarOverlay__panel sf-calendarOverlay__panel--pick" role="dialog" aria-modal="true" aria-label="Choose a date">
+            <div class="sf-calendar__nav">
+              <div class="sf-calendar__monthNav">
+                <button class="sf-calendar__arrow liquid-glass" type="button" data-liquid-glass="drag" data-calendar-prev-month aria-label="Previous month">
+                  <span class="icon" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                </button>
+                <p class="sf-calendar__month" data-calendar-month></p>
+                <button class="sf-calendar__arrow liquid-glass" type="button" data-liquid-glass="drag" data-calendar-next-month aria-label="Next month">
+                  <span class="icon sf-calendar__icon--fwd" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                </button>
+              </div>
+              <div class="sf-calendar__yearNav">
+                <button class="sf-calendar__arrow sf-calendar__arrow--year liquid-glass" type="button" data-liquid-glass="drag" data-calendar-prev-year aria-label="Previous year">
+                  <span class="icon" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                </button>
+                <p class="sf-calendar__year" data-calendar-year></p>
+                <button class="sf-calendar__arrow sf-calendar__arrow--year liquid-glass" type="button" data-liquid-glass="drag" data-calendar-next-year aria-label="Next year">
+                  <span class="icon sf-calendar__icon--fwd" style="--icon: url(../assets/icons/chevron-left.svg)"></span>
+                </button>
+              </div>
+            </div>
+            <div class="sf-calendar__weekdays" aria-hidden="true">
+              <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+            </div>
+            <div class="sf-calendar__grid" role="grid" aria-label="Days" data-calendar-grid></div>
+            <div class="sf-calendar__pickActions">
+              <button class="sf-btn sf-btn--danger" type="button" data-calendar-delete hidden>Delete inspection</button>
+              <button class="sf-btn sf-btn--solid" type="button" data-calendar-next disabled>Next</button>
+            </div>
+          </div>
+          <div class="sf-calendarOverlay__panel sf-calendarOverlay__panel--confirm" role="dialog" aria-modal="true" aria-label="Confirm this date">
+            <div class="sf-calendar__preview" data-calendar-preview></div>
+            <div class="sf-calendar__confirmActions">
+              <button class="sf-btn sf-btn--ghost liquid-glass" type="button" data-liquid-glass="drag" data-calendar-back><span class="icon" style="--icon: url(../assets/icons/chevron-left.svg)"></span>Back</button>
+              <button class="sf-btn sf-btn--solid liquid-glass" type="button" data-liquid-glass="drag" data-calendar-confirm>Confirm</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script type="module" src="authority.js"></script>
+  <script type="module" src="../assets/js/bottomNav.js"></script>
+</body>
+</html>

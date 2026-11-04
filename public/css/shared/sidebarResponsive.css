@@ -1,0 +1,155 @@
+:root {
+    --drawer-shift: 280px;
+
+    --drawer-radius: 32px;
+}
+
+/* --- Ultrawide constraint (always active) --- */
+.mainContent {
+    max-width: 1920px;
+}
+
+/* ---- The drawer's mirrored action rows ---- */
+.navItem--mirrored {
+    display: none;
+    width: 100%;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.navItem--mirrored[data-destructive] {
+    color: var(--destructive);
+}
+
+@media (max-width: 768px) {
+    .navItem--mirrored {
+        display: flex;
+    }
+}
+
+.sidebarOverlay {
+    display: none;
+}
+
+/* ============================================================================
+   MOBILE — 768px and below
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* The sidebar button only exists here. components.css says what it looks like. */
+    .sidebarHamburger {
+        display: flex;
+    }
+
+    .sidebar {
+        z-index: 1;
+        width: var(--drawer-shift);
+        margin-left: 0;
+        transform: none;
+
+        border-right: none;
+    }
+
+    /* ---- The app, as a card that gets shoved ---- */
+    .mainContent {
+        position: relative;
+        z-index: 2;
+        margin-left: 0 !important;
+        background: var(--surface-page);
+        transform: translateX(0);
+        transition:
+            transform var(--duration-warm) var(--ease-standard),
+            border-radius var(--duration-warm) var(--ease-standard);
+        will-change: transform;
+    }
+
+    body.sidebarOpen .mainContent {
+        transform: translateX(var(--drawer-shift));
+        border-radius: var(--drawer-radius);
+        overflow: hidden;
+        box-shadow: var(--shadow-drawer);
+    }
+
+    .sidebarOverlay {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 3;
+        background: rgba(255, 255, 255, var(--drawer-wash));
+        opacity: 0;
+        visibility: hidden;
+        transition:
+            opacity var(--duration-warm) var(--ease-standard),
+            transform var(--duration-warm) var(--ease-standard),
+            visibility var(--duration-warm) var(--ease-standard);
+    }
+
+    body.sidebarOpen .sidebarOverlay {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(var(--drawer-shift));
+        border-radius: var(--drawer-radius);
+    }
+
+    /* The page behind must not scroll while the drawer is open. */
+    body.sidebarOpen {
+        overflow: hidden;
+    }
+
+    /* ---- Top bar, tightened ----
+       sidebarResponsive owns the mobile layout of the bar; the grid in
+       components.css is a desktop-only arrangement. */
+    .topBar {
+        display: flex;
+        padding: 16px 20px 0 20px !important;
+        justify-content: space-between !important;
+    }
+
+    .dashboardContent {
+        padding: 0 20px 20px 20px !important;
+    }
+
+    /* ---- The actions pill is GONE here ---- */
+    .topBarActions {
+        display: none;
+    }
+
+}
+
+/* ---- While a finger is on it ---- */
+body.sidebarDragging .mainContent,
+body.sidebarDragging .sidebarOverlay {
+    transition: none;
+}
+
+/* ---- Left-edge catcher for swipe-to-open ---- */
+.drawerEdge {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .drawerEdge {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 22px;
+        z-index: 4;
+        touch-action: pan-y;
+        pointer-events: none;
+    }
+
+    body:not(.sidebarOpen) .drawerEdge {
+        pointer-events: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mainContent,
+    .sidebarOverlay {
+        transition: none;
+    }
+}

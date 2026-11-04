@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Agreement History</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle">Rental Agreement History</h1>
+      <div class="topBarActions" data-liquid-glass="drag">
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page page-wide">
+    <a href="rentalAgreement.html" class="back-link">&larr; Back to Rental Agreements</a>
+    <p class="subtitle">Rental agreements that have expired or been cancelled.</p>
+
+    <div class="filter-bar">
+      <div>
+        <label for="filterHistoryId">Filter by Agreement ID</label>
+        <input type="number" id="filterHistoryId" placeholder="e.g. 3">
+      </div>
+      <button id="clearHistoryFilterBtn" class="clear-btn" type="button">Clear</button>
+    </div>
+
+    <div class="table-plain">
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>ID</th><th>Stall</th><th>Owner</th><th>Start</th><th>End</th><th>Price</th><th>Status</th><th>Archived</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p id="historyEmptyMsg" class="empty-msg" style="display:none;">No history entries found.</p>
+  </div>
+
+  <!-- View Detail Modal -->
+  <div id="viewHistoryModal" class="modal-overlay">
+    <div class="modal-box form-modal-box modal-box-wrap">
+      <button type="button" class="form-modal-close" id="closeViewModalBtn">&times;</button>
+      <h3 id="viewModalTitle">Agreement Details</h3>
+      <div class="detail-list">
+        <div class="detail-row"><span>Status</span><strong id="v_Status"></strong></div>
+        <div class="detail-row"><span>Stall ID</span><strong id="v_StallId"></strong></div>
+        <div class="detail-row"><span>Owner ID</span><strong id="v_OwnerId"></strong></div>
+        <div class="detail-row"><span>Start Date</span><strong id="v_AgreementStartDate"></strong></div>
+        <div class="detail-row"><span>End Date</span><strong id="v_AgreementEndDate"></strong></div>
+        <div class="detail-row"><span>Rental Price</span><strong id="v_RentalPrice"></strong></div>
+        <div class="detail-row"><span>Archived At</span><strong id="v_ArchivedAt"></strong></div>
+        <div class="detail-row detail-row-block"><span>Terms and Conditions</span><p id="v_AgreementTermsAndConditions"></p></div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script src="../../js/operator/rentalAgreementHistory.js"></script>
+  <script>renderOperatorNavbar('rentalAgreement'); renderBottomPillNav('home');</script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Detail — Hawker Vendor</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/vendor-shell.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorHeader.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorNav.css">
+  <link rel="stylesheet" href="../../css/vendor/dashboard.css">
+  <link rel="stylesheet" href="../../css/vendor/storeDetail.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <div class="topBarBrand">
+        <img class="topBarLogo" src="../../images/hawkrOS.svg" alt="HAWKR">
+        <h1 class="topBarTitle" id="pageTitle">Store Detail</h1>
+      </div>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="vendor.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+    <div class="page-title">
+      <a href="stall.html" class="back-link">&larr; Back to My Stall</a>
+      <div class="page-sub">Everything about this store in one place</div>
+    </div>
+
+    <div class="content">
+      <div class="banner error" id="errorBanner"></div>
+      <div class="banner success" id="successBanner"></div>
+
+      <div class="store-header card">
+        <div class="store-photo"><img id="storeImage" alt="" onerror="this.style.display='none'"></div>
+        <div class="store-info">
+          <h2 id="storeName">Loading…</h2>
+          <div class="store-detail-row"><span class="label">Location</span><span id="storeLocation">—</span></div>
+          <div class="store-detail-row"><span class="label">Owner</span><span id="storeOwner">—</span></div>
+          <div class="store-detail-row"><span class="label">Email Address</span><span id="storeEmail">—</span></div>
+          <div class="store-detail-row"><span class="label">Operating Hours</span><span id="storeHours">—</span></div>
+          <div class="store-detail-row"><span class="label">NEA Inspection Grade</span><span id="storeNeaGrade">—</span></div>
+          <div class="store-detail-row"><span class="label"></span><span id="storePendingGrade" class="stall-pending" hidden></span></div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card card">
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="statOrders">Loading…</div>
+        </div>
+        <div class="stat-card card">
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value" id="statRevenue">Loading…</div>
+        </div>
+        <div class="stat-card card">
+          <div class="stat-label">This Month Sales</div>
+          <div class="stat-value" id="statMonthSales">Loading…</div>
+        </div>
+        <div class="stat-card card">
+          <div class="stat-label">Rental Expenses</div>
+          <div class="stat-value" id="statRental">Loading…</div>
+        </div>
+      </div>
+
+      <div class="store-grid">
+        <div class="card actions-panel">
+          <div class="card-title">Store Actions</div>
+          <button class="action-btn" id="updateMenuBtn">Update Menu</button>
+          <button class="action-btn" id="trackInventoryBtn">Track Inventory</button>
+          <button class="action-btn" id="customerFeedbackBtn">Customer Feedback</button>
+          <button class="action-btn" id="addPromotionBtn">Add Promotion</button>
+          <button class="action-btn" id="rentalAgreementBtn">Rental Agreement</button>
+          <button class="action-btn danger" id="deleteStoreBtn">Delete Store</button>
+        </div>
+
+        <div class="card chart-box">
+          <div class="card-title">Top 5 Best Selling Items</div>
+          <div class="chart-canvas-wrap tall"><canvas id="topItemsChart"></canvas></div>
+        </div>
+
+        <div class="card target-card">
+          <div class="card-title">Monthly Target</div>
+          <div id="targetContent">
+            <div class="empty-state">Loading…</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="app-footer">&copy; 2026 Hawker Management System</footer>
+  </div>
+
+  <!-- Delete store confirmation modal -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h2>Delete Store</h2>
+      <div class="modal-sub">This can't be undone. It permanently deletes this store's menu, orders, reviews, promotions, vouchers, stock, and rental agreements — everything tied to it.</div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+        <button type="button" class="btn btn-primary danger" id="confirmDeleteBtn">Delete Store</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly target modal -->
+  <div class="modal-overlay" id="targetModal">
+    <div class="modal">
+      <h2>Set Monthly Target</h2>
+      <div class="modal-sub">Pick a goal for this stall. Progress is tracked from the 1st to the last day of the month, then resets.</div>
+      <form id="targetForm">
+        <div class="form-field">
+          <label for="targetType">Target Type</label>
+          <select id="targetType" required>
+            <option value="revenue">Sales Revenue</option>
+            <option value="orders">Total Orders</option>
+            <option value="items">Items Sold</option>
+            <option value="customers">New Customers</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="targetValue">Target Value</label>
+          <input type="number" id="targetValue" step="0.01" min="0.01" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelTargetBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveTargetBtn">Save Target</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="dashboard.html" data-tab="dashboard">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Dashboard</span>
+    </a>
+    <a class="bottomPillNav__item" href="orders.html" data-tab="orders">
+      <span class="icon" style="--icon: url(../../icons/orders.svg)"></span>
+      <span>Orders</span>
+    </a>
+    <a class="bottomPillNav__item" href="stall.html" data-tab="stall">
+      <span class="icon" style="--icon: url(../../icons/organisation.svg)"></span>
+      <span>My Stall</span>
+    </a>
+    <a class="bottomPillNav__item" href="orderHistory.html" data-tab="orderHistory">
+      <span class="icon" style="--icon: url(../../icons/history.svg)"></span>
+      <span>Order History</span>
+    </a>
+    <a class="bottomPillNav__item" href="support.html" data-tab="support">
+      <span class="icon" style="--icon: url(../../icons/feedback.svg)"></span>
+      <span>Support</span>
+    </a>
+  </nav>
+
+  <script src="../../js/vendor/vendorNav.js"></script>
+  <script>renderBottomPillNav('stall');</script>
+  <script src="../../js/vendor/storeDetail.js"></script>
+  <script src="../../js/vendor/vendorHeader.js"></script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

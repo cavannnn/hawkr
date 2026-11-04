@@ -1,0 +1,270 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Self-hosted fonts, copied from the reference package's fonts/ folder (latin + latin-ext). */
+@font-face {
+    font-family: "Source Serif 4";
+    font-style: normal;
+    font-weight: 200 900;
+    font-display: swap;
+    src: url("../fonts/source-serif-4-normal-latin.woff2") format("woff2");
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: "Source Serif 4";
+    font-style: normal;
+    font-weight: 200 900;
+    font-display: swap;
+    src: url("../fonts/source-serif-4-normal-latin-ext.woff2") format("woff2");
+    unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+        U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+        U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: "Source Serif 4";
+    font-style: italic;
+    font-weight: 200 900;
+    font-display: swap;
+    src: url("../fonts/source-serif-4-italic-latin.woff2") format("woff2");
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: "Source Serif 4";
+    font-style: italic;
+    font-weight: 200 900;
+    font-display: swap;
+    src: url("../fonts/source-serif-4-italic-latin-ext.woff2") format("woff2");
+    unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+        U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+        U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: "Google Sans Flex";
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url("../fonts/google-sans-flex-latin.woff2") format("woff2");
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: "Google Sans Flex";
+    font-style: normal;
+    font-weight: 300 700;
+    font-display: swap;
+    src: url("../fonts/google-sans-flex-latin-ext.woff2") format("woff2");
+    unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+        U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+        U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+    font-family: "Google Sans Code";
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url("../fonts/google-sans-code-latin.woff2") format("woff2");
+    unicode-range:
+        U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+        U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+        U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+    font-family: "Google Sans Code";
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url("../fonts/google-sans-code-latin-ext.woff2") format("woff2");
+    unicode-range:
+        U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+        U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+        U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+    /* Neutral ramp, purple-tinted */
+    --text-primary: #341539;
+    --text-secondary: #6b5e6f;
+    --text-faint: #c9c2cb;
+    --scaffold: #9e94a1;
+    --surface-page: #ffffff;
+    --surface-card: #ffffff;
+    --surface-sunken: #f4f1f6;
+    --surface-sunken-hover: #eeeaf0;
+    --border: #e9e4ea;
+    --border-strong: #d8d0da;
+
+    /* Accent */
+    --accent: #913b9f;
+    --accent-dark: #6f2d7a;
+    --text-muted: var(--scaffold);
+
+    /* Administrative/hygiene-grade layer (locked blue, never --status-*) */
+    --grade-ink: #1d4ed8;
+    --grade-bg: #eff6ff;
+    --admin-link: #2563eb;
+
+    /* Keyboard-hint chip */
+    --chip-fill: rgba(145, 59, 159, 0.15);
+    --chip-drop: rgba(145, 59, 159, 0.25);
+    --chip-on-accent: #bc65d0;
+
+    --join-purple: #9747ff;
+    --join-fill-top: rgba(151, 71, 255, 0.1);
+    --join-fill-cta: rgba(151, 71, 255, 0.24);
+
+    /* Edge frost (scrolling-under-chrome fade) */
+    --frost-blur: 4px;
+    --frost-fill: rgba(255, 255, 255, 0.35);
+    --frost-fade: 86%;
+
+    /* Mobile drawer */
+    --drawer-wash: 0.52;
+    --shadow-drawer: -2px 0 16px rgba(52, 21, 57, 0.32);
+
+    /* Status / validation (deliberately shared hexes, see the hawkr notes) */
+    --status-open: #34c759;
+    --status-closed: #ff3b30;
+    --valid: #34c759;
+    --invalid: #ff3b30;
+    --switch-on: #34c759;
+    --fav-on: #ff3b30;
+
+    /* Destructive â€” a tint, not an outline */
+    --destructive: #eb001b;
+    --destructive-fill: #fff0f2;
+    --destructive-border: #ffdde1;
+
+    --text-inverse: #fffafa;
+
+    /* Tag pills */
+    --tag-bg: #f2f2ff;
+    --tag-halal-bg: #eaf5e9;
+    --radius-pill: 100px;
+
+    /* Liquid glass material */
+    --glass-blur: 20px;
+    --glass-bg: rgba(245, 245, 245, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --glass-bg-opaque: rgba(245, 242, 245, 0.95);
+    --glass-light-rim: rgba(255, 255, 255, 0.55);
+    --glass-light-fill: linear-gradient(rgba(255, 255, 255, 0.55), rgba(145, 59, 159, 0.08));
+
+    /* Type */
+    --font-display: "Source Serif 4", Georgia, serif;
+    --font-ui: "Google Sans Flex", system-ui, sans-serif;
+    --font-mono: "Google Sans Code", ui-monospace, monospace;
+
+    /* Breakpoints (read back by JS where needed, never hardcoded there) */
+    --bp-tablet: 1024px;
+    --bp-mobile: 768px;
+    --bp-small: 480px;
+
+    /* Motion */
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --duration-quick: 150ms;
+    --duration-warm: 250ms;
+    --radius-chip: 8px;
+
+    /* Icon scale */
+    --icon-sm: 14px;
+    --icon-md: 18px;
+    --icon-lg: 24px;
+    --icon-xl: 32px;
+
+    /* Shadows â€” tinted with the brand black, never pure black */
+    --shadow-raised: 0 1px 3px 0 rgba(52, 21, 57, 0.08), 0 1px 2px -1px rgba(52, 21, 57, 0.06);
+    --shadow-floating: 0 8px 24px rgba(52, 21, 57, 0.16);
+    --shadow-glass-rim: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    /* Skeleton shimmer */
+    --skeleton-base: var(--border);
+    --skeleton-sheen: rgba(255, 255, 255, 0.65);
+}
+
+.liquid-glass {
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    background: var(--glass-light-fill);
+    border: 1px solid var(--glass-light-rim);
+    box-shadow: var(--shadow-floating), var(--shadow-glass-rim);
+}
+
+@supports not (backdrop-filter: blur(20px)) {
+    .liquid-glass {
+        background: var(--glass-bg-opaque);
+    }
+}
+
+.frost {
+    backdrop-filter: blur(var(--frost-blur));
+    -webkit-backdrop-filter: blur(var(--frost-blur));
+    background: var(--frost-fill);
+}
+
+.icon {
+    -webkit-mask-image: var(--icon);
+    mask-image: var(--icon);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    background: currentColor;
+    width: var(--icon-md);
+    height: var(--icon-md);
+    display: inline-block;
+    flex-shrink: 0;
+}
+.icon-img {
+    width: var(--icon-md);
+    height: var(--icon-md);
+    display: inline-block;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.icon--sm { width: var(--icon-sm); height: var(--icon-sm); }
+.icon--lg { width: var(--icon-lg); height: var(--icon-lg); }
+.icon--xl { width: var(--icon-xl); height: var(--icon-xl); }
+
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    user-drag: none;
+}
+
+/* Shimmer placeholder â€” add .skeleton to any element awaiting data. */
+.skeleton {
+    color: transparent !important;
+    background-color: var(--skeleton-base);
+    background-image: linear-gradient(90deg, transparent, var(--skeleton-sheen), transparent);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    border-radius: var(--radius-chip);
+    animation: hk-shimmer 1.4s ease-in-out infinite;
+    user-select: none;
+}
+@keyframes hk-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .skeleton { animation: none; }
+}

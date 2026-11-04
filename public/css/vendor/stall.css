@@ -1,0 +1,264 @@
+
+
+.stall-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.stall-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.stall-card .stall-photo {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+
+.stall-card .stall-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.stall-card:hover .stall-photo img {
+  transform: scale(1.08);
+}
+
+.stall-card .stall-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.stall-card .stall-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.stall-card .stall-line {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.stall-pending {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--color-text-muted);
+  opacity: 0.85;
+}
+
+.field-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-field {
+  flex: 1;
+}
+
+.image-preview {
+  margin-top: 10px;
+}
+
+.image-preview img {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+
+
+.request-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  transition: background 0.15s ease;
+}
+
+.request-row:last-child {
+  border-bottom: none;
+}
+
+.request-row:hover {
+  background: var(--color-surface-2);
+}
+
+.request-thumb {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+
+.request-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.request-row:hover .request-thumb img {
+  transform: scale(1.08);
+}
+
+.request-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.request-row .admin-actions,
+.request-row > .pill {
+  margin-left: auto;
+}
+
+.request-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.request-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+}
+
+.review-note {
+  font-size: 12px;
+  color: var(--color-danger);
+  margin-top: 5px;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+
+.pill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  white-space: nowrap;
+  transition: transform 0.15s ease;
+}
+
+.pill:hover {
+  transform: scale(1.06);
+}
+
+.pill.pending {
+  background: #fff3d6;
+  color: #8a6100;
+}
+
+.pill.approved {
+  background: var(--color-success-soft);
+  color: #006300;
+}
+
+.pill.rejected {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+
+.pill.grade-A {
+  background: var(--color-success-soft);
+  color: #006300;
+}
+
+.pill.grade-B {
+  background: #fff3d6;
+  color: #8a6100;
+}
+
+.pill.grade-C {
+  background: #ffe4d1;
+  color: #9a3f0f;
+}
+
+.pill.grade-D {
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+
+.fab-btn {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary-dark);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-modal);
+  transition: background 0.2s ease, transform 0.15s ease;
+  z-index: 40;
+}
+
+.fab-btn:hover {
+  background: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.fab-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+.modal-lg {
+  width: 560px;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .fab-btn {
+    right: 16px;
+    bottom: 16px;
+  }
+}

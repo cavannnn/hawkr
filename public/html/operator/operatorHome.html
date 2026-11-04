@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator Home</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/operator/operatorHeader.css">
+  <link rel="stylesheet" href="../../css/operator/operator.css">
+  <link rel="stylesheet" href="../../css/shared/listRow.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <h1 class="topBarTitle" id="welcomeName">Welcome</h1>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search for anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="operatorProfile.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="page">
+      <div class="pageSectionHead">
+        <h2 class="pageSectionTitle">Manage</h2>
+        <p class="subtitle">The rest of your centre, one click away.</p>
+      </div>
+
+      <div class="listStack">
+        <a class="listRow" href="stallRequests.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/vendor.svg)" aria-hidden="true"></span>
+          <span class="listRowMain">
+            <span class="listRowName">Stall requests</span>
+            <span class="listRowMeta">Vendors applying for a unit, waiting on your decision.</span>
+          </span>
+        </a>
+        <a class="listRow" href="rentalAgreement.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/agreement.svg)" aria-hidden="true"></span>
+          <span class="listRowMain">
+            <span class="listRowName">Rental agreements</span>
+            <span class="listRowMeta">Write and edit leases, read the history.</span>
+          </span>
+        </a>
+        <a class="listRow" href="rentalRenewals.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/clock.svg)" aria-hidden="true"></span>
+          <span class="listRowMain">
+            <span class="listRowName">Rental renewals</span>
+            <span class="listRowMeta">Leases coming up for renewal, waiting on your decision.</span>
+          </span>
+        </a>
+        <a class="listRow" href="supportInbox.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/feedback.svg)" aria-hidden="true"></span>
+          <span class="listRowMain">
+            <span class="listRowName">Support inbox</span>
+            <span class="listRowMeta">Review and respond to vendor and customer support requests.</span>
+          </span>
+        </a>
+        <a class="listRow" href="centreManagement.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/organisation.svg)" aria-hidden="true"></span>
+          <span class="listRowMain">
+            <span class="listRowName">Centre management</span>
+            <span class="listRowMeta">Closures, operations, satisfaction and centre-wide promotions.</span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      <p>&copy; 2026 Hawker Management System</p>
+    </footer>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="operatorHome.html" data-tab="home">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Home</span>
+    </a>
+    <a class="bottomPillNav__item" href="myChildren.html" data-tab="children">
+      <span class="icon" style="--icon: url(../../icons/vendor.svg)"></span>
+      <span>My Stalls</span>
+    </a>
+    <a class="bottomPillNav__item" href="transactions.html" data-tab="transactions">
+      <span class="icon" style="--icon: url(../../icons/payments.svg)"></span>
+      <span>Transactions</span>
+    </a>
+  </nav>
+
+  <script src="../../js/operator/operatorNav.js"></script>
+  <script>
+    renderOperatorNavbar('home');
+    renderBottomPillNav('home');
+    if (!localStorage.getItem('authToken')) {
+      window.location.href = '/auth/login.html';
+    }
+  </script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>

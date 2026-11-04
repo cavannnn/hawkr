@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — Hawker Vendor</title>
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/shared/liquidGlass.css">
+  <link rel="stylesheet" href="../../css/shared/components.css">
+  <link rel="stylesheet" href="../../css/shared/sidebarResponsive.css">
+  <link rel="stylesheet" href="../../css/shared/appShell.css">
+  <link rel="stylesheet" href="../../css/vendor-shell.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorHeader.css">
+  <link rel="stylesheet" href="../../css/vendor/vendorNav.css">
+  <link rel="stylesheet" href="../../css/vendor/vendor.css">
+</head>
+<body>
+
+  <!-- Main Content -->
+  <div class="mainContent">
+    <div class="topBar">
+      <div class="topBarBrand">
+        <img class="topBarLogo" src="../../images/hawkrOS.svg" alt="HAWKR">
+        <h1 class="topBarTitle">Profile</h1>
+      </div>
+      <div class="global-search" id="globalSearch">
+        <span class="icon search-icon" style="--icon: url(../../icons/search.svg)"></span>
+        <input type="text" id="globalSearchInput" placeholder="Search anything..." autocomplete="off">
+        <div class="global-search-results" id="globalSearchResults" hidden></div>
+      </div>
+
+      <div class="topBarActions" data-liquid-glass="drag">
+        <div class="notification-bell" id="notificationBell" data-notification-bell style="position: relative;">
+          <button class="topBarAction bell-btn" id="bellBtn" type="button" aria-label="Notifications">
+            <span class="icon icon--lg bell-icon" style="--icon: url(../../icons/notifications.svg)"></span>
+            <span class="bell-badge" id="bellBadge" hidden>0</span>
+          </button>
+          <div class="notification-panel" id="notificationPanel" hidden>
+            <div class="notification-panel-header">
+              <span>Notifications</span>
+              <button type="button" id="markAllReadBtn">Mark all read</button>
+            </div>
+            <div class="notification-list" id="notificationList"></div>
+          </div>
+        </div>
+        <button class="topBarAction" type="button" aria-label="Settings" data-href="vendor.html">
+          <span class="icon icon--lg" style="--icon: url(../../icons/settings.svg)"></span>
+        </button>
+        <button class="topBarAction" id="logoutBtn" type="button" aria-label="Log out">
+          <span class="icon icon--lg" style="--icon: url(../../icons/logout.svg)"></span>
+        </button>
+      </div>
+    </div>
+    <div class="page-title">
+      <div class="page-sub">Your account details</div>
+    </div>
+
+    <div class="content">
+        <div class="banner error" id="errorBanner"></div>
+        <div class="banner success" id="successBanner"></div>
+
+        <div class="profile-header">
+          <div class="avatar-lg" id="profileAvatarWrap">
+            <img id="profileAvatarImg" alt="" hidden>
+            <span id="profileAvatar">V</span>
+          </div>
+          <div>
+            <div class="profile-name" id="username">Loading…</div>
+            <span class="role-badge" id="role">—</span>
+          </div>
+        </div>
+
+        <div class="profile-details">
+          <div class="detail-row">
+            <span class="detail-label">Email</span>
+            <span class="detail-value" id="email">Loading…</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Contact Number</span>
+            <span class="detail-value" id="contactNumber">Loading…</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Gender</span>
+            <span class="detail-value" id="gender">Loading…</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Account Created</span>
+            <span class="detail-value" id="createdAt">Loading…</span>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn btn-primary" id="editProfileBtn">Edit Profile</button>
+        </div>
+
+        <div class="page-title" style="padding: 32px 0 0;">
+          <h1 style="font-size: 18px;">My Stall</h1>
+          <div class="page-sub">The stall linked to your account</div>
+        </div>
+
+        <div id="stallSection"></div>
+    </div>
+
+    <footer class="app-footer">&copy; 2026 Hawker Management System</footer>
+  </div>
+
+  <!-- Edit profile modal -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <h2>Edit Profile</h2>
+      <div class="modal-sub">Update your account email or password.</div>
+      <form id="editProfileForm">
+        <div class="form-field">
+          <label for="editEmail">Email</label>
+          <input type="email" id="editEmail" required>
+        </div>
+        <div class="form-field">
+          <label for="editContactNumber">Contact Number</label>
+          <input type="tel" id="editContactNumber" placeholder="e.g. 91234567">
+        </div>
+        <div class="form-field">
+          <label for="editGender">Gender</label>
+          <select id="editGender">
+            <option value="">Prefer not to say</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="editProfilePicture">Profile Picture</label>
+          <input type="file" id="editProfilePicture" accept="image/png, image/jpeg, image/webp, image/gif">
+          <div class="hint">JPG, PNG, WEBP or GIF. Max 5MB.</div>
+          <div class="avatar-preview" id="avatarPreviewWrap" hidden>
+            <img id="avatarPreview" alt="Preview">
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="editPassword">New Password</label>
+          <input type="password" id="editPassword" placeholder="Leave blank to keep current password" minlength="8">
+          <div class="hint">Minimum 8 characters. Leave blank if you don't want to change it.</div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveEditBtn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <nav class="bottomPillNav" aria-label="Primary" data-bottom-nav>
+    <a class="bottomPillNav__item" href="dashboard.html" data-tab="dashboard">
+      <span class="icon" style="--icon: url(../../icons/home.svg)"></span>
+      <span>Dashboard</span>
+    </a>
+    <a class="bottomPillNav__item" href="orders.html" data-tab="orders">
+      <span class="icon" style="--icon: url(../../icons/orders.svg)"></span>
+      <span>Orders</span>
+    </a>
+    <a class="bottomPillNav__item" href="stall.html" data-tab="stall">
+      <span class="icon" style="--icon: url(../../icons/organisation.svg)"></span>
+      <span>My Stall</span>
+    </a>
+    <a class="bottomPillNav__item" href="orderHistory.html" data-tab="orderHistory">
+      <span class="icon" style="--icon: url(../../icons/history.svg)"></span>
+      <span>Order History</span>
+    </a>
+    <a class="bottomPillNav__item" href="support.html" data-tab="support">
+      <span class="icon" style="--icon: url(../../icons/feedback.svg)"></span>
+      <span>Support</span>
+    </a>
+  </nav>
+
+  <script src="../../js/vendor/vendorNav.js"></script>
+  <script src="../../js/vendor/vendor.js"></script>
+  <script src="../../js/vendor/vendorHeader.js"></script>
+  <script type="module" src="../../js/shared/liquidGlass.js"></script>
+  <script type="module" src="../../js/shared/topBar.js"></script>
+</body>
+</html>
